@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="smsp_default_text_color">#4e4b4b</color>
+    <color name="smsp_disabled_color">#44000000</color>
+    <color name="smsp_error_color">#E7492E</color>
+</resources>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="10dp"
+    tools:context="com.chivorn.demojava.MainActivity">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="10dp"
+        android:gravity="center"
+        android:text="@string/lib_name"
+        android:textSize="19sp" />
+
+    <com.chivorn.smartmaterialspinner.SmartMaterialSpinner
+        android:id="@+id/sp_provinces"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:smsp_alwaysShowFloatingLabel="true"
+        app:smsp_floatingLabelText="floating text"
+        app:smsp_hint="This is hint spinner 1" />
+
+    <com.chivorn.smartmaterialspinner.SmartMaterialSpinner
+        android:id="@+id/sp_countries"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:smsp_alwaysShowFloatingLabel="false"
+        app:smsp_floatingLabelText="floating text"
+        app:smsp_hint="This is hint spinner 2" />
+
+    <android.support.v7.widget.AppCompatEditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>

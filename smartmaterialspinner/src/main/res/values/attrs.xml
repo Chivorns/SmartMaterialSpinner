@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+    <declare-styleable name="SmartMaterialSpinner">
+        <attr name="smsp_baseColor" format="integer" />
+        <attr name="smsp_highlightColor" format="integer" />
+        <attr name="smsp_errorColor" format="integer" />
+        <attr name="smsp_error" format="string" />
+        <attr name="smsp_hint" format="string" />
+        <attr name="smsp_hintColor" format="color" />
+        <attr name="smsp_hintTextSize" format="dimension" />
+        <attr name="smsp_floatingLabelText" format="string" />
+        <attr name="smsp_floatingLabelColor" format="color" />
+        <attr name="smsp_multiline" format="boolean" />
+        <attr name="smsp_nbErrorLines" format="integer" />
+        <attr name="smsp_typeface" format="string" />
+        <attr name="smsp_alignLabels" format="boolean" />
+        <attr name="smsp_thickness" format="dimension" />
+        <attr name="smsp_thickness_error" format="dimension" />
+        <attr name="smsp_arrowSize" format="dimension" />
+        <attr name="smsp_arrowColor" format="color" />
+        <attr name="smsp_enableFloatingLabel" format="boolean" />
+        <attr name="smsp_enableErrorLabel" format="boolean" />
+        <attr name="smsp_alwaysShowFloatingLabel" format="boolean" />
+        <attr name="smsp_isRtl" format="boolean" />
+        <attr name="smsp_hintView" format="reference" />
+        <attr name="smsp_dropDownHintView" format="reference" />
+    </declare-styleable>
+</resources>
+
