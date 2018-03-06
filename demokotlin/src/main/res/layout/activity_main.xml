@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="10dp"
-    tools:context="chivorn.com.demokotlin.MainActivity">
+    tools:context="com.chivorn.demokotlin.MainActivity">
 
     <TextView
         android:layout_width="match_parent"

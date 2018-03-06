@@ -36,11 +36,9 @@ import com.chivorn.smartmaterialspinner.util.nineoldandroid.animation.ValueAnima
 import java.util.ArrayList;
 import java.util.List;
 
-import static android.R.layout.simple_spinner_item;
-
 
 public class SmartMaterialSpinner extends AppCompatSpinner implements ValueAnimator.AnimatorUpdateListener {
-    public static final int DEFAULT_ARROW_WIDTH_DP = 12;
+    public static final int DEFAULT_ARROW_WIDTH_DP = 10;
 
     private static final String TAG = SmartMaterialSpinner.class.getSimpleName();
 
@@ -103,8 +101,7 @@ public class SmartMaterialSpinner extends AppCompatSpinner implements ValueAnima
     private boolean multiline;
     private Typeface typeface;
     private boolean alignLabels;
-    private float thickness;
-    private float thicknessError;
+    private float underlineSize;
     private int arrowColor;
     private float arrowSize;
     private boolean enableErrorLabel;
@@ -157,7 +154,6 @@ public class SmartMaterialSpinner extends AppCompatSpinner implements ValueAnima
         setMinimumHeight(getPaddingTop() + getPaddingBottom() + minContentHeight);
         //Erase the drawable selector not to be affected by new size (extra paddings)
         setBackgroundResource(R.drawable.smart_material_spinner_background);
-
     }
 
     private void initAttributes(Context context, AttributeSet attrs) {
@@ -175,24 +171,22 @@ public class SmartMaterialSpinner extends AppCompatSpinner implements ValueAnima
         disabledColor = context.getResources().getColor(R.color.smsp_disabled_color);
         error = array.getString(R.styleable.SmartMaterialSpinner_smsp_error);
         hint = array.getString(R.styleable.SmartMaterialSpinner_smsp_hint);
+        floatingLabelText = array.getString(R.styleable.SmartMaterialSpinner_smsp_floatingLabelText);
         hintColor = array.getColor(R.styleable.SmartMaterialSpinner_smsp_hintColor, baseColor);
         hintTextSize = array.getDimension(R.styleable.SmartMaterialSpinner_smsp_hintTextSize, -1);
-        // floatingLabelText = array.getString(R.styleable.SmartMaterialSpinner_smsp_floatingLabelText);
-        floatingLabelText = "Hello";
         floatingLabelColor = array.getColor(R.styleable.SmartMaterialSpinner_smsp_floatingLabelColor, baseColor);
         multiline = array.getBoolean(R.styleable.SmartMaterialSpinner_smsp_multiline, true);
         minNbErrorLines = array.getInt(R.styleable.SmartMaterialSpinner_smsp_nbErrorLines, 1);
         alignLabels = array.getBoolean(R.styleable.SmartMaterialSpinner_smsp_alignLabels, true);
-        thickness = array.getDimension(R.styleable.SmartMaterialSpinner_smsp_thickness, 1);
-        thicknessError = array.getDimension(R.styleable.SmartMaterialSpinner_smsp_thickness_error, 2);
+        underlineSize = array.getDimension(R.styleable.SmartMaterialSpinner_smsp_underlineSize, 0.6f);
         arrowColor = array.getColor(R.styleable.SmartMaterialSpinner_smsp_arrowColor, baseColor);
         arrowSize = array.getDimension(R.styleable.SmartMaterialSpinner_smsp_arrowSize, dpToPx(DEFAULT_ARROW_WIDTH_DP));
         enableErrorLabel = array.getBoolean(R.styleable.SmartMaterialSpinner_smsp_enableErrorLabel, true);
         enableFloatingLabel = array.getBoolean(R.styleable.SmartMaterialSpinner_smsp_enableFloatingLabel, true);
         alwaysShowFloatingLabel = array.getBoolean(R.styleable.SmartMaterialSpinner_smsp_alwaysShowFloatingLabel, false);
         isRtl = array.getBoolean(R.styleable.SmartMaterialSpinner_smsp_isRtl, false);
-        mHintView = array.getResourceId(R.styleable.SmartMaterialSpinner_smsp_hintView, simple_spinner_item);
-        mDropDownHintView = array.getResourceId(R.styleable.SmartMaterialSpinner_smsp_dropDownHintView, android.R.layout.simple_spinner_dropdown_item);
+        mHintView = array.getResourceId(R.styleable.SmartMaterialSpinner_smsp_hintView, R.layout.smart_material_spinner_hint_item_layout);
+        mDropDownHintView = array.getResourceId(R.styleable.SmartMaterialSpinner_smsp_dropDownHintView, R.layout.smart_material_spinner_dropdown_item);
 
         String typefacePath = array.getString(R.styleable.SmartMaterialSpinner_smsp_typeface);
         if (typefacePath != null) {
@@ -432,7 +426,7 @@ public class SmartMaterialSpinner extends AppCompatSpinner implements ValueAnima
 
 
         if (error != null && enableErrorLabel) {
-            lineHeight = dpToPx(thicknessError);
+            lineHeight = dpToPx(underlineSize);
             int startYErrorLabel = startYLine + errorLabelSpacing + lineHeight;
             paint.setColor(errorColor);
             textPaint.setColor(errorColor);
@@ -455,7 +449,7 @@ public class SmartMaterialSpinner extends AppCompatSpinner implements ValueAnima
             }
 
         } else {
-            lineHeight = dpToPx(thickness);
+            lineHeight = dpToPx(underlineSize);
             if (isSelected || hasFocus()) {
                 paint.setColor(highlightColor);
             } else {
@@ -721,21 +715,12 @@ public class SmartMaterialSpinner extends AppCompatSpinner implements ValueAnima
         invalidate();
     }
 
-    public float getThickness() {
-        return thickness;
+    public float getUnderlineSize() {
+        return underlineSize;
     }
 
-    public void setThickness(float thickness) {
-        this.thickness = thickness;
-        invalidate();
-    }
-
-    public float getThicknessError() {
-        return thicknessError;
-    }
-
-    public void setThicknessError(float thicknessError) {
-        this.thicknessError = thicknessError;
+    public void setUnderlineSize(float underlineSize) {
+        this.underlineSize = underlineSize;
         invalidate();
     }
 
@@ -851,7 +836,7 @@ public class SmartMaterialSpinner extends AppCompatSpinner implements ValueAnima
 
     public <T> void setItems(@NonNull List<String> items) {
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), R.layout.smart_material_spinner_hint_item_layout, items);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        adapter.setDropDownViewResource(R.layout.smart_material_spinner_dropdown_item);
         setAdapter(adapter);
     }
 

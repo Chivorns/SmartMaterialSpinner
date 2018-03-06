@@ -1,4 +1,4 @@
-package chivorn.com.demokotlin
+package com.chivorn.demokotlin
 
 import org.junit.Test
 

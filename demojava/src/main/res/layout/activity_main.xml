@@ -21,9 +21,7 @@
         android:id="@+id/sp_provinces"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:smsp_alwaysShowFloatingLabel="true"
-        app:smsp_floatingLabelText="floating text"
-        app:smsp_hint="This is hint spinner 1" />
+        app:smsp_hint="Province" />
 
     <com.chivorn.smartmaterialspinner.SmartMaterialSpinner
         android:id="@+id/sp_countries"
@@ -31,7 +29,7 @@
         android:layout_height="wrap_content"
         app:smsp_alwaysShowFloatingLabel="false"
         app:smsp_floatingLabelText="floating text"
-        app:smsp_hint="This is hint spinner 2" />
+        app:smsp_hint="This is hint in spinner 2" />
 
     <android.support.v7.widget.AppCompatEditText
         android:layout_width="match_parent"

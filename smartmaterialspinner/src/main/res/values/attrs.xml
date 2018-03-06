@@ -15,8 +15,7 @@
         <attr name="smsp_nbErrorLines" format="integer" />
         <attr name="smsp_typeface" format="string" />
         <attr name="smsp_alignLabels" format="boolean" />
-        <attr name="smsp_thickness" format="dimension" />
-        <attr name="smsp_thickness_error" format="dimension" />
+        <attr name="smsp_underlineSize" format="dimension" />
         <attr name="smsp_arrowSize" format="dimension" />
         <attr name="smsp_arrowColor" format="color" />
         <attr name="smsp_enableFloatingLabel" format="boolean" />

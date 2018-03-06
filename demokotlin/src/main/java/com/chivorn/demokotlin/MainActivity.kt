@@ -1,10 +1,11 @@
-package chivorn.com.demokotlin
+package com.chivorn.demokotlin
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
 import android.widget.Toast
+import chivorn.com.demokotlin.R
 import com.chivorn.smartmaterialspinner.SmartMaterialSpinner
 import java.util.ArrayList
 
