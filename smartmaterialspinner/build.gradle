@@ -1,5 +1,32 @@
 apply plugin: 'com.android.library'
 
+ext {
+    // Library
+    LIBRARY_NAME = 'SmartMaterialSpinner'
+    PUBLISH_GROUP_ID = 'com.github.chivorns'
+    PUBLISH_ARTIFACT_ID = LIBRARY_NAME.toLowerCase()
+    PUBLISH_VERSION = '1.0.0'
+
+    // Bintray
+    BINTRAY_REPO = 'maven'
+    LIBRARY_DESC = 'Provide with more customization for your spinner.'
+
+    // Github
+    GIT_REPO_URL = 'https://github.com/Chivorns/SmartMaterialSpinner'
+    GIT_VCS_URL  = GIT_REPO_URL + '.git'
+    GIT_USER_REPO_NAME = 'Chivorns/SmartMaterialSpinner'
+
+    // Developer Info
+    DEVELOPER_ID = 'chivorns'
+    DEVELOPER_NAME = 'Chivorn'
+    DEVELOPER_EMAIL = 'chivorn@live.com'
+
+    // Licence
+    LICENSE_NAME = 'The Apache Software License, Version 2.0'
+    LICENSE_URL = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+    ALL_LICENSES = ["Apache-2.0"]
+}
+
 android {
     compileSdkVersion 26
     defaultConfig {
@@ -33,3 +60,5 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
 }
+
+apply from: 'https://raw.githubusercontent.com/Chivorns/publish-android-library-plugin/master/publish_lib_v1.gradle'
