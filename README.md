@@ -7,7 +7,7 @@ The best Android spinner library for your android application
 
 ```gradle
 dependencies {
-    implementation 'com.github.chivorns:smartmaterialspinner:1.0.0'
+    implementation 'com.github.chivorns:smartmaterialspinner:1.0.1'
 }
 ```
 
