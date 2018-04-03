@@ -1,1 +1,1 @@
-include ':demojava',':smartmaterialspinner', ':demokotlin'
+include ':demojava',':smartmaterialspinner', ':demokotlin', ':resources'

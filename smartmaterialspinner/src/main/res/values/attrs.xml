@@ -24,6 +24,7 @@
         <attr name="smsp_isRtl" format="boolean" />
         <attr name="smsp_hintView" format="reference" />
         <attr name="smsp_dropDownHintView" format="reference" />
+        <attr name="smsp_showEmptyDropdown" format="boolean" />
     </declare-styleable>
 </resources>
 

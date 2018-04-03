@@ -108,6 +108,7 @@ public class SmartMaterialSpinner extends AppCompatSpinner implements ValueAnima
     private boolean enableFloatingLabel;
     private boolean alwaysShowFloatingLabel;
     private boolean isRtl;
+    private boolean isShowEmptyDropdown;
 
     private HintAdapter hintAdapter;
 
@@ -187,6 +188,7 @@ public class SmartMaterialSpinner extends AppCompatSpinner implements ValueAnima
         isRtl = array.getBoolean(R.styleable.SmartMaterialSpinner_smsp_isRtl, false);
         mHintView = array.getResourceId(R.styleable.SmartMaterialSpinner_smsp_hintView, R.layout.smart_material_spinner_hint_item_layout);
         mDropDownHintView = array.getResourceId(R.styleable.SmartMaterialSpinner_smsp_dropDownHintView, R.layout.smart_material_spinner_dropdown_item);
+        isShowEmptyDropdown = array.getBoolean(R.styleable.SmartMaterialSpinner_smsp_showEmptyDropdown, true);
 
         String typefacePath = array.getString(R.styleable.SmartMaterialSpinner_smsp_typeface);
         if (typefacePath != null) {
@@ -204,21 +206,30 @@ public class SmartMaterialSpinner extends AppCompatSpinner implements ValueAnima
 
         // Set default item to spinner to enable dropdown item
         setItems(new ArrayList<String>());
-        configDropdownSpinnerAfterHasItems();
+        if (isShowEmptyDropdown) {
+            configDropdownSpinnerAfterHasItems(true);
+        } else {
+            configDropdownSpinnerAfterHasItems(false);
+        }
     }
 
     /*
      * Config dropdown width and height.
      */
-    private void configDropdownSpinnerAfterHasItems() {
+    private void configDropdownSpinnerAfterHasItems(final boolean isShowEmptyDropdown) {
         this.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                     SmartMaterialSpinner.this.getViewTreeObserver().removeOnGlobalLayoutListener(this);
                 }
-                SmartMaterialSpinner.this.setDropDownWidth(SmartMaterialSpinner.this.getWidth());
-                SmartMaterialSpinner.this.setDropDownVerticalOffset(SmartMaterialSpinner.this.getHeight());
+                if (isShowEmptyDropdown) {
+                    SmartMaterialSpinner.this.setDropDownWidth(SmartMaterialSpinner.this.getWidth());
+                    SmartMaterialSpinner.this.setDropDownVerticalOffset(SmartMaterialSpinner.this.getHeight());
+                } else {
+                    SmartMaterialSpinner.this.setDropDownWidth(0);
+                    SmartMaterialSpinner.this.setDropDownVerticalOffset(0);
+                }
             }
         });
     }
@@ -530,6 +541,12 @@ public class SmartMaterialSpinner extends AppCompatSpinner implements ValueAnima
             invalidate();
         }
         return super.onTouchEvent(event);
+    }
+
+    @Override
+    public boolean performClick() {
+        super.performClick();
+        return true;
     }
 
     @Override
@@ -884,6 +901,11 @@ public class SmartMaterialSpinner extends AppCompatSpinner implements ValueAnima
             position++;
         }
         return (hintAdapter == null || position < 0) ? INVALID_ROW_ID : hintAdapter.getItemId(position);
+    }
+
+    public void setShowEmptyDropdown(boolean status) {
+        isShowEmptyDropdown = status;
+        configDropdownSpinnerAfterHasItems(status);
     }
 
 

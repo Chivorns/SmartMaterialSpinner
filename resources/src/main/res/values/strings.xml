@@ -1,0 +1,4 @@
+<resources>
+    <string name="java_app_name">SMSP-Java</string>
+    <string name="kotlin_app_name">SMSP-Kotlin</string>
+</resources>
