@@ -1,4 +1,6 @@
 # SmartMaterialSpinner
+[ ![Download](https://api.bintray.com/packages/chivorn/maven/datetimeoptionspicker/images/download.svg) ](https://bintray.com/chivorn/maven/datetimeoptionspicker/_latestVersion)
+
 The best Android spinner library for your android application
 ## Usage
 ### Add the dependencies to your gradle file:
