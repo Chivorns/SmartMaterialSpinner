@@ -1,4 +1,6 @@
 # SmartMaterialSpinner
+[ ![Download](https://api.bintray.com/packages/chivorn/maven/smartmaterialspinner/images/download.svg) ](https://bintray.com/chivorn/maven/smartmaterialspinner/_latestVersion)
+
 The best Android spinner library for your android application
 ## Screenshot Demo
 
@@ -32,7 +34,7 @@ dependencies {
 ```
 
 ## In Java class
-
+```java
 public class MainActivity extends AppCompatActivity {
 
     private SmartMaterialSpinner spProvince;
@@ -83,13 +85,12 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
-
     }
 }
-
+```
 
 ## In Kotlin class
-
+```kotlin
 class MainActivity : AppCompatActivity() {
     private var spProvince: SmartMaterialSpinner? = null
     private var spCountry: SmartMaterialSpinner? = null
@@ -134,5 +135,5 @@ class MainActivity : AppCompatActivity() {
         })
     }
 }
-
+```
 
