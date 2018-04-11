@@ -2,6 +2,12 @@
 [ ![Download](https://api.bintray.com/packages/chivorn/maven/smartmaterialspinner/images/download.svg) ](https://bintray.com/chivorn/maven/smartmaterialspinner/_latestVersion)
 
 The best Android spinner library for your android application
+
+## Available on Play Store
+<a href="https://play.google.com/store/apps/details?id=com.chivorn.smsp.demojava" target="_blank">
+  <img src="https://github.com/Chivorns/Resources/blob/master/google-play-badge.png" alt="Play Store" width="200" ">
+</a>
+
 ## Screenshot Demo
 
 ![](https://github.com/Chivorns/SmartMaterialSpinner/blob/master/resources/src/main/assets/1.smsp_no_select.png)
