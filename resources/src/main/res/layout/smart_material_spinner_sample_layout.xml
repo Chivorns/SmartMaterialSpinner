@@ -36,4 +36,38 @@
         app:smsp_hint="Country"
         app:smsp_showEmptyDropdown="false" />
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="bottom|center"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:id="@+id/git_repo_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button_bg"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center"
+                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
+                android:src="@drawable/github_logo" />
+
+            <Button
+                android:id="@+id/github_repo_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:layout_marginEnd="5dp"
+                android:layout_marginRight="5dp"
+                android:background="#00000000"
+                android:text="@string/github_repo"
+                android:textAllCaps="false" />
+        </LinearLayout>
+    </LinearLayout>
+
 </LinearLayout>

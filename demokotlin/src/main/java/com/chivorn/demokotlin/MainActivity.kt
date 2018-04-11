@@ -1,32 +1,26 @@
 package com.chivorn.demokotlin
 
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
 import android.view.MotionEvent
 import android.view.View
 import android.widget.AdapterView
 import android.widget.Toast
 import chivorn.com.demokotlin.R
-import com.chivorn.smartmaterialspinner.SmartMaterialSpinner
+import com.chivorn.resourcemodule.MainApp
 import java.util.*
 
-class MainActivity : AppCompatActivity() {
-    private var spProvince: SmartMaterialSpinner? = null
-    private var spCountry: SmartMaterialSpinner? = null
-    private var provinceList: MutableList<String>? = null
-
+class MainActivity : MainApp() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.smart_material_spinner_sample_layout)
 
-        initSpinner()
+        initBaseView()
+        initSpinnerInKotlin()
+        onGithubRepoClickListenter()
     }
 
-    private fun initSpinner() {
-        spProvince = findViewById(R.id.sp_provinces)
-        spCountry = findViewById(R.id.sp_countries)
+    private fun initSpinnerInKotlin() {
         provinceList = ArrayList()
-
         provinceList!!.add("Kampong Thom")
         provinceList!!.add("Kampong Cham")
         provinceList!!.add("Kampong Chhnang")

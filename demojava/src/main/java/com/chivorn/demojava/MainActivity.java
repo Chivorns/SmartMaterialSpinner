@@ -1,36 +1,28 @@
 package com.chivorn.demojava;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Toast;
 
-import com.chivorn.smartmaterialspinner.SmartMaterialSpinner;
+import com.chivorn.resourcemodule.MainApp;
 
 import java.util.ArrayList;
-import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
-
-    private SmartMaterialSpinner spProvince;
-    private SmartMaterialSpinner spCountry;
-    private List<String> provinceList;
-
+public class MainActivity extends MainApp {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.smart_material_spinner_sample_layout);
 
-        initSpinner();
+        initBaseView();
+        initSpinnerInJava();
+        onGithubRepoClickListenter();
     }
 
-    private void initSpinner() {
-        spProvince = findViewById(R.id.sp_provinces);
-        spCountry = findViewById(R.id.sp_countries);
+    private void initSpinnerInJava() {
         provinceList = new ArrayList<>();
-
         provinceList.add("Kampong Thom");
         provinceList.add("Kampong Cham");
         provinceList.add("Kampong Chhnang");
