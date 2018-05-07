@@ -531,6 +531,9 @@ public class SmartMaterialSpinner extends AppCompatSpinner implements ValueAnima
                     isSelected = true;
                     if (getContext() instanceof Activity)
                         SoftKeyboardUtil.hideSoftKeyboard((Activity) getContext());
+                    if (!isShowEmptyDropdown) {
+                        return true;
+                    }
                     break;
 
                 case MotionEvent.ACTION_UP:

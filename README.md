@@ -19,7 +19,7 @@ The best Android spinner library for your android application
 
 ```gradle
 dependencies {
-    implementation 'com.github.chivorns:smartmaterialspinner:1.0.2'
+    implementation 'com.github.chivorns:smartmaterialspinner:1.0.3'
 }
 ```
 
@@ -44,7 +44,7 @@ dependencies {
 public class MainActivity extends AppCompatActivity {
 
     private SmartMaterialSpinner spProvince;
-    private SmartMaterialSpinner spCountry;
+    private SmartMaterialSpinner spEmptyItem;
     private List<String> provinceList;
 
     @Override
@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void initSpinner() {
         spProvince = findViewById(R.id.sp_provinces);
-        spCountry = findViewById(R.id.sp_countries);
+        spEmptyItem = findViewById(R.id.sp_empty_item);
         provinceList = new ArrayList<>();
 
         provinceList.add("Kampong Thom");
@@ -80,15 +80,15 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        spCountry.setShowEmptyDropdown(false);
+        spEmptyItem.setShowEmptyDropdown(false);
         // Use this method instead of OnClicklistener() to handle touch even.
-        spCountry.setOnTouchListener(new View.OnTouchListener() {
+        spEmptyItem.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
                     Toast.makeText(MainActivity.this, "Country spinner is clicked", Toast.LENGTH_SHORT).show();
                 }
-                return true;
+                return false;
             }
         });
     }
@@ -99,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
 ```kotlin
 class MainActivity : AppCompatActivity() {
     private var spProvince: SmartMaterialSpinner? = null
-    private var spCountry: SmartMaterialSpinner? = null
+    private var spEmptyItem: SmartMaterialSpinner? = null
     private var provinceList: MutableList<String>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -111,7 +111,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun initSpinner() {
         spProvince = findViewById(R.id.sp_provinces)
-        spCountry = findViewById(R.id.sp_countries)
+        spEmptyItem = findViewById(R.id.sp_empty_item)
         provinceList = ArrayList()
 
         provinceList!!.add("Kampong Thom")
@@ -131,13 +131,13 @@ class MainActivity : AppCompatActivity() {
             override fun onNothingSelected(adapterView: AdapterView<*>) {}
         }
 
-        spCountry!!.setShowEmptyDropdown(false)
+        spEmptyItem!!.setShowEmptyDropdown(false)
         // Use this method instead of OnClicklistener() to handle touch even.
-        spCountry!!.setOnTouchListener(View.OnTouchListener { v, event ->
+        spEmptyItem!!.setOnTouchListener(View.OnTouchListener { v, event ->
             if (event.action == MotionEvent.ACTION_DOWN) {
                 Toast.makeText(this@MainActivity, "Country spinner is clicked", Toast.LENGTH_SHORT).show()
             }
-            true
+            false
         })
     }
 }

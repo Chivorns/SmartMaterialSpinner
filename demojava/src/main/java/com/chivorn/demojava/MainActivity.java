@@ -43,15 +43,15 @@ public class MainActivity extends MainApp {
             }
         });
 
-        spCountry.setShowEmptyDropdown(false);
+        spEmptyItem.setShowEmptyDropdown(false);
         // Use this method instead of OnClicklistener() to handle touch even.
-        spCountry.setOnTouchListener(new View.OnTouchListener() {
+        spEmptyItem.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    Toast.makeText(MainActivity.this, "Country spinner is clicked", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, getString(R.string.empty_item_spinner_click_msg), Toast.LENGTH_SHORT).show();
                 }
-                return true;
+                return false;
             }
         });
 

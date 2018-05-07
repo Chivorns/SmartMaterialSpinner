@@ -37,13 +37,14 @@ class MainActivity : MainApp() {
             override fun onNothingSelected(adapterView: AdapterView<*>) {}
         }
 
-        spCountry!!.setShowEmptyDropdown(false)
+        spEmptyItem!!.setShowEmptyDropdown(false)
         // Use this method instead of OnClicklistener() to handle touch even.
-        spCountry!!.setOnTouchListener(View.OnTouchListener { v, event ->
+        spEmptyItem!!.setOnTouchListener({ v, event ->
             if (event.action == MotionEvent.ACTION_DOWN) {
-                Toast.makeText(this@MainActivity, "Country spinner is clicked", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@MainActivity, getString(R.string.empty_item_spinner_click_msg), Toast.LENGTH_SHORT).show()
+
             }
-            true
+            false
         })
     }
 }
