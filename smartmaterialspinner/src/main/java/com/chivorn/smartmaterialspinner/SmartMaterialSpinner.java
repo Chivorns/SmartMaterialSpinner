@@ -92,6 +92,7 @@ public class SmartMaterialSpinner extends AppCompatSpinner implements ValueAnima
     private int highlightColor;
     private int errorColor;
     private int disabledColor;
+    private int underlineColor;
     private CharSequence error;
     private CharSequence hint;
     private int hintColor;
@@ -170,6 +171,7 @@ public class SmartMaterialSpinner extends AppCompatSpinner implements ValueAnima
         highlightColor = array.getColor(R.styleable.SmartMaterialSpinner_smsp_highlightColor, defaultHighlightColor);
         errorColor = array.getColor(R.styleable.SmartMaterialSpinner_smsp_errorColor, defaultErrorColor);
         disabledColor = context.getResources().getColor(R.color.smsp_disabled_color);
+        underlineColor = array.getColor(R.styleable.SmartMaterialSpinner_smsp_underlineColor, defaultBaseColor);
         error = array.getString(R.styleable.SmartMaterialSpinner_smsp_error);
         hint = array.getString(R.styleable.SmartMaterialSpinner_smsp_hint);
         floatingLabelText = array.getString(R.styleable.SmartMaterialSpinner_smsp_floatingLabelText);
@@ -464,7 +466,7 @@ public class SmartMaterialSpinner extends AppCompatSpinner implements ValueAnima
             if (isSelected || hasFocus()) {
                 paint.setColor(highlightColor);
             } else {
-                paint.setColor(isEnabled() ? baseColor : disabledColor);
+                paint.setColor(isEnabled() ? underlineColor : disabledColor);
             }
         }
 
@@ -822,6 +824,11 @@ public class SmartMaterialSpinner extends AppCompatSpinner implements ValueAnima
 
     public boolean isRtl() {
         return isRtl;
+    }
+
+    public void setUnderlineColor(int color) {
+        underlineColor = color;
+        invalidate();
     }
 
     /**

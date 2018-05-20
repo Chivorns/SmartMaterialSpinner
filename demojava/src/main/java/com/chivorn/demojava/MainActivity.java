@@ -1,6 +1,7 @@
 package com.chivorn.demojava;
 
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
@@ -55,5 +56,7 @@ public class MainActivity extends MainApp {
             }
         });
 
+        // TODO: Set underline color
+        spProvince.setUnderlineColor(ContextCompat.getColor(getApplicationContext(), R.color.underline_color));
     }
 }

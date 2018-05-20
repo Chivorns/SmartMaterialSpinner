@@ -35,12 +35,13 @@
         app:smsp_baseColor="@color/base_color"
         app:smsp_floatingLabelText="floating text"
         app:smsp_hint="Empty Item Spinner"
-        app:smsp_showEmptyDropdown="false" />
+        app:smsp_showEmptyDropdown="false"
+        app:smsp_underlineColor="@color/underline_color" />
 
     <EditText
-        android:background="@drawable/smsp_border_bottom"
         android:layout_width="match_parent"
         android:layout_height="50dp"
+        android:background="@drawable/smsp_border_bottom"
         android:hint="Input text"
         android:maxLines="1"
         android:padding="0dp"

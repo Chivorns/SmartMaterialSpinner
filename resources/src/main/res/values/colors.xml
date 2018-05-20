@@ -7,4 +7,5 @@
     <color name="base_color">#d46a6a</color>
     <color name="hint_color">#d46a6a</color>
     <color name="floating_color">#d46a6a</color>
+    <color name="underline_color">#4851504e</color>
 </resources>
