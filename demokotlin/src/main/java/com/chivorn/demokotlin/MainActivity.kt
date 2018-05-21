@@ -41,9 +41,8 @@ class MainActivity : MainApp() {
         spEmptyItem!!.setShowEmptyDropdown(false)
         // Use this method instead of OnClicklistener() to handle touch even.
         spEmptyItem!!.setOnTouchListener({ v, event ->
-            if (event.action == MotionEvent.ACTION_DOWN) {
+            if (event.action == MotionEvent.ACTION_UP) {
                 Toast.makeText(this@MainActivity, getString(R.string.empty_item_spinner_click_msg), Toast.LENGTH_SHORT).show()
-
             }
             false
         })

@@ -85,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
         spEmptyItem.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                if (event.getAction() == MotionEvent.ACTION_UP) {
                     Toast.makeText(MainActivity.this, "Country spinner is clicked", Toast.LENGTH_SHORT).show();
                 }
                 return false;
@@ -134,7 +134,7 @@ class MainActivity : AppCompatActivity() {
         spEmptyItem!!.setShowEmptyDropdown(false)
         // Use this method instead of OnClicklistener() to handle touch even.
         spEmptyItem!!.setOnTouchListener(View.OnTouchListener { v, event ->
-            if (event.action == MotionEvent.ACTION_DOWN) {
+            if (event.action == MotionEvent.ACTION_UP) {
                 Toast.makeText(this@MainActivity, "Country spinner is clicked", Toast.LENGTH_SHORT).show()
             }
             false
