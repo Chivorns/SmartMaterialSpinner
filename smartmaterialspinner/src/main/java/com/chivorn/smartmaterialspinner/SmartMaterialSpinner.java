@@ -114,7 +114,7 @@ public class SmartMaterialSpinner extends AppCompatSpinner implements ValueAnima
     private HintAdapter hintAdapter;
 
     //Default hint views
-    private Integer mDropDownHintView;
+    private Integer mDropdownView;
     private Integer mHintView;
 
     /*
@@ -189,7 +189,7 @@ public class SmartMaterialSpinner extends AppCompatSpinner implements ValueAnima
         alwaysShowFloatingLabel = array.getBoolean(R.styleable.SmartMaterialSpinner_smsp_alwaysShowFloatingLabel, false);
         isRtl = array.getBoolean(R.styleable.SmartMaterialSpinner_smsp_isRtl, false);
         mHintView = array.getResourceId(R.styleable.SmartMaterialSpinner_smsp_hintView, R.layout.smart_material_spinner_hint_item_layout);
-        mDropDownHintView = array.getResourceId(R.styleable.SmartMaterialSpinner_smsp_dropDownHintView, R.layout.smart_material_spinner_dropdown_item);
+        mDropdownView = array.getResourceId(R.styleable.SmartMaterialSpinner_smsp_dropdownView, R.layout.smart_material_spinner_dropdown_item);
         isShowEmptyDropdown = array.getBoolean(R.styleable.SmartMaterialSpinner_smsp_showEmptyDropdown, true);
 
         String typefacePath = array.getString(R.styleable.SmartMaterialSpinner_smsp_typeface);
@@ -680,7 +680,7 @@ public class SmartMaterialSpinner extends AppCompatSpinner implements ValueAnima
     }
 
     public void setDripDownHintView(Integer resId) {
-        this.mDropDownHintView = resId;
+        this.mDropdownView = resId;
     }
 
     public void setFloatingLabelText(CharSequence floatingLabelText) {
@@ -997,7 +997,7 @@ public class SmartMaterialSpinner extends AppCompatSpinner implements ValueAnima
         private View getHintView(final View convertView, final ViewGroup parent, final boolean isDropDownView) {
 
             final LayoutInflater inflater = LayoutInflater.from(mContext);
-            final int resid = isDropDownView ? mDropDownHintView : mHintView;
+            final int resid = isDropDownView ? mDropdownView : mHintView;
             final TextView textView = (TextView) inflater.inflate(resid, parent, false);
             textView.setText(hint);
             textView.setTextColor(SmartMaterialSpinner.this.isEnabled() ? hintColor : disabledColor);

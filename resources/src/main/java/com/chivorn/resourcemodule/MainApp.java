@@ -15,6 +15,7 @@ public class MainApp extends AppCompatActivity implements View.OnClickListener {
     private final String repoUrl = "https://github.com/Chivorns/SmartMaterialSpinner";
 
     protected SmartMaterialSpinner spProvince;
+    protected SmartMaterialSpinner spProvinceDialog;
     protected SmartMaterialSpinner spEmptyItem;
     protected List<String> provinceList;
 
@@ -24,6 +25,7 @@ public class MainApp extends AppCompatActivity implements View.OnClickListener {
 
     public void initBaseView() {
         spProvince = findViewById(R.id.sp_provinces);
+        spProvinceDialog = findViewById(R.id.sp_provinces_dialog);
         spEmptyItem = findViewById(R.id.sp_empty_item);
         githubRepo = findViewById(R.id.git_repo_container);
         githubRepoBtn = findViewById(R.id.github_repo_btn);

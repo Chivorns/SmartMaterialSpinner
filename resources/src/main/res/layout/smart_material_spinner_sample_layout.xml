@@ -23,7 +23,19 @@
         app:smsp_baseColor="@color/base_color"
         app:smsp_floatingLabelColor="@color/floating_color"
         app:smsp_highlightColor="@color/colorPrimary"
-        app:smsp_hint="Province"
+        app:smsp_hint="Province (Dropdown Mode)"
+        app:smsp_hintColor="@color/hint_color"
+        app:smsp_hintTextSize="14sp" />
+
+    <com.chivorn.smartmaterialspinner.SmartMaterialSpinner
+        android:id="@+id/sp_provinces_dialog"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:spinnerMode="dialog"
+        app:smsp_baseColor="@color/base_color"
+        app:smsp_floatingLabelColor="@color/floating_color"
+        app:smsp_highlightColor="@color/colorPrimary"
+        app:smsp_hint="Province (Dialog Mode)"
         app:smsp_hintColor="@color/hint_color"
         app:smsp_hintTextSize="14sp" />
 
@@ -65,8 +77,8 @@
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:layout_gravity="center"
-                android:layout_marginLeft="10dp"
                 android:layout_marginStart="10dp"
+                android:layout_marginLeft="10dp"
                 android:src="@drawable/github_logo" />
 
             <Button
