@@ -61,6 +61,7 @@ public class MainActivity extends MainApp {
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
+                Toast.makeText(MainActivity.this, "On Nothing Selected", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -72,6 +73,7 @@ public class MainActivity extends MainApp {
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
+                Toast.makeText(MainActivity.this, "On Nothing Selected", Toast.LENGTH_SHORT).show();
             }
         });
 

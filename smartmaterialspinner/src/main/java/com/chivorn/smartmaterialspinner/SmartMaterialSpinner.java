@@ -556,11 +556,9 @@ public class SmartMaterialSpinner extends AppCompatSpinner implements ValueAnima
 
     @Override
     public void setOnItemSelectedListener(final OnItemSelectedListener listener) {
-
         final OnItemSelectedListener onItemSelectedListener = new OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
                 if (hint != null || floatingLabelText != null) {
                     if (!floatingLabelVisible && position != 0) {
                         showFloatingLabel();
@@ -572,12 +570,15 @@ public class SmartMaterialSpinner extends AppCompatSpinner implements ValueAnima
                 if (position != lastPosition && error != null) {
                     setError(null);
                 }
+                boolean isStartup = lastPosition == -1;
                 lastPosition = position;
 
                 if (listener != null) {
                     position = hint != null ? position - 1 : position;
                     if (position >= 0) {
                         listener.onItemSelected(parent, view, position, id);
+                    } else if (position == -1 && !isStartup) {
+                        listener.onNothingSelected(parent);
                     }
                 }
             }
