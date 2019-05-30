@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Point;
@@ -96,6 +97,9 @@ public class SmartMaterialSpinner extends AppCompatSpinner implements ValueAnima
     private CharSequence error;
     private CharSequence hint;
     private int hintColor;
+    private int itemColor;
+    private int itemListColor;
+    private int selectedItemColor;
     private float hintTextSize;
     private CharSequence floatingLabelText;
     private int floatingLabelColor;
@@ -176,6 +180,9 @@ public class SmartMaterialSpinner extends AppCompatSpinner implements ValueAnima
         hint = array.getString(R.styleable.SmartMaterialSpinner_smsp_hint);
         floatingLabelText = array.getString(R.styleable.SmartMaterialSpinner_smsp_floatingLabelText);
         hintColor = array.getColor(R.styleable.SmartMaterialSpinner_smsp_hintColor, baseColor);
+        itemColor = array.getColor(R.styleable.SmartMaterialSpinner_smsp_itemColor, Color.BLACK);
+        itemListColor = array.getColor(R.styleable.SmartMaterialSpinner_smsp_itemListColor, Color.BLACK);
+        selectedItemColor = array.getColor(R.styleable.SmartMaterialSpinner_smsp_selectedItemColor, itemColor);
         hintTextSize = array.getDimension(R.styleable.SmartMaterialSpinner_smsp_hintTextSize, -1);
         floatingLabelColor = array.getColor(R.styleable.SmartMaterialSpinner_smsp_floatingLabelColor, baseColor);
         multiline = array.getBoolean(R.styleable.SmartMaterialSpinner_smsp_multiline, true);
@@ -408,7 +415,11 @@ public class SmartMaterialSpinner extends AppCompatSpinner implements ValueAnima
 
         int targetNbLines = minNbErrorLines;
         if (error != null) {
-            staticLayout = new StaticLayout(error, textPaint, getWidth() - getPaddingRight() - getPaddingLeft(), Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, true);
+            int mWidth = getWidth() - getPaddingRight() - getPaddingLeft();
+            if (mWidth < 0) {
+                mWidth = 0;
+            }
+            staticLayout = new StaticLayout(error, textPaint, mWidth, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, true);
             int nbErrorLines = staticLayout.getLineCount();
             targetNbLines = Math.max(minNbErrorLines, nbErrorLines);
         }
@@ -447,6 +458,9 @@ public class SmartMaterialSpinner extends AppCompatSpinner implements ValueAnima
             if (multiline) {
                 canvas.save();
                 canvas.translate(startX + rightLeftSpinnerPadding, startYErrorLabel - errorLabelSpacing);
+                if (staticLayout == null) {
+                    prepareBottomPadding();
+                }
                 staticLayout.draw(canvas);
                 canvas.restore();
 
@@ -576,9 +590,20 @@ public class SmartMaterialSpinner extends AppCompatSpinner implements ValueAnima
                 if (listener != null) {
                     position = hint != null ? position - 1 : position;
                     if (position >= 0) {
+                        if (view instanceof TextView) {
+                            TextView selectedItem = (TextView) parent.getChildAt(0);
+                            selectedItem.setTextColor(itemColor);
+                        }
                         listener.onItemSelected(parent, view, position, id);
                     } else if (position == -1 && !isStartup) {
                         listener.onNothingSelected(parent);
+                    }
+                } else {
+                    if (position > 0 && !isStartup) {
+                        if (view instanceof TextView) {
+                            TextView selectedItem = (TextView) parent.getChildAt(0);
+                            selectedItem.setTextColor(itemColor);
+                        }
                     }
                 }
             }
@@ -832,6 +857,21 @@ public class SmartMaterialSpinner extends AppCompatSpinner implements ValueAnima
         invalidate();
     }
 
+    public void setItemColor(int color) {
+        this.itemColor = color;
+    }
+
+    public void setItemListColor(int color) {
+        this.itemListColor = color;
+        if (selectedItemColor == Color.BLACK && color != Color.BLACK) {
+            selectedItemColor = color;
+        }
+    }
+
+    public void setSelectedItemColor(int color) {
+        this.selectedItemColor = color;
+    }
+
     /**
      * @deprecated {use @link #setPaddingSafe(int, int, int, int)} to keep internal computation OK
      */
@@ -992,7 +1032,15 @@ public class SmartMaterialSpinner extends AppCompatSpinner implements ValueAnima
                 convertView = (convertView.getTag() != null && convertView.getTag() instanceof Integer && (Integer) convertView.getTag() != HINT_TYPE) ? convertView : null;
             }
             position = hint != null ? position - 1 : position;
-            return isDropDownView ? mSpinnerAdapter.getDropDownView(position, convertView, parent) : mSpinnerAdapter.getView(position, convertView, parent);
+            View dropdownItemView = (isDropDownView ? mSpinnerAdapter.getDropDownView(position, convertView, parent) : mSpinnerAdapter.getView(position, convertView, parent));
+            if (dropdownItemView instanceof TextView) {
+                TextView itemTextView = (TextView) dropdownItemView;
+                itemTextView.setTextColor(itemListColor);
+                if (position >= 0 && position == getSelectedItemPosition() - 1) {
+                    itemTextView.setTextColor(selectedItemColor);
+                }
+            }
+            return dropdownItemView;
         }
 
         private View getHintView(final View convertView, final ViewGroup parent, final boolean isDropDownView) {

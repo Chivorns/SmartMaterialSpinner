@@ -9,6 +9,9 @@
         <attr name="smsp_hint" format="string" />
         <attr name="smsp_hintColor" format="color" />
         <attr name="smsp_hintTextSize" format="dimension" />
+        <attr name="smsp_itemColor" format="color|reference" />
+        <attr name="smsp_itemListColor" format="color|reference" />
+        <attr name="smsp_selectedItemColor" format="color|reference" />
         <attr name="smsp_floatingLabelText" format="string" />
         <attr name="smsp_floatingLabelColor" format="color" />
         <attr name="smsp_multiline" format="boolean" />

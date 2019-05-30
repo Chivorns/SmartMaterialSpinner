@@ -40,6 +40,21 @@
         app:smsp_hintTextSize="14sp" />
 
     <com.chivorn.smartmaterialspinner.SmartMaterialSpinner
+        android:id="@+id/sp_custom_color"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:spinnerMode="dialog"
+        app:smsp_baseColor="@color/base_color"
+        app:smsp_floatingLabelColor="@color/floating_color"
+        app:smsp_highlightColor="@color/colorPrimary"
+        app:smsp_hint="Custom Color"
+        app:smsp_hintColor="@color/hint_color"
+        app:smsp_hintTextSize="14sp"
+        app:smsp_itemColor="@color/custom_item_color"
+        app:smsp_itemListColor="@color/custom_item_list_color"
+        app:smsp_selectedItemColor="@color/custom_selected_item_color" />
+
+    <com.chivorn.smartmaterialspinner.SmartMaterialSpinner
         android:id="@+id/sp_empty_item"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

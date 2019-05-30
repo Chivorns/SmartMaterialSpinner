@@ -1,7 +1,6 @@
 package com.chivorn.demokotlin
 
 import android.os.Bundle
-import android.support.v4.content.ContextCompat
 import android.view.MotionEvent
 import android.view.View
 import android.widget.AdapterView
@@ -49,6 +48,7 @@ class MainActivity : MainApp() {
 
         spProvince!!.setItems<Any>(provinceList!!)
         spProvinceDialog!!.setItems<Any>(provinceList)
+        spCustomColor!!.setItems<Any>(provinceList)
 
         spProvince!!.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(adapterView: AdapterView<*>, view: View, position: Int, id: Long) {
@@ -74,9 +74,5 @@ class MainActivity : MainApp() {
             }
             false
         })
-
-        // TODO: Set underline color
-        spProvince.setUnderlineColor(ContextCompat.getColor(applicationContext, R.color.underline_color))
-        spProvinceDialog.setUnderlineColor(ContextCompat.getColor(applicationContext, R.color.underline_color))
     }
 }

@@ -1,7 +1,6 @@
 package com.chivorn.demojava;
 
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
@@ -52,6 +51,11 @@ public class MainActivity extends MainApp {
 
         spProvince.setItems(provinceList);
         spProvinceDialog.setItems(provinceList);
+        spCustomColor.setItems(provinceList);
+
+        spCustomColor.setItemColor(getResources().getColor(R.color.custom_item_color));
+        spCustomColor.setSelectedItemColor(getResources().getColor(R.color.custom_selected_item_color));
+        spCustomColor.setItemListColor(getResources().getColor(R.color.custom_item_list_color));
 
         spProvince.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -88,9 +92,5 @@ public class MainActivity extends MainApp {
                 return false;
             }
         });
-
-        // TODO: Set underline color
-        spProvince.setUnderlineColor(ContextCompat.getColor(getApplicationContext(), R.color.underline_color));
-        spProvinceDialog.setUnderlineColor(ContextCompat.getColor(getApplicationContext(), R.color.underline_color));
     }
 }
