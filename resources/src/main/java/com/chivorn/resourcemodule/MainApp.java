@@ -20,6 +20,7 @@ public class MainApp extends AppCompatActivity implements View.OnClickListener {
     protected SmartMaterialSpinner spProvinceDialog;
     protected SmartMaterialSpinner spCustomColor;
     protected SmartMaterialSpinner spEmptyItem;
+    protected SmartMaterialSpinner spSearchable;
     protected List<String> provinceList;
 
     private LinearLayout githubRepo;
@@ -32,11 +33,12 @@ public class MainApp extends AppCompatActivity implements View.OnClickListener {
         spProvinceDialog = findViewById(R.id.sp_provinces_dialog);
         spCustomColor = findViewById(R.id.sp_custom_color);
         spEmptyItem = findViewById(R.id.sp_empty_item);
+        spSearchable = findViewById(R.id.sp_searchable);
         githubRepo = findViewById(R.id.git_repo_container);
         btnShowError = findViewById(R.id.btn_show_error);
         githubRepoBtn = findViewById(R.id.github_repo_btn);
 
-        setUnderlineColor(spProvince, spProvinceDialog, spCustomColor);
+        setUnderlineColor(spProvince, spProvinceDialog, spCustomColor, spSearchable);
     }
 
     public void onClickListenter() {

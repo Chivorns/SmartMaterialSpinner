@@ -4,6 +4,7 @@ import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -38,7 +39,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class SmartMaterialSpinner extends AppCompatSpinner implements ValueAnimator.AnimatorUpdateListener {
+public class SmartMaterialSpinner extends AppCompatSpinner implements ValueAnimator.AnimatorUpdateListener, SearchableSpinnerDialog.SearchableItem {
     public static final int DEFAULT_ARROW_WIDTH_DP = 10;
 
     private static final String TAG = SmartMaterialSpinner.class.getSimpleName();
@@ -48,6 +49,9 @@ public class SmartMaterialSpinner extends AppCompatSpinner implements ValueAnima
     private TextPaint textPaint;
     private StaticLayout staticLayout;
 
+    private SearchableSpinnerDialog searchableSpinnerDialog;
+    private List searchDialogItem;
+    private boolean isSearchable = false;
 
     private Path selectorPath;
     private Point[] selectorPoints;
@@ -162,6 +166,14 @@ public class SmartMaterialSpinner extends AppCompatSpinner implements ValueAnima
         //Erase the drawable selector not to be affected by new size (extra paddings)
         setBackgroundResource(R.drawable.smart_material_spinner_background);
         setError(error);
+        initSearchableDialog();
+
+        setItems(new ArrayList<String>());
+        if (isShowEmptyDropdown) {
+            configDropdownSpinnerAfterHasItems(true);
+        } else {
+            configDropdownSpinnerAfterHasItems(false);
+        }
     }
 
     private void initAttributes(Context context, AttributeSet attrs) {
@@ -200,6 +212,7 @@ public class SmartMaterialSpinner extends AppCompatSpinner implements ValueAnima
         mHintView = array.getResourceId(R.styleable.SmartMaterialSpinner_smsp_hintView, R.layout.smart_material_spinner_hint_item_layout);
         mDropdownView = array.getResourceId(R.styleable.SmartMaterialSpinner_smsp_dropdownView, R.layout.smart_material_spinner_dropdown_item);
         isShowEmptyDropdown = array.getBoolean(R.styleable.SmartMaterialSpinner_smsp_showEmptyDropdown, true);
+        isSearchable = array.getBoolean(R.styleable.SmartMaterialSpinner_smsp_isSearchable, false);
 
         String typefacePath = array.getString(R.styleable.SmartMaterialSpinner_smsp_typeface);
         if (typefacePath != null) {
@@ -214,14 +227,13 @@ public class SmartMaterialSpinner extends AppCompatSpinner implements ValueAnima
         floatingLabelVisible = false;
         lastPosition = -1;
         currentNbErrorLines = minNbErrorLines;
+    }
 
-        // Set default item to spinner to enable dropdown item
-        setItems(new ArrayList<String>());
-        if (isShowEmptyDropdown) {
-            configDropdownSpinnerAfterHasItems(true);
-        } else {
-            configDropdownSpinnerAfterHasItems(false);
-        }
+    private void initSearchableDialog() {
+        searchDialogItem = new ArrayList();
+        searchableSpinnerDialog = SearchableSpinnerDialog.newInstance(searchDialogItem);
+        searchableSpinnerDialog.setOnSearchDialogItemClickListener(this);
+        setSearchable(isSearchable);
     }
 
     /*
@@ -443,6 +455,14 @@ public class SmartMaterialSpinner extends AppCompatSpinner implements ValueAnima
         return (hintAdapter.getCount() == 0 && hint == null) || (hintAdapter.getCount() == 1 && hint != null);
     }
 
+    private Activity scanForActivity(Context context) {
+        if (context instanceof Activity)
+            return (Activity) context;
+        else if (context instanceof ContextWrapper)
+            return scanForActivity(((ContextWrapper) context).getBaseContext());
+        return null;
+    }
+
     /*
      * **********************************************************************************
      * DRAWING METHODS
@@ -635,6 +655,17 @@ public class SmartMaterialSpinner extends AppCompatSpinner implements ValueAnima
     @Override
     public void onAnimationUpdate(ValueAnimator animation) {
         invalidate();
+    }
+
+    @Override
+    public void onSearchItemClickListener(Object item, int position) {
+        int selectedIndex = searchDialogItem.indexOf(item);
+        if (position >= 0) {
+            if (hint != null) {
+                selectedIndex += 1;
+            }
+            setSelection(selectedIndex);
+        }
     }
 
 
@@ -883,6 +914,32 @@ public class SmartMaterialSpinner extends AppCompatSpinner implements ValueAnima
 
     public void setSelectedItemColor(int color) {
         this.selectedItemColor = color;
+    }
+
+    public void setSearchable(boolean searchable) {
+        this.isSearchable = searchable;
+        if (searchable) {
+            setClickable(false);
+            setOnTouchListener(new OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    if (event.getAction() == MotionEvent.ACTION_UP) {
+                        if (isSearchable && hintAdapter != null) {
+                            searchDialogItem.clear();
+                            int itemStart = 0;
+                            if (hint != null) {
+                                itemStart = 1;
+                            }
+                            for (int i = itemStart; i < hintAdapter.getCount(); i++) {
+                                searchDialogItem.add(hintAdapter.getItem(i));
+                            }
+                            searchableSpinnerDialog.show(scanForActivity(getContext()).getFragmentManager(), "TAG");
+                        }
+                    }
+                    return true;
+                }
+            });
+        }
     }
 
     /**

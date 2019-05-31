@@ -52,6 +52,7 @@ public class MainActivity extends MainApp {
         spProvince.setItems(provinceList);
         spProvinceDialog.setItems(provinceList);
         spCustomColor.setItems(provinceList);
+        spSearchable.setItems(provinceList);
 
         spCustomColor.setItemColor(getResources().getColor(R.color.custom_item_color));
         spCustomColor.setSelectedItemColor(getResources().getColor(R.color.custom_selected_item_color));
@@ -85,6 +86,18 @@ public class MainActivity extends MainApp {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
                 spCustomColor.setError("You are selecting on spinner item -> \"" + provinceList.get(position) + "\" . You can show it both in XML and programmatically and you can display as single line or multiple lines");
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                Toast.makeText(MainActivity.this, "On Nothing Selected", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        spSearchable.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
+                spSearchable.setError("Your selected item is \"" + provinceList.get(position) + "\" .");
             }
 
             @Override

@@ -73,6 +73,22 @@
         app:smsp_showEmptyDropdown="false"
         app:smsp_underlineColor="@color/underline_color" />
 
+    <com.chivorn.smartmaterialspinner.SmartMaterialSpinner
+        android:id="@+id/sp_searchable"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:spinnerMode="dialog"
+        app:smsp_baseColor="@color/base_color"
+        app:smsp_error="This is error text from xml"
+        app:smsp_errorColor="@color/error_color"
+        app:smsp_floatingLabelColor="@color/floating_color"
+        app:smsp_highlightColor="@color/colorPrimary"
+        app:smsp_hint="Searchable Spinner"
+        app:smsp_hintColor="@color/hint_color"
+        app:smsp_hintTextSize="14sp"
+        app:smsp_isSearchable="true"
+        app:smsp_multilineError="true" />
+
     <EditText
         android:layout_width="match_parent"
         android:layout_height="50dp"

@@ -49,6 +49,7 @@ class MainActivity : MainApp() {
         spProvince!!.setItems<Any>(provinceList!!)
         spProvinceDialog!!.setItems<Any>(provinceList)
         spCustomColor!!.setItems<Any>(provinceList)
+        spSearchable!!.setItems<Any>(provinceList)
 
         spProvince!!.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(adapterView: AdapterView<*>, view: View, position: Int, id: Long) {
@@ -69,6 +70,14 @@ class MainActivity : MainApp() {
         spCustomColor!!.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(adapterView: AdapterView<*>, view: View, position: Int, id: Long) {
                 spCustomColor?.error = "You are selecting on spinner item -> \"" + provinceList[position] + "\" . You can show it both in XML and programmatically and you can display as single line or multiple lines"
+            }
+
+            override fun onNothingSelected(adapterView: AdapterView<*>) {}
+        }
+
+        spSearchable!!.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(adapterView: AdapterView<*>, view: View, position: Int, id: Long) {
+                spSearchable?.error = "Your selected item is \"" + provinceList.get(position) + "\" ."
             }
 
             override fun onNothingSelected(adapterView: AdapterView<*>) {}
