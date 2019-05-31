@@ -21,11 +21,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:smsp_baseColor="@color/base_color"
+        app:smsp_error="This is error text from xml"
+        app:smsp_errorColor="@color/error_color"
         app:smsp_floatingLabelColor="@color/floating_color"
         app:smsp_highlightColor="@color/colorPrimary"
         app:smsp_hint="Province (Dropdown Mode)"
         app:smsp_hintColor="@color/hint_color"
-        app:smsp_hintTextSize="14sp" />
+        app:smsp_hintTextSize="14sp"
+        app:smsp_multilineError="false" />
 
     <com.chivorn.smartmaterialspinner.SmartMaterialSpinner
         android:id="@+id/sp_provinces_dialog"
@@ -33,11 +36,14 @@
         android:layout_height="wrap_content"
         android:spinnerMode="dialog"
         app:smsp_baseColor="@color/base_color"
+        app:smsp_error="This is error text from xml"
+        app:smsp_errorColor="@color/error_color"
         app:smsp_floatingLabelColor="@color/floating_color"
         app:smsp_highlightColor="@color/colorPrimary"
         app:smsp_hint="Province (Dialog Mode)"
         app:smsp_hintColor="@color/hint_color"
-        app:smsp_hintTextSize="14sp" />
+        app:smsp_hintTextSize="14sp"
+        app:smsp_multilineError="true" />
 
     <com.chivorn.smartmaterialspinner.SmartMaterialSpinner
         android:id="@+id/sp_custom_color"
@@ -45,6 +51,7 @@
         android:layout_height="wrap_content"
         android:spinnerMode="dialog"
         app:smsp_baseColor="@color/base_color"
+        app:smsp_errorColor="@color/error_color"
         app:smsp_floatingLabelColor="@color/floating_color"
         app:smsp_highlightColor="@color/colorPrimary"
         app:smsp_hint="Custom Color"
@@ -60,6 +67,7 @@
         android:layout_height="wrap_content"
         app:smsp_alwaysShowFloatingLabel="false"
         app:smsp_baseColor="@color/base_color"
+        app:smsp_errorColor="@color/error_color"
         app:smsp_floatingLabelText="floating text"
         app:smsp_hint="Empty Item Spinner"
         app:smsp_showEmptyDropdown="false"
@@ -74,6 +82,17 @@
         android:padding="0dp"
         android:textColorHint="@color/floating_color"
         android:textSize="14sp" />
+
+    <Button
+        android:id="@+id/btn_show_error"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        android:layout_marginEnd="5dp"
+        android:layout_marginRight="5dp"
+        android:background="#00000000"
+        android:text="Show Error"
+        android:textAllCaps="false" />
 
     <LinearLayout
         android:layout_width="match_parent"

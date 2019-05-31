@@ -14,6 +14,7 @@ import java.util.List;
 
 public class MainApp extends AppCompatActivity implements View.OnClickListener {
     private final String repoUrl = "https://github.com/Chivorns/SmartMaterialSpinner";
+    protected static final String ERROR_MSG = "This is error message. We use it to show at bottom of spinner field and you have two options to display. One single line and second is multiple line";
 
     protected SmartMaterialSpinner spProvince;
     protected SmartMaterialSpinner spProvinceDialog;
@@ -22,6 +23,7 @@ public class MainApp extends AppCompatActivity implements View.OnClickListener {
     protected List<String> provinceList;
 
     private LinearLayout githubRepo;
+    private Button btnShowError;
     private Button githubRepoBtn;
     private Intent intent;
 
@@ -31,15 +33,20 @@ public class MainApp extends AppCompatActivity implements View.OnClickListener {
         spCustomColor = findViewById(R.id.sp_custom_color);
         spEmptyItem = findViewById(R.id.sp_empty_item);
         githubRepo = findViewById(R.id.git_repo_container);
+        btnShowError = findViewById(R.id.btn_show_error);
         githubRepoBtn = findViewById(R.id.github_repo_btn);
 
         setUnderlineColor(spProvince, spProvinceDialog, spCustomColor);
     }
 
-    public void onGithubRepoClickListenter() {
+    public void onClickListenter() {
         if (githubRepo != null && githubRepoBtn != null) {
             githubRepo.setOnClickListener(this);
             githubRepoBtn.setOnClickListener(this);
+        }
+
+        if (btnShowError != null) {
+            btnShowError.setOnClickListener(this);
         }
     }
 
@@ -49,6 +56,10 @@ public class MainApp extends AppCompatActivity implements View.OnClickListener {
             intent = new Intent(Intent.ACTION_VIEW);
             intent.setData(Uri.parse(repoUrl));
             startActivity(intent);
+        } else if (v.getId() == R.id.btn_show_error) {
+            spProvince.setError(ERROR_MSG);
+            spProvinceDialog.setError(ERROR_MSG);
+            spCustomColor.setError(ERROR_MSG);
         }
     }
 

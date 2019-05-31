@@ -18,7 +18,7 @@ public class MainActivity extends MainApp {
 
         initBaseView();
         initSpinnerInJava();
-        onGithubRepoClickListenter();
+        onClickListenter();
     }
 
     private void initSpinnerInJava() {
@@ -60,7 +60,7 @@ public class MainActivity extends MainApp {
         spProvince.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
-                Toast.makeText(MainActivity.this, provinceList.get(position), Toast.LENGTH_SHORT).show();
+                spProvince.setError("You are selecting on spinner item -> \"" + provinceList.get(position) + "\" . You can show it both in XML and programmatically and you can display as single line or multiple lines");
             }
 
             @Override
@@ -72,7 +72,19 @@ public class MainActivity extends MainApp {
         spProvinceDialog.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
-                Toast.makeText(MainActivity.this, provinceList.get(position), Toast.LENGTH_SHORT).show();
+                spProvinceDialog.setError("You are selecting on spinner item -> \"" + provinceList.get(position) + "\" . You can show it both in XML and programmatically and you can display as single line or multiple lines");
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                Toast.makeText(MainActivity.this, "On Nothing Selected", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        spCustomColor.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
+                spCustomColor.setError("You are selecting on spinner item -> \"" + provinceList.get(position) + "\" . You can show it both in XML and programmatically and you can display as single line or multiple lines");
             }
 
             @Override

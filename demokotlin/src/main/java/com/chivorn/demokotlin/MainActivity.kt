@@ -15,7 +15,7 @@ class MainActivity : MainApp() {
 
         initBaseView()
         initSpinnerInKotlin()
-        onGithubRepoClickListenter()
+        onClickListenter()
     }
 
     private fun initSpinnerInKotlin() {
@@ -52,7 +52,7 @@ class MainActivity : MainApp() {
 
         spProvince!!.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(adapterView: AdapterView<*>, view: View, position: Int, id: Long) {
-                Toast.makeText(this@MainActivity, provinceList!![position], Toast.LENGTH_SHORT).show()
+                spProvince?.error = "You are selecting on spinner item -> \"" + provinceList[position] + "\" . You can show it both in XML and programmatically and you can display as single line or multiple lines"
             }
 
             override fun onNothingSelected(adapterView: AdapterView<*>) {}
@@ -60,7 +60,15 @@ class MainActivity : MainApp() {
 
         spProvinceDialog!!.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(adapterView: AdapterView<*>, view: View, position: Int, id: Long) {
-                Toast.makeText(this@MainActivity, provinceList[position], Toast.LENGTH_SHORT).show()
+                spProvinceDialog?.error = "You are selecting on spinner item -> \"" + provinceList[position] + "\" . You can show it both in XML and programmatically and you can display as single line or multiple lines"
+            }
+
+            override fun onNothingSelected(adapterView: AdapterView<*>) {}
+        }
+
+        spCustomColor!!.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(adapterView: AdapterView<*>, view: View, position: Int, id: Long) {
+                spCustomColor?.error = "You are selecting on spinner item -> \"" + provinceList[position] + "\" . You can show it both in XML and programmatically and you can display as single line or multiple lines"
             }
 
             override fun onNothingSelected(adapterView: AdapterView<*>) {}
