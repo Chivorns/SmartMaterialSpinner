@@ -12,8 +12,11 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Point;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
+import android.support.v7.content.res.AppCompatResources;
 import android.support.v7.widget.AppCompatSpinner;
 import android.text.Layout;
 import android.text.StaticLayout;
@@ -52,6 +55,9 @@ public class SmartMaterialSpinner extends AppCompatSpinner implements ValueAnima
     private SearchableSpinnerDialog searchableSpinnerDialog;
     private List searchDialogItem;
     private boolean isSearchable = false;
+    private boolean isEnableSearchHeader = true;
+    private String searchHeaderText;
+    private String searchHint;
 
     private Path selectorPath;
     private Point[] selectorPoints;
@@ -156,17 +162,18 @@ public class SmartMaterialSpinner extends AppCompatSpinner implements ValueAnima
      */
 
     private void init(Context context, AttributeSet attrs) {
+        initSearchableDialogObject();
         initAttributes(context, attrs);
         initPaintObjects();
         initDimensions();
         initPadding();
         initFloatingLabelAnimator();
         initOnItemSelectedListener();
+        configSearchableDialog();
         setMinimumHeight(getPaddingTop() + getPaddingBottom() + minContentHeight);
         //Erase the drawable selector not to be affected by new size (extra paddings)
         setBackgroundResource(R.drawable.smart_material_spinner_background);
         setError(error);
-        initSearchableDialog();
 
         setItems(new ArrayList<String>());
         if (isShowEmptyDropdown) {
@@ -177,49 +184,57 @@ public class SmartMaterialSpinner extends AppCompatSpinner implements ValueAnima
     }
 
     private void initAttributes(Context context, AttributeSet attrs) {
-
         TypedArray defaultArray = context.obtainStyledAttributes(new int[]{R.attr.colorControlNormal, R.attr.colorAccent});
         int defaultBaseColor = defaultArray.getColor(0, 0);
         int defaultHighlightColor = defaultArray.getColor(1, 0);
         int defaultErrorColor = context.getResources().getColor(R.color.smsp_error_color);
         defaultArray.recycle();
 
-        TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.SmartMaterialSpinner);
-        baseColor = array.getColor(R.styleable.SmartMaterialSpinner_smsp_baseColor, defaultBaseColor);
-        highlightColor = array.getColor(R.styleable.SmartMaterialSpinner_smsp_highlightColor, defaultHighlightColor);
-        errorColor = array.getColor(R.styleable.SmartMaterialSpinner_smsp_errorColor, defaultErrorColor);
+        TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.SmartMaterialSpinner);
+        baseColor = typedArray.getColor(R.styleable.SmartMaterialSpinner_smsp_baseColor, defaultBaseColor);
+        highlightColor = typedArray.getColor(R.styleable.SmartMaterialSpinner_smsp_highlightColor, defaultHighlightColor);
+        errorColor = typedArray.getColor(R.styleable.SmartMaterialSpinner_smsp_errorColor, defaultErrorColor);
         disabledColor = context.getResources().getColor(R.color.smsp_disabled_color);
-        underlineColor = array.getColor(R.styleable.SmartMaterialSpinner_smsp_underlineColor, defaultBaseColor);
-        error = array.getString(R.styleable.SmartMaterialSpinner_smsp_error);
-        hint = array.getString(R.styleable.SmartMaterialSpinner_smsp_hint);
-        floatingLabelText = array.getString(R.styleable.SmartMaterialSpinner_smsp_floatingLabelText);
-        hintColor = array.getColor(R.styleable.SmartMaterialSpinner_smsp_hintColor, baseColor);
-        itemColor = array.getColor(R.styleable.SmartMaterialSpinner_smsp_itemColor, Color.BLACK);
-        itemListColor = array.getColor(R.styleable.SmartMaterialSpinner_smsp_itemListColor, Color.BLACK);
-        selectedItemColor = array.getColor(R.styleable.SmartMaterialSpinner_smsp_selectedItemColor, itemColor);
-        hintTextSize = array.getDimension(R.styleable.SmartMaterialSpinner_smsp_hintTextSize, getResources().getDimension(R.dimen.smsp_default_hint_size));
-        floatingLabelColor = array.getColor(R.styleable.SmartMaterialSpinner_smsp_floatingLabelColor, baseColor);
-        multilineError = array.getBoolean(R.styleable.SmartMaterialSpinner_smsp_multilineError, true);
-        minNbErrorLines = array.getInt(R.styleable.SmartMaterialSpinner_smsp_nbErrorLines, 1);
-        alignLabels = array.getBoolean(R.styleable.SmartMaterialSpinner_smsp_alignLabels, true);
-        underlineSize = array.getDimension(R.styleable.SmartMaterialSpinner_smsp_underlineSize, 0.6f);
-        arrowColor = array.getColor(R.styleable.SmartMaterialSpinner_smsp_arrowColor, baseColor);
-        arrowSize = array.getDimension(R.styleable.SmartMaterialSpinner_smsp_arrowSize, dpToPx(DEFAULT_ARROW_WIDTH_DP));
-        enableErrorLabel = array.getBoolean(R.styleable.SmartMaterialSpinner_smsp_enableErrorLabel, true);
-        enableFloatingLabel = array.getBoolean(R.styleable.SmartMaterialSpinner_smsp_enableFloatingLabel, true);
-        alwaysShowFloatingLabel = array.getBoolean(R.styleable.SmartMaterialSpinner_smsp_alwaysShowFloatingLabel, false);
-        isRtl = array.getBoolean(R.styleable.SmartMaterialSpinner_smsp_isRtl, false);
-        mHintView = array.getResourceId(R.styleable.SmartMaterialSpinner_smsp_hintView, R.layout.smart_material_spinner_hint_item_layout);
-        mDropdownView = array.getResourceId(R.styleable.SmartMaterialSpinner_smsp_dropdownView, R.layout.smart_material_spinner_dropdown_item);
-        isShowEmptyDropdown = array.getBoolean(R.styleable.SmartMaterialSpinner_smsp_showEmptyDropdown, true);
-        isSearchable = array.getBoolean(R.styleable.SmartMaterialSpinner_smsp_isSearchable, false);
+        underlineColor = typedArray.getColor(R.styleable.SmartMaterialSpinner_smsp_underlineColor, defaultBaseColor);
+        error = typedArray.getString(R.styleable.SmartMaterialSpinner_smsp_error);
+        hint = typedArray.getString(R.styleable.SmartMaterialSpinner_smsp_hint);
+        floatingLabelText = typedArray.getString(R.styleable.SmartMaterialSpinner_smsp_floatingLabelText);
+        hintColor = typedArray.getColor(R.styleable.SmartMaterialSpinner_smsp_hintColor, baseColor);
+        itemColor = typedArray.getColor(R.styleable.SmartMaterialSpinner_smsp_itemColor, Color.BLACK);
+        itemListColor = typedArray.getColor(R.styleable.SmartMaterialSpinner_smsp_itemListColor, Color.BLACK);
+        selectedItemColor = typedArray.getColor(R.styleable.SmartMaterialSpinner_smsp_selectedItemColor, itemColor);
+        hintTextSize = typedArray.getDimension(R.styleable.SmartMaterialSpinner_smsp_hintTextSize, getResources().getDimension(R.dimen.smsp_default_hint_size));
+        floatingLabelColor = typedArray.getColor(R.styleable.SmartMaterialSpinner_smsp_floatingLabelColor, baseColor);
+        multilineError = typedArray.getBoolean(R.styleable.SmartMaterialSpinner_smsp_multilineError, true);
+        minNbErrorLines = typedArray.getInt(R.styleable.SmartMaterialSpinner_smsp_nbErrorLines, 1);
+        alignLabels = typedArray.getBoolean(R.styleable.SmartMaterialSpinner_smsp_alignLabels, true);
+        underlineSize = typedArray.getDimension(R.styleable.SmartMaterialSpinner_smsp_underlineSize, 0.6f);
+        arrowColor = typedArray.getColor(R.styleable.SmartMaterialSpinner_smsp_arrowColor, baseColor);
+        arrowSize = typedArray.getDimension(R.styleable.SmartMaterialSpinner_smsp_arrowSize, dpToPx(DEFAULT_ARROW_WIDTH_DP));
+        enableErrorLabel = typedArray.getBoolean(R.styleable.SmartMaterialSpinner_smsp_enableErrorLabel, true);
+        enableFloatingLabel = typedArray.getBoolean(R.styleable.SmartMaterialSpinner_smsp_enableFloatingLabel, true);
+        alwaysShowFloatingLabel = typedArray.getBoolean(R.styleable.SmartMaterialSpinner_smsp_alwaysShowFloatingLabel, false);
+        isRtl = typedArray.getBoolean(R.styleable.SmartMaterialSpinner_smsp_isRtl, false);
+        mHintView = typedArray.getResourceId(R.styleable.SmartMaterialSpinner_smsp_hintView, R.layout.smart_material_spinner_hint_item_layout);
+        mDropdownView = typedArray.getResourceId(R.styleable.SmartMaterialSpinner_smsp_dropdownView, R.layout.smart_material_spinner_dropdown_item);
+        isShowEmptyDropdown = typedArray.getBoolean(R.styleable.SmartMaterialSpinner_smsp_showEmptyDropdown, true);
+        isSearchable = typedArray.getBoolean(R.styleable.SmartMaterialSpinner_smsp_isSearchable, false);
+        isEnableSearchHeader = typedArray.getBoolean(R.styleable.SmartMaterialSpinner_smsp_isEnableSearchHeader, true);
+        searchHeaderText = typedArray.getString(R.styleable.SmartMaterialSpinner_smsp_searchHeaderText);
+        int searchHeaderDrawableResId = typedArray.getResourceId(R.styleable.SmartMaterialSpinner_smsp_searchHeaderColor, 0);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN && searchHeaderDrawableResId != 0) {
+            setSearchHeaderBackground(AppCompatResources.getDrawable(getContext(), searchHeaderDrawableResId));
+        } else {
+            setSearchHeaderBackground(typedArray.getColor(R.styleable.SmartMaterialSpinner_smsp_searchHeaderColor, getResources().getColor(R.color.smsp_search_header_background)));
+        }
+        searchHint = typedArray.getString(R.styleable.SmartMaterialSpinner_smsp_searchHint);
 
-        String typefacePath = array.getString(R.styleable.SmartMaterialSpinner_smsp_typeface);
+        String typefacePath = typedArray.getString(R.styleable.SmartMaterialSpinner_smsp_typeface);
         if (typefacePath != null) {
             typeface = Typeface.createFromAsset(getContext().getAssets(), typefacePath);
         }
 
-        array.recycle();
+        typedArray.recycle();
 
         floatingLabelPercent = 0f;
         errorLabelPosX = 0;
@@ -229,11 +244,19 @@ public class SmartMaterialSpinner extends AppCompatSpinner implements ValueAnima
         currentNbErrorLines = minNbErrorLines;
     }
 
-    private void initSearchableDialog() {
+    private void initSearchableDialogObject() {
         searchDialogItem = new ArrayList();
         searchableSpinnerDialog = SearchableSpinnerDialog.newInstance(searchDialogItem);
         searchableSpinnerDialog.setOnSearchDialogItemClickListener(this);
+    }
+
+    private void configSearchableDialog() {
         setSearchable(isSearchable);
+        setEnableSearchHeader(isEnableSearchHeader);
+        setSearchHeaderText(searchHeaderText);
+        setSearchHint(searchHint);
+        setSearchListItemColor(itemListColor);
+        setSelectedSearchItemColor(selectedItemColor);
     }
 
     /*
@@ -628,8 +651,10 @@ public class SmartMaterialSpinner extends AppCompatSpinner implements ValueAnima
                             selectedItem.setTextColor(itemColor);
                         }
                         listener.onItemSelected(parent, view, position, id);
+                        setSearchSelectedPosition(position);
                     } else if (position == -1 && !isStartup) {
                         listener.onNothingSelected(parent);
+                        setSearchSelectedPosition(position);
                     }
                 } else {
                     if (position > 0 && !isStartup) {
@@ -907,13 +932,16 @@ public class SmartMaterialSpinner extends AppCompatSpinner implements ValueAnima
 
     public void setItemListColor(int color) {
         this.itemListColor = color;
+        setSearchListItemColor(itemListColor);
         if (selectedItemColor == Color.BLACK && color != Color.BLACK) {
             selectedItemColor = color;
+            setSelectedSearchItemColor(selectedItemColor);
         }
     }
 
     public void setSelectedItemColor(int color) {
         this.selectedItemColor = color;
+        setSelectedSearchItemColor(selectedItemColor);
     }
 
     public void setSearchable(boolean searchable) {
@@ -941,6 +969,56 @@ public class SmartMaterialSpinner extends AppCompatSpinner implements ValueAnima
             });
         }
     }
+
+    public void setEnableSearchHeader(boolean enableSearchHeader) {
+        if (searchableSpinnerDialog != null) {
+            searchableSpinnerDialog.setEnableSearchHeader(enableSearchHeader);
+        }
+    }
+
+    public void setSearchHeaderText(String headerText) {
+        if (searchableSpinnerDialog != null) {
+            searchableSpinnerDialog.setSearchHeaderText(headerText);
+        }
+    }
+
+    public void setSearchHeaderBackground(int color) {
+        if (searchableSpinnerDialog != null) {
+            searchableSpinnerDialog.setSearchHeaderBackground(color);
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
+    public void setSearchHeaderBackground(Drawable drawable) {
+        if (searchableSpinnerDialog != null) {
+            searchableSpinnerDialog.setSearchHeaderBackground(drawable);
+        }
+    }
+
+    public void setSearchHint(String hint) {
+        if (searchableSpinnerDialog != null) {
+            searchableSpinnerDialog.setSearchHint(hint);
+        }
+    }
+
+    private void setSearchListItemColor(int searchListItemColor) {
+        if (searchableSpinnerDialog != null) {
+            searchableSpinnerDialog.setSearchListItemColor(searchListItemColor);
+        }
+    }
+
+    private void setSelectedSearchItemColor(int selectedSearchItemColor) {
+        if (searchableSpinnerDialog != null) {
+            searchableSpinnerDialog.setSelectedSearchItemColor(selectedSearchItemColor);
+        }
+    }
+
+    private void setSearchSelectedPosition(int position) {
+        if (searchableSpinnerDialog != null) {
+            searchableSpinnerDialog.setSelectedPosition(position);
+        }
+    }
+
 
     /**
      * @deprecated {use @link #setPaddingSafe(int, int, int, int)} to keep internal computation OK

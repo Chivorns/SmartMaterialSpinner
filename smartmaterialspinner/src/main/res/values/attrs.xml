@@ -30,6 +30,10 @@
         <attr name="smsp_dropdownView" format="reference" />
         <attr name="smsp_showEmptyDropdown" format="boolean" />
         <attr name="smsp_isSearchable" format="boolean" />
+        <attr name="smsp_isEnableSearchHeader" format="boolean" />
+        <attr name="smsp_searchHeaderText" format="string" />
+        <attr name="smsp_searchHeaderColor" format="color|reference" />
+        <attr name="smsp_searchHint" format="string" />
     </declare-styleable>
 </resources>
 
