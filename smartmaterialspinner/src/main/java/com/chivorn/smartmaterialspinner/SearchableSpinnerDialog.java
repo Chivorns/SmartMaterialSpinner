@@ -30,7 +30,8 @@ import java.io.Serializable;
 import java.util.List;
 
 public class SearchableSpinnerDialog extends DialogFragment implements SearchView.OnQueryTextListener, SearchView.OnCloseListener {
-    private static final String LIST_ITEMS = "items";
+    private static final String LIST_ITEMS = "LIST_ITEMS";
+    private static final String SAVE_INSTANCE_STATE_KEY = "SAVE_INSTANCE_STATE_KEY";
     private ArrayAdapter searchArrayAdapter;
     private ViewGroup searchHeaderView;
     private TextView tvSearchHeader;
@@ -38,7 +39,7 @@ public class SearchableSpinnerDialog extends DialogFragment implements SearchVie
     private ListView searchListView;
     private TextView tvListItem;
 
-    private boolean isEnableSearchHeader;
+    private boolean isEnableSearchHeader = true;
     private int headerBackgroundColor;
     private Drawable headerBackgroundDrawable;
     private int searchListItemColor;
@@ -73,10 +74,10 @@ public class SearchableSpinnerDialog extends DialogFragment implements SearchVie
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         LayoutInflater inflater = LayoutInflater.from(getActivity());
         if (savedInstanceState != null) {
-            searchableItem = (SearchableItem) savedInstanceState.getSerializable("item");
+            searchableItem = (SearchableItem) savedInstanceState.getSerializable(SAVE_INSTANCE_STATE_KEY);
         }
         View searchLayout = inflater.inflate(R.layout.smart_material_spinner_searchable_dialog_layout, null);
-        initSearchDialog(searchLayout);
+        initSearchDialog(searchLayout, savedInstanceState);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setView(searchLayout);
@@ -102,11 +103,12 @@ public class SearchableSpinnerDialog extends DialogFragment implements SearchVie
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 
-    private void initSearchDialog(View rootView) {
+    private void initSearchDialog(View rootView, Bundle savedInstanceState) {
         SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
         searchHeaderView = rootView.findViewById(R.id.search_header_layout);
         tvSearchHeader = rootView.findViewById(R.id.tv_search_header);
         searchView = rootView.findViewById(R.id.search_view);
+        searchListView = rootView.findViewById(R.id.search_list_item);
         if (searchManager != null) {
             searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
         }
@@ -116,10 +118,8 @@ public class SearchableSpinnerDialog extends DialogFragment implements SearchVie
         searchView.setFocusable(true);
         searchView.setIconified(false);
         searchView.requestFocusFromTouch();
-
         SoftKeyboardUtil.hideSoftKeyboard(getActivity());
         List items = (List) getArguments().getSerializable(LIST_ITEMS);
-        searchListView = rootView.findViewById(R.id.search_list_item);
         searchArrayAdapter = new ArrayAdapter<String>(getActivity(), R.layout.smart_material_spinner_search_list_item_layout, items) {
             @NonNull
             @Override
@@ -177,7 +177,7 @@ public class SearchableSpinnerDialog extends DialogFragment implements SearchVie
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        outState.putSerializable("item", searchableItem);
+        outState.putSerializable(SAVE_INSTANCE_STATE_KEY, searchableItem);
         super.onSaveInstanceState(outState);
     }
 
