@@ -291,11 +291,8 @@ public class SmartMaterialSpinner extends AppCompatSpinner implements ValueAnima
     }
 
     private void initPaintObjects() {
-
         int labelTextSize = getResources().getDimensionPixelSize(R.dimen.label_text_size);
-
         paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-
         textPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
         textPaint.setTextSize(labelTextSize);
         if (typeface != null) {
@@ -319,20 +316,20 @@ public class SmartMaterialSpinner extends AppCompatSpinner implements ValueAnima
     }
 
     private void initPadding() {
-
         innerPaddingTop = getPaddingTop();
         innerPaddingLeft = getPaddingLeft();
         innerPaddingRight = getPaddingRight();
         innerPaddingBottom = getPaddingBottom();
-
         extraPaddingTop = enableFloatingLabel ? floatingLabelTopSpacing + floatingLabelInsideSpacing + floatingLabelBottomSpacing : floatingLabelBottomSpacing;
         updateBottomPadding();
-
     }
 
     private void updateBottomPadding() {
         Paint.FontMetrics textMetrics = textPaint.getFontMetrics();
         extraPaddingBottom = underlineTopSpacing + underlineBottomSpacing;
+        if (error != null) {
+            extraPaddingBottom = underlineTopSpacing + dpToPx(2);
+        }
         if (enableErrorLabel) {
             extraPaddingBottom += (int) ((textMetrics.descent - textMetrics.ascent) * currentNbErrorLines);
         }
@@ -386,7 +383,6 @@ public class SmartMaterialSpinner extends AppCompatSpinner implements ValueAnima
     }
 
     private void startErrorScrollingAnimator() {
-
         int textWidth = Math.round(textPaint.measureText(error.toString()));
         if (errorLabelAnimator == null) {
             errorLabelAnimator = ObjectAnimator.ofInt(this, "errorLabelPosX", 0, textWidth + getWidth() / 2);
@@ -452,7 +448,7 @@ public class SmartMaterialSpinner extends AppCompatSpinner implements ValueAnima
         final int[] targetNbLines = {minNbErrorLines};
         if (error != null) {
             final int[] mWidth = {getWidth() - getPaddingRight() - getPaddingLeft()};
-            if (mWidth[0] < 0) {
+            if (mWidth[0] <= 0) {
                 getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
                     @Override
                     public void onGlobalLayout() {
@@ -495,7 +491,6 @@ public class SmartMaterialSpinner extends AppCompatSpinner implements ValueAnima
 
     @Override
     protected void onDraw(Canvas canvas) {
-
         super.onDraw(canvas);
         int startX = 0;
         int endX = getWidth();
@@ -503,7 +498,6 @@ public class SmartMaterialSpinner extends AppCompatSpinner implements ValueAnima
 
         int startYLine = getHeight() - getPaddingBottom() + underlineTopSpacing;
         int startYFloatingLabel = (int) (getPaddingTop() - floatingLabelPercent * floatingLabelBottomSpacing);
-
 
         if (error != null && enableErrorLabel) {
             lineHeight = dpToPx(underlineSize);
@@ -519,7 +513,6 @@ public class SmartMaterialSpinner extends AppCompatSpinner implements ValueAnima
                 }
                 staticLayout.draw(canvas);
                 canvas.restore();
-
             } else {
                 //scrolling
                 canvas.drawText(error.toString(), startX + rightLeftSpinnerPadding - errorLabelPosX, startYErrorLabel, textPaint);
@@ -560,10 +553,7 @@ public class SmartMaterialSpinner extends AppCompatSpinner implements ValueAnima
                 canvas.drawText(textToDraw, startX + rightLeftSpinnerPadding, startYFloatingLabel, textPaint);
             }
         }
-
         drawSelector(canvas, getWidth() - rightLeftSpinnerPadding, getPaddingTop() + dpToPx(8));
-
-
     }
 
     private void drawSelector(Canvas canvas, int posX, int posY) {
@@ -673,7 +663,6 @@ public class SmartMaterialSpinner extends AppCompatSpinner implements ValueAnima
                 }
             }
         };
-
         super.setOnItemSelectedListener(onItemSelectedListener);
     }
 
@@ -885,7 +874,7 @@ public class SmartMaterialSpinner extends AppCompatSpinner implements ValueAnima
         if (errorLabelAnimator != null) {
             errorLabelAnimator.end();
         }
-
+        updateBottomPadding();
         if (multilineError) {
             startErrorMultilineAnimator(prepareBottomPadding());
         } else if (needScrollingAnimation()) {
@@ -1029,7 +1018,6 @@ public class SmartMaterialSpinner extends AppCompatSpinner implements ValueAnima
         super.setPadding(left, top, right, bottom);
     }
 
-
     public void setPaddingSafe(int left, int top, int right, int bottom) {
         innerPaddingRight = right;
         innerPaddingLeft = left;
@@ -1119,9 +1107,7 @@ public class SmartMaterialSpinner extends AppCompatSpinner implements ValueAnima
      */
 
     private class HintAdapter extends BaseAdapter {
-
         private static final int HINT_TYPE = -1;
-
         private SpinnerAdapter mSpinnerAdapter;
         private Context mContext;
 
@@ -1129,7 +1115,6 @@ public class SmartMaterialSpinner extends AppCompatSpinner implements ValueAnima
             mSpinnerAdapter = spinnerAdapter;
             mContext = context;
         }
-
 
         @Override
         public int getViewTypeCount() {
@@ -1196,7 +1181,6 @@ public class SmartMaterialSpinner extends AppCompatSpinner implements ValueAnima
         }
 
         private View getHintView(final View convertView, final ViewGroup parent, final boolean isDropDownView) {
-
             final LayoutInflater inflater = LayoutInflater.from(mContext);
             final int resid = isDropDownView ? mDropdownView : mHintView;
             final TextView textView = (TextView) inflater.inflate(resid, parent, false);

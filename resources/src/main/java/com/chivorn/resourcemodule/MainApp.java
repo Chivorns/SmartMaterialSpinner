@@ -14,7 +14,6 @@ import java.util.List;
 
 public class MainApp extends AppCompatActivity implements View.OnClickListener {
     private final String repoUrl = "https://github.com/Chivorns/SmartMaterialSpinner";
-    protected static final String ERROR_MSG = "This is error message. We use it to show at bottom of spinner field and you have two options to display. One single line and second is multiple line";
 
     protected SmartMaterialSpinner spProvince;
     protected SmartMaterialSpinner spProvinceDialog;
@@ -59,9 +58,10 @@ public class MainApp extends AppCompatActivity implements View.OnClickListener {
             intent.setData(Uri.parse(repoUrl));
             startActivity(intent);
         } else if (v.getId() == R.id.btn_show_error) {
-            spProvince.setError(ERROR_MSG);
-            spProvinceDialog.setError(ERROR_MSG);
-            spCustomColor.setError(ERROR_MSG);
+            spProvince.setError(getResources().getString(R.string.sample_error_message));
+            spProvinceDialog.setError(getResources().getString(R.string.sample_error_message));
+            spCustomColor.setError(getResources().getString(R.string.sample_error_message));
+            spSearchable.setError(getResources().getString(R.string.sample_error_message));
         }
     }
 

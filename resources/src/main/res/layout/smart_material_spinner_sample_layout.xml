@@ -1,153 +1,162 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="10dp">
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginBottom="10dp"
-        android:gravity="center"
-        android:text="@string/lib_name"
-        android:textColor="@color/colorPrimary"
-        android:textSize="19sp" />
-
-    <com.chivorn.smartmaterialspinner.SmartMaterialSpinner
-        android:id="@+id/sp_searchable"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:spinnerMode="dialog"
-        app:smsp_baseColor="@color/base_color"
-        app:smsp_error="This is error text from xml"
-        app:smsp_errorColor="@color/error_color"
-        app:smsp_floatingLabelColor="@color/floating_color"
-        app:smsp_highlightColor="@color/colorPrimary"
-        app:smsp_hint="Searchable Spinner"
-        app:smsp_hintColor="@color/hint_color"
-        app:smsp_hintTextSize="14sp"
-        app:smsp_isSearchable="true"
-        app:smsp_itemColor="@color/custom_item_color"
-        app:smsp_itemListColor="@color/custom_item_list_color"
-        app:smsp_multilineError="true"
-        app:smsp_searchHeaderColor="@color/smsp_search_header_background"
-        app:smsp_searchHeaderText="Province"
-        app:smsp_searchHint="Search Item"
-        app:smsp_selectedItemColor="@color/custom_selected_item_color" />
-
-    <com.chivorn.smartmaterialspinner.SmartMaterialSpinner
-        android:id="@+id/sp_provinces"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:smsp_baseColor="@color/base_color"
-        app:smsp_error="This is error text from xml"
-        app:smsp_errorColor="@color/error_color"
-        app:smsp_floatingLabelColor="@color/floating_color"
-        app:smsp_highlightColor="@color/colorPrimary"
-        app:smsp_hint="Province (Dropdown Mode)"
-        app:smsp_hintColor="@color/hint_color"
-        app:smsp_hintTextSize="14sp"
-        app:smsp_multilineError="false" />
-
-    <com.chivorn.smartmaterialspinner.SmartMaterialSpinner
-        android:id="@+id/sp_provinces_dialog"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:spinnerMode="dialog"
-        app:smsp_baseColor="@color/base_color"
-        app:smsp_error="This is error text from xml"
-        app:smsp_errorColor="@color/error_color"
-        app:smsp_floatingLabelColor="@color/floating_color"
-        app:smsp_highlightColor="@color/colorPrimary"
-        app:smsp_hint="Province (Dialog Mode)"
-        app:smsp_hintColor="@color/hint_color"
-        app:smsp_hintTextSize="14sp"
-        app:smsp_multilineError="true" />
-
-    <com.chivorn.smartmaterialspinner.SmartMaterialSpinner
-        android:id="@+id/sp_custom_color"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:spinnerMode="dialog"
-        app:smsp_baseColor="@color/base_color"
-        app:smsp_errorColor="@color/error_color"
-        app:smsp_floatingLabelColor="@color/floating_color"
-        app:smsp_highlightColor="@color/colorPrimary"
-        app:smsp_hint="Custom Color"
-        app:smsp_hintColor="@color/hint_color"
-        app:smsp_hintTextSize="14sp"
-        app:smsp_itemColor="@color/custom_item_color"
-        app:smsp_itemListColor="@color/custom_item_list_color"
-        app:smsp_selectedItemColor="@color/custom_selected_item_color" />
-
-    <com.chivorn.smartmaterialspinner.SmartMaterialSpinner
-        android:id="@+id/sp_empty_item"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:smsp_alwaysShowFloatingLabel="false"
-        app:smsp_baseColor="@color/base_color"
-        app:smsp_errorColor="@color/error_color"
-        app:smsp_floatingLabelText="floating text"
-        app:smsp_hint="Empty Item Spinner"
-        app:smsp_showEmptyDropdown="false"
-        app:smsp_underlineColor="@color/underline_color" />
-
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="@drawable/smsp_border_bottom"
-        android:hint="Input text"
-        android:maxLines="1"
-        android:padding="0dp"
-        android:textColorHint="@color/floating_color"
-        android:textSize="14sp" />
-
-    <Button
-        android:id="@+id/btn_show_error"
-        android:layout_width="wrap_content"
-        android:layout_height="40dp"
-        android:layout_gravity="center"
-        android:layout_marginEnd="5dp"
-        android:layout_marginRight="5dp"
-        android:background="#00000000"
-        android:text="Show Error"
-        android:textAllCaps="false" />
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="bottom|center"
-        android:orientation="horizontal">
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="10dp"
+        android:weightSum="2">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="10dp"
+            android:gravity="center"
+            android:text="@string/lib_name"
+            android:textColor="@color/colorPrimary"
+            android:textSize="19sp" />
+
+        <com.chivorn.smartmaterialspinner.SmartMaterialSpinner
+            android:id="@+id/sp_searchable"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:spinnerMode="dialog"
+            app:smsp_baseColor="@color/base_color"
+            app:smsp_error="@string/sample_error_message"
+            app:smsp_errorColor="@color/error_color"
+            app:smsp_floatingLabelColor="@color/floating_color"
+            app:smsp_highlightColor="@color/colorPrimary"
+            app:smsp_hint="Searchable Spinner"
+            app:smsp_hintColor="@color/hint_color"
+            app:smsp_hintTextSize="14sp"
+            app:smsp_isSearchable="true"
+            app:smsp_itemColor="@color/custom_item_color"
+            app:smsp_itemListColor="@color/custom_item_list_color"
+            app:smsp_multilineError="true"
+            app:smsp_searchHeaderColor="@color/smsp_search_header_background"
+            app:smsp_searchHeaderText="Province"
+            app:smsp_searchHint="Search Item"
+            app:smsp_selectedItemColor="@color/custom_selected_item_color" />
+
+        <com.chivorn.smartmaterialspinner.SmartMaterialSpinner
+            android:id="@+id/sp_provinces"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:smsp_baseColor="@color/base_color"
+            app:smsp_error="@string/sample_error_message"
+            app:smsp_errorColor="@color/error_color"
+            app:smsp_floatingLabelColor="@color/floating_color"
+            app:smsp_highlightColor="@color/colorPrimary"
+            app:smsp_hint="Province (Dropdown Mode)"
+            app:smsp_hintColor="@color/hint_color"
+            app:smsp_hintTextSize="14sp"
+            app:smsp_multilineError="false" />
+
+        <com.chivorn.smartmaterialspinner.SmartMaterialSpinner
+            android:id="@+id/sp_provinces_dialog"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:spinnerMode="dialog"
+            app:smsp_baseColor="@color/base_color"
+            app:smsp_errorColor="@color/error_color"
+            app:smsp_floatingLabelColor="@color/floating_color"
+            app:smsp_highlightColor="@color/colorPrimary"
+            app:smsp_hint="Province (Dialog Mode)"
+            app:smsp_hintColor="@color/hint_color"
+            app:smsp_hintTextSize="14sp"
+            app:smsp_multilineError="true" />
+
+        <com.chivorn.smartmaterialspinner.SmartMaterialSpinner
+            android:id="@+id/sp_custom_color"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:spinnerMode="dialog"
+            app:smsp_baseColor="@color/base_color"
+            app:smsp_errorColor="@color/error_color"
+            app:smsp_floatingLabelColor="@color/floating_color"
+            app:smsp_highlightColor="@color/colorPrimary"
+            app:smsp_hint="Custom Color"
+            app:smsp_hintColor="@color/hint_color"
+            app:smsp_hintTextSize="14sp"
+            app:smsp_itemColor="@color/custom_item_color"
+            app:smsp_itemListColor="@color/custom_item_list_color"
+            app:smsp_selectedItemColor="@color/custom_selected_item_color" />
+
+        <com.chivorn.smartmaterialspinner.SmartMaterialSpinner
+            android:id="@+id/sp_empty_item"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:smsp_alwaysShowFloatingLabel="false"
+            app:smsp_baseColor="@color/base_color"
+            app:smsp_errorColor="@color/error_color"
+            app:smsp_floatingLabelText="floating text"
+            app:smsp_hint="Empty Item Spinner"
+            app:smsp_showEmptyDropdown="false"
+            app:smsp_underlineColor="@color/underline_color" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@drawable/smsp_border_bottom"
+            android:focusable="false"
+            android:hint="@string/input_text"
+            android:maxLines="1"
+            android:padding="0dp"
+            android:textColorHint="@color/floating_color"
+            android:textSize="14sp" />
+
+        <Button
+            android:id="@+id/btn_show_error"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginRight="5dp"
+            android:background="#2196F3"
+            android:text="@string/show_error"
+            android:textAllCaps="false"
+            android:textColor="@color/smsp_white_color" />
 
         <LinearLayout
-            android:id="@+id/git_repo_container"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/button_bg"
+            android:layout_marginTop="20dp"
+            android:gravity="bottom|center"
             android:orientation="horizontal">
 
-            <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_gravity="center"
-                android:layout_marginStart="10dp"
-                android:layout_marginLeft="10dp"
-                android:src="@drawable/github_logo" />
-
-            <Button
-                android:id="@+id/github_repo_btn"
+            <LinearLayout
+                android:id="@+id/git_repo_container"
                 android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:layout_gravity="center"
-                android:layout_marginEnd="5dp"
-                android:layout_marginRight="5dp"
-                android:background="#00000000"
-                android:text="@string/github_repo"
-                android:textAllCaps="false" />
-        </LinearLayout>
-    </LinearLayout>
+                android:layout_height="wrap_content"
+                android:background="@drawable/button_bg"
+                android:orientation="horizontal">
 
-</LinearLayout>
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:src="@drawable/github_logo" />
+
+                <Button
+                    android:id="@+id/github_repo_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginRight="5dp"
+                    android:background="#00000000"
+                    android:text="@string/github_repo"
+                    android:textAllCaps="false" />
+            </LinearLayout>
+        </LinearLayout>
+
+    </LinearLayout>
+</ScrollView>
