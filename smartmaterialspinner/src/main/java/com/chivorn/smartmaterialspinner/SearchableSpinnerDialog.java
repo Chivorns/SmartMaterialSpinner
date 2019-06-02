@@ -141,7 +141,7 @@ public class SearchableSpinnerDialog extends DialogFragment implements SearchVie
         searchListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                searchableItem.onSearchItemClickListener(searchArrayAdapter.getItem(position), position);
+                searchableItem.onSearchItemSelected(searchArrayAdapter.getItem(position), position);
                 getDialog().dismiss();
             }
         });
@@ -212,14 +212,14 @@ public class SearchableSpinnerDialog extends DialogFragment implements SearchVie
     }
 
     public interface SearchableItem<T> extends Serializable {
-        void onSearchItemClickListener(T item, int position);
+        void onSearchItemSelected(T item, int position);
     }
 
     public interface OnSearchTextChanged {
         void onSearchTextChanged(String strText);
     }
 
-    public void setOnSearchDialogItemClickListener(SearchableItem searchableItem) {
+    public void setOnSearchItemSelectedListener(SearchableItem searchableItem) {
         this.searchableItem = searchableItem;
     }
 

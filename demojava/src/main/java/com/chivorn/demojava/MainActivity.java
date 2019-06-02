@@ -1,12 +1,12 @@
 package com.chivorn.demojava;
 
 import android.os.Bundle;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Toast;
 
 import com.chivorn.resourcemodule.MainApp;
+import com.chivorn.smartmaterialspinner.SmartMaterialSpinner;
 
 import java.util.ArrayList;
 
@@ -106,15 +106,10 @@ public class MainActivity extends MainApp {
             }
         });
 
-        spEmptyItem.setShowEmptyDropdown(false);
-        // Use this method instead of OnClicklistener() to handle touch even.
-        spEmptyItem.setOnTouchListener(new View.OnTouchListener() {
+        spEmptyItem.setOnEmptySpinnerClicked(new SmartMaterialSpinner.OnEmptySpinnerClickListener() {
             @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_UP) {
-                    Toast.makeText(MainActivity.this, getString(R.string.empty_item_spinner_click_msg), Toast.LENGTH_SHORT).show();
-                }
-                return false;
+            public void onEmptySpinnerClicked() {
+                Toast.makeText(MainActivity.this, getString(R.string.empty_item_spinner_click_msg), Toast.LENGTH_SHORT).show();
             }
         });
     }

@@ -132,6 +132,8 @@ public class SmartMaterialSpinner extends AppCompatSpinner implements ValueAnima
     private Integer mDropdownView;
     private Integer mHintView;
 
+    private OnEmptySpinnerClickListener onEmptySpinnerClickListener;
+
     /*
      * **********************************************************************************
      * CONSTRUCTORS
@@ -171,16 +173,9 @@ public class SmartMaterialSpinner extends AppCompatSpinner implements ValueAnima
         initOnItemSelectedListener();
         configSearchableDialog();
         setMinimumHeight(getPaddingTop() + getPaddingBottom() + minContentHeight);
-        //Erase the drawable selector not to be affected by new size (extra paddings)
         setBackgroundResource(R.drawable.smart_material_spinner_background);
-        setError(error);
-
         setItems(new ArrayList<String>());
-        if (isShowEmptyDropdown) {
-            configDropdownSpinnerAfterHasItems(true);
-        } else {
-            configDropdownSpinnerAfterHasItems(false);
-        }
+        configDropdownWidthAfterAttrReady();
     }
 
     private void initAttributes(Context context, AttributeSet attrs) {
@@ -217,7 +212,7 @@ public class SmartMaterialSpinner extends AppCompatSpinner implements ValueAnima
         isRtl = typedArray.getBoolean(R.styleable.SmartMaterialSpinner_smsp_isRtl, false);
         mHintView = typedArray.getResourceId(R.styleable.SmartMaterialSpinner_smsp_hintView, R.layout.smart_material_spinner_hint_item_layout);
         mDropdownView = typedArray.getResourceId(R.styleable.SmartMaterialSpinner_smsp_dropdownView, R.layout.smart_material_spinner_dropdown_item);
-        isShowEmptyDropdown = typedArray.getBoolean(R.styleable.SmartMaterialSpinner_smsp_showEmptyDropdown, true);
+        isShowEmptyDropdown = typedArray.getBoolean(R.styleable.SmartMaterialSpinner_smsp_showEmptyDropdown, false);
         isSearchable = typedArray.getBoolean(R.styleable.SmartMaterialSpinner_smsp_isSearchable, false);
         isEnableSearchHeader = typedArray.getBoolean(R.styleable.SmartMaterialSpinner_smsp_isEnableSearchHeader, true);
         searchHeaderText = typedArray.getString(R.styleable.SmartMaterialSpinner_smsp_searchHeaderText);
@@ -247,7 +242,7 @@ public class SmartMaterialSpinner extends AppCompatSpinner implements ValueAnima
     private void initSearchableDialogObject() {
         searchDialogItem = new ArrayList();
         searchableSpinnerDialog = SearchableSpinnerDialog.newInstance(searchDialogItem);
-        searchableSpinnerDialog.setOnSearchDialogItemClickListener(this);
+        searchableSpinnerDialog.setOnSearchItemSelectedListener(this);
     }
 
     private void configSearchableDialog() {
@@ -262,20 +257,20 @@ public class SmartMaterialSpinner extends AppCompatSpinner implements ValueAnima
     /*
      * Config dropdown width and height.
      */
-    private void configDropdownSpinnerAfterHasItems(final boolean isShowEmptyDropdown) {
+    private void configDropdownWidthAfterAttrReady() {
         this.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                     SmartMaterialSpinner.this.getViewTreeObserver().removeOnGlobalLayoutListener(this);
                 }
-                if (isShowEmptyDropdown) {
-                    SmartMaterialSpinner.this.setDropDownWidth(SmartMaterialSpinner.this.getWidth());
-                    SmartMaterialSpinner.this.setDropDownVerticalOffset(SmartMaterialSpinner.this.getHeight());
-                } else {
+                SmartMaterialSpinner.this.setDropDownWidth(SmartMaterialSpinner.this.getWidth());
+                SmartMaterialSpinner.this.setDropDownVerticalOffset(SmartMaterialSpinner.this.getHeight());
+                if (!isShowEmptyDropdown && getCount() == 1 && hint != null) {
                     SmartMaterialSpinner.this.setDropDownWidth(0);
                     SmartMaterialSpinner.this.setDropDownVerticalOffset(0);
                 }
+                setError(error);
             }
         });
     }
@@ -591,13 +586,13 @@ public class SmartMaterialSpinner extends AppCompatSpinner implements ValueAnima
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
                     isSelected = true;
-                    if (getContext() instanceof Activity)
+                    if (getContext() instanceof Activity) {
                         SoftKeyboardUtil.hideSoftKeyboard((Activity) getContext());
-                    if (!isShowEmptyDropdown) {
-                        return true;
+                    }
+                    if (!isShowEmptyDropdown && getCount() == 1 && hint != null && onEmptySpinnerClickListener != null) {
+                        onEmptySpinnerClickListener.onEmptySpinnerClicked();
                     }
                     break;
-
                 case MotionEvent.ACTION_UP:
                 case MotionEvent.ACTION_CANCEL:
                     isSelected = false;
@@ -672,7 +667,7 @@ public class SmartMaterialSpinner extends AppCompatSpinner implements ValueAnima
     }
 
     @Override
-    public void onSearchItemClickListener(Object item, int position) {
+    public void onSearchItemSelected(Object item, int position) {
         int selectedIndex = searchDialogItem.indexOf(item);
         if (position >= 0) {
             if (hint != null) {
@@ -871,10 +866,10 @@ public class SmartMaterialSpinner extends AppCompatSpinner implements ValueAnima
 
     public void setError(CharSequence error) {
         this.error = error;
+        updateBottomPadding();
         if (errorLabelAnimator != null) {
             errorLabelAnimator.end();
         }
-        updateBottomPadding();
         if (multilineError) {
             startErrorMultilineAnimator(prepareBottomPadding());
         } else if (needScrollingAnimation()) {
@@ -1008,6 +1003,14 @@ public class SmartMaterialSpinner extends AppCompatSpinner implements ValueAnima
         }
     }
 
+    public interface OnEmptySpinnerClickListener {
+        void onEmptySpinnerClicked();
+    }
+
+    public void setOnEmptySpinnerClicked(OnEmptySpinnerClickListener onEmptySpinnerClickListener) {
+        this.onEmptySpinnerClickListener = onEmptySpinnerClickListener;
+    }
+
 
     /**
      * @deprecated {use @link #setPaddingSafe(int, int, int, int)} to keep internal computation OK
@@ -1095,8 +1098,8 @@ public class SmartMaterialSpinner extends AppCompatSpinner implements ValueAnima
     }
 
     public void setShowEmptyDropdown(boolean status) {
-        isShowEmptyDropdown = status;
-        configDropdownSpinnerAfterHasItems(status);
+        this.isShowEmptyDropdown = status;
+        configDropdownWidthAfterAttrReady();
     }
 
 
