@@ -11,6 +11,7 @@
     <dimen name="smsp_error_label_spacing">12dp</dimen>
     <dimen name="smsp_default_text_and_hint_size">14sp</dimen>
     <dimen name="smsp_default_hint_size">14sp</dimen>
-    <dimen name="smsp_default_floating_label_size">14sp</dimen>
+    <dimen name="smsp_default_floating_label_size">12sp</dimen>
+    <dimen name="smsp_default_error_text_size">12sp</dimen>
 
 </resources>

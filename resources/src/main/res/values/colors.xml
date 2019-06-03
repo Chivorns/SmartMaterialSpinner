@@ -6,7 +6,7 @@
 
     <color name="base_color">#d46a6a</color>
     <color name="hint_color">#d46a6a</color>
-    <color name="floating_color">#d46a6a</color>
+    <color name="floating_color">#009688</color>
     <color name="underline_color">#4851504e</color>
 
     <color name="custom_item_color">#2196F3</color>

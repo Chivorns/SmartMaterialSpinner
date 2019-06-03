@@ -101,6 +101,7 @@ public class SmartMaterialSpinner extends AppCompatSpinner implements ValueAnima
     //AttributeSet
     private int baseColor;
     private int highlightColor;
+    private float errorTextSize;
     private int errorColor;
     private int disabledColor;
     private int underlineColor;
@@ -108,11 +109,15 @@ public class SmartMaterialSpinner extends AppCompatSpinner implements ValueAnima
     private CharSequence error;
     private CharSequence hint;
     private int hintColor;
+    private int itemListHintColor;
+    private int itemListHintBackground;
+    private float itemSize;
     private int itemColor;
     private int itemListColor;
     private int selectedItemColor;
     private float hintTextSize;
     private CharSequence floatingLabelText;
+    private float floatingLabelSize;
     private int floatingLabelColor;
     private boolean multilineError;
     private Typeface typeface;
@@ -180,26 +185,32 @@ public class SmartMaterialSpinner extends AppCompatSpinner implements ValueAnima
 
     private void initAttributes(Context context, AttributeSet attrs) {
         TypedArray defaultArray = context.obtainStyledAttributes(new int[]{R.attr.colorControlNormal, R.attr.colorAccent});
-        int defaultBaseColor = defaultArray.getColor(0, 0);
-        int defaultHighlightColor = defaultArray.getColor(1, 0);
+        int defaultBaseColor = context.getResources().getColor(R.color.smsp_base_color);
+        //int defaultHighlightColor = defaultArray.getColor(1, 0);
+        int defaultHighlightColor = context.getResources().getColor(R.color.smsp_base_color);
         int defaultErrorColor = context.getResources().getColor(R.color.smsp_error_color);
         defaultArray.recycle();
 
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.SmartMaterialSpinner);
         baseColor = typedArray.getColor(R.styleable.SmartMaterialSpinner_smsp_baseColor, defaultBaseColor);
         highlightColor = typedArray.getColor(R.styleable.SmartMaterialSpinner_smsp_highlightColor, defaultHighlightColor);
+        errorTextSize = typedArray.getDimension(R.styleable.SmartMaterialSpinner_smsp_errorTextSize, getResources().getDimension(R.dimen.smsp_default_error_text_size));
         errorColor = typedArray.getColor(R.styleable.SmartMaterialSpinner_smsp_errorColor, defaultErrorColor);
         disabledColor = context.getResources().getColor(R.color.smsp_disabled_color);
-        underlineColor = typedArray.getColor(R.styleable.SmartMaterialSpinner_smsp_underlineColor, defaultBaseColor);
+        underlineColor = typedArray.getColor(R.styleable.SmartMaterialSpinner_smsp_underlineColor, getResources().getColor(R.color.smsp_underline_color));
         error = typedArray.getString(R.styleable.SmartMaterialSpinner_smsp_error);
         hint = typedArray.getString(R.styleable.SmartMaterialSpinner_smsp_hint);
         floatingLabelText = typedArray.getString(R.styleable.SmartMaterialSpinner_smsp_floatingLabelText);
-        hintColor = typedArray.getColor(R.styleable.SmartMaterialSpinner_smsp_hintColor, baseColor);
+        hintColor = typedArray.getColor(R.styleable.SmartMaterialSpinner_smsp_hintColor, getResources().getColor(R.color.smsp_hint_color));
+        itemListHintColor = typedArray.getColor(R.styleable.SmartMaterialSpinner_smsp_itemListHintColor, getResources().getColor(R.color.smsp_item_list_hint_color));
+        itemListHintBackground = typedArray.getColor(R.styleable.SmartMaterialSpinner_smsp_itemListHintBackgroundColor, getResources().getColor(R.color.smsp_item_list_hint_background));
+        itemSize = typedArray.getDimension(R.styleable.SmartMaterialSpinner_smsp_itemSize, getResources().getDimension(R.dimen.smsp_default_text_and_hint_size));
         itemColor = typedArray.getColor(R.styleable.SmartMaterialSpinner_smsp_itemColor, Color.BLACK);
         itemListColor = typedArray.getColor(R.styleable.SmartMaterialSpinner_smsp_itemListColor, Color.BLACK);
-        selectedItemColor = typedArray.getColor(R.styleable.SmartMaterialSpinner_smsp_selectedItemColor, itemColor);
+        selectedItemColor = typedArray.getColor(R.styleable.SmartMaterialSpinner_smsp_selectedItemColor, getResources().getColor(R.color.smsp_selected_color));
         hintTextSize = typedArray.getDimension(R.styleable.SmartMaterialSpinner_smsp_hintTextSize, getResources().getDimension(R.dimen.smsp_default_hint_size));
-        floatingLabelColor = typedArray.getColor(R.styleable.SmartMaterialSpinner_smsp_floatingLabelColor, baseColor);
+        floatingLabelSize = typedArray.getDimension(R.styleable.SmartMaterialSpinner_smsp_floatingLabelSize, getResources().getDimension(R.dimen.smsp_default_floating_label_size));
+        floatingLabelColor = typedArray.getColor(R.styleable.SmartMaterialSpinner_smsp_floatingLabelColor, getResources().getColor(R.color.smsp_floating_label_color));
         multilineError = typedArray.getBoolean(R.styleable.SmartMaterialSpinner_smsp_multilineError, true);
         minNbErrorLines = typedArray.getInt(R.styleable.SmartMaterialSpinner_smsp_nbErrorLines, 1);
         alignLabels = typedArray.getBoolean(R.styleable.SmartMaterialSpinner_smsp_alignLabels, true);
@@ -323,7 +334,7 @@ public class SmartMaterialSpinner extends AppCompatSpinner implements ValueAnima
         Paint.FontMetrics textMetrics = textPaint.getFontMetrics();
         extraPaddingBottom = underlineTopSpacing + underlineBottomSpacing;
         if (error != null) {
-            extraPaddingBottom = underlineTopSpacing + dpToPx(2);
+            extraPaddingBottom = underlineTopSpacing + dpToPx(4);
         }
         if (enableErrorLabel) {
             extraPaddingBottom += (int) ((textMetrics.descent - textMetrics.ascent) * currentNbErrorLines);
@@ -497,14 +508,16 @@ public class SmartMaterialSpinner extends AppCompatSpinner implements ValueAnima
         if (error != null && enableErrorLabel) {
             lineHeight = dpToPx(underlineSize);
             int startYErrorLabel = startYLine + errorLabelSpacing + lineHeight;
-            paint.setColor(errorColor);
+            paint.setColor(underlineColor);
             textPaint.setColor(errorColor);
+            textPaint.setTextSize(errorTextSize);
             //Error Label Drawing
             if (multilineError) {
                 canvas.save();
                 canvas.translate(startX + rightLeftSpinnerPadding, startYErrorLabel - errorLabelSpacing);
                 if (staticLayout == null) {
-                    prepareBottomPadding();
+                    int mWidth = getWidth() - getPaddingRight() - getPaddingLeft();
+                    staticLayout = new StaticLayout(error, textPaint, mWidth, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, true);
                 }
                 staticLayout.draw(canvas);
                 canvas.restore();
@@ -518,11 +531,10 @@ public class SmartMaterialSpinner extends AppCompatSpinner implements ValueAnima
                     canvas.restore();
                 }
             }
-
         } else {
             lineHeight = dpToPx(underlineSize);
             if (isSelected || hasFocus()) {
-                paint.setColor(highlightColor);
+                paint.setColor(underlineColor); // highlightColor
             } else {
                 paint.setColor(isEnabled() ? underlineColor : disabledColor);
             }
@@ -534,13 +546,14 @@ public class SmartMaterialSpinner extends AppCompatSpinner implements ValueAnima
         //Floating Label Drawing
         if ((hint != null || floatingLabelText != null) && enableFloatingLabel) {
             if (isSelected || hasFocus()) {
-                textPaint.setColor(highlightColor);
+                textPaint.setColor(floatingLabelColor); // highlightColor
             } else {
                 textPaint.setColor(isEnabled() ? floatingLabelColor : disabledColor);
             }
             if (floatingLabelAnimator.isRunning() || !floatingLabelVisible) {
                 textPaint.setAlpha((int) ((0.8 * floatingLabelPercent + 0.2) * baseAlpha * floatingLabelPercent));
             }
+            textPaint.setTextSize(floatingLabelSize);
             String textToDraw = floatingLabelText != null ? floatingLabelText.toString() : hint.toString();
             if (isRtl) {
                 canvas.drawText(textToDraw, getWidth() - rightLeftSpinnerPadding - textPaint.measureText(textToDraw), startYFloatingLabel, textPaint);
@@ -548,7 +561,7 @@ public class SmartMaterialSpinner extends AppCompatSpinner implements ValueAnima
                 canvas.drawText(textToDraw, startX + rightLeftSpinnerPadding, startYFloatingLabel, textPaint);
             }
         }
-        drawSelector(canvas, getWidth() - rightLeftSpinnerPadding, getPaddingTop() + dpToPx(8));
+        drawSelector(canvas, getWidth() - rightLeftSpinnerPadding, getPaddingTop() + dpToPx(6));
     }
 
     private void drawSelector(Canvas canvas, int posX, int posY) {
@@ -589,11 +602,12 @@ public class SmartMaterialSpinner extends AppCompatSpinner implements ValueAnima
                     if (getContext() instanceof Activity) {
                         SoftKeyboardUtil.hideSoftKeyboard((Activity) getContext());
                     }
+                    break;
+                case MotionEvent.ACTION_UP:
                     if (!isShowEmptyDropdown && getCount() == 1 && hint != null && onEmptySpinnerClickListener != null) {
                         onEmptySpinnerClickListener.onEmptySpinnerClicked();
                     }
                     break;
-                case MotionEvent.ACTION_UP:
                 case MotionEvent.ACTION_CANCEL:
                     isSelected = false;
                     break;
@@ -633,6 +647,7 @@ public class SmartMaterialSpinner extends AppCompatSpinner implements ValueAnima
                     if (position >= 0) {
                         if (view instanceof TextView) {
                             TextView selectedItem = (TextView) parent.getChildAt(0);
+                            selectedItem.setTextSize(TypedValue.COMPLEX_UNIT_PX, itemSize);
                             selectedItem.setTextColor(itemColor);
                         }
                         listener.onItemSelected(parent, view, position, id);
@@ -645,6 +660,7 @@ public class SmartMaterialSpinner extends AppCompatSpinner implements ValueAnima
                     if (position > 0 && !isStartup) {
                         if (view instanceof TextView) {
                             TextView selectedItem = (TextView) parent.getChildAt(0);
+                            selectedItem.setTextSize(TypedValue.COMPLEX_UNIT_PX, itemSize);
                             selectedItem.setTextColor(itemColor);
                         }
                     }
@@ -713,12 +729,25 @@ public class SmartMaterialSpinner extends AppCompatSpinner implements ValueAnima
         invalidate();
     }
 
+    public void setItemListHintColor(int itemListHintColor) {
+        this.itemListHintColor = itemListHintColor;
+    }
+
+    public void setItemListHintBackground(int itemListHintBackground) {
+        this.itemListHintBackground = itemListHintBackground;
+    }
+
     public float getHintTextSize() {
         return hintTextSize;
     }
 
     public void setHintTextSize(float hintTextSize) {
-        this.hintTextSize = hintTextSize;
+        this.hintTextSize = dpToPx(hintTextSize);
+        invalidate();
+    }
+
+    public void setErrorTextSize(float errorTextSize) {
+        this.errorTextSize = dpToPx(errorTextSize);
         invalidate();
     }
 
@@ -774,6 +803,11 @@ public class SmartMaterialSpinner extends AppCompatSpinner implements ValueAnima
 
     public CharSequence getFloatingLabelText() {
         return this.floatingLabelText;
+    }
+
+    public void setFloatingLabelSize(float floatingLabelSize) {
+        this.floatingLabelSize = dpToPx(floatingLabelSize);
+        invalidate();
     }
 
     public int getFloatingLabelColor() {
@@ -907,6 +941,11 @@ public class SmartMaterialSpinner extends AppCompatSpinner implements ValueAnima
 
     public void setUnderlineColor(int color) {
         underlineColor = color;
+        invalidate();
+    }
+
+    public void setItemSize(float itemSize) {
+        this.itemSize = dpToPx(itemSize);
         invalidate();
     }
 
@@ -1160,6 +1199,7 @@ public class SmartMaterialSpinner extends AppCompatSpinner implements ValueAnima
 
         @Override
         public View getDropDownView(int position, View convertView, ViewGroup parent) {
+            parent.setPadding(0, 0, 0, 0);
             return buildView(position, convertView, parent, true);
         }
 
@@ -1185,13 +1225,17 @@ public class SmartMaterialSpinner extends AppCompatSpinner implements ValueAnima
 
         private View getHintView(final View convertView, final ViewGroup parent, final boolean isDropDownView) {
             final LayoutInflater inflater = LayoutInflater.from(mContext);
-            final int resid = isDropDownView ? mDropdownView : mHintView;
-            final TextView textView = (TextView) inflater.inflate(resid, parent, false);
+            final int resId = isDropDownView ? mDropdownView : mHintView;
+            final TextView textView = (TextView) inflater.inflate(resId, parent, false);
             textView.setText(hint);
             textView.setTextColor(SmartMaterialSpinner.this.isEnabled() ? hintColor : disabledColor);
-            textView.setTag(HINT_TYPE);
             if (hintTextSize != -1)
                 textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, hintTextSize);
+            if (isDropDownView) {
+                textView.setTextColor(itemListHintColor);
+                textView.setBackgroundColor(itemListHintBackground);
+            }
+            textView.setTag(HINT_TYPE);
             return textView;
         }
 

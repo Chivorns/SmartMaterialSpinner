@@ -16,7 +16,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:padding="15dp"
-            android:text="@string/search_item"
+            android:text="@string/search_or_select_item"
             android:textColor="@color/smsp_white_color"
             android:textSize="14sp"
             android:textStyle="bold" />
@@ -36,7 +36,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:iconifiedByDefault="false"
-            android:queryHint="Search" />
+            android:queryHint="Search..." />
 
         <ListView
             android:id="@+id/search_list_item"

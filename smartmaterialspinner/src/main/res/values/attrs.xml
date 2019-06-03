@@ -4,17 +4,22 @@
     <declare-styleable name="SmartMaterialSpinner">
         <attr name="smsp_baseColor" format="integer" />
         <attr name="smsp_highlightColor" format="integer" />
+        <attr name="smsp_errorTextSize" format="dimension" />
         <attr name="smsp_errorColor" format="integer" />
         <attr name="smsp_error" format="string" />
         <attr name="smsp_multilineError" format="boolean" />
         <attr name="smsp_enableErrorLabel" format="boolean" />
         <attr name="smsp_hint" format="string" />
-        <attr name="smsp_hintColor" format="color" />
+        <attr name="smsp_hintColor" format="color|reference" />
+        <attr name="smsp_itemListHintColor" format="color|reference" />
+        <attr name="smsp_itemListHintBackgroundColor" format="color|reference" />
         <attr name="smsp_hintTextSize" format="dimension" />
+        <attr name="smsp_itemSize" format="dimension" />
         <attr name="smsp_itemColor" format="color|reference" />
         <attr name="smsp_itemListColor" format="color|reference" />
         <attr name="smsp_selectedItemColor" format="color|reference" />
         <attr name="smsp_floatingLabelText" format="string" />
+        <attr name="smsp_floatingLabelSize" format="dimension" />
         <attr name="smsp_floatingLabelColor" format="color" />
         <attr name="smsp_nbErrorLines" format="integer" />
         <attr name="smsp_typeface" format="string" />

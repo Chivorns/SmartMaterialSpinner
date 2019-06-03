@@ -26,34 +26,22 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:spinnerMode="dialog"
-            app:smsp_baseColor="@color/base_color"
             app:smsp_error="@string/sample_error_message"
-            app:smsp_errorColor="@color/error_color"
-            app:smsp_floatingLabelColor="@color/floating_color"
-            app:smsp_highlightColor="@color/colorPrimary"
+            app:smsp_errorTextSize="12dp"
             app:smsp_hint="Searchable Spinner"
-            app:smsp_hintColor="@color/hint_color"
             app:smsp_hintTextSize="14sp"
             app:smsp_isSearchable="true"
-            app:smsp_itemColor="@color/custom_item_color"
-            app:smsp_itemListColor="@color/custom_item_list_color"
+            app:smsp_itemSize="14sp"
             app:smsp_multilineError="true"
-            app:smsp_searchHeaderColor="@color/smsp_search_header_background"
-            app:smsp_searchHeaderText="Province"
-            app:smsp_searchHint="Search Item"
-            app:smsp_selectedItemColor="@color/custom_selected_item_color" />
+            app:smsp_searchHeaderColor="@color/smsp_search_header_background" />
 
         <com.chivorn.smartmaterialspinner.SmartMaterialSpinner
             android:id="@+id/sp_provinces"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:smsp_baseColor="@color/base_color"
             app:smsp_error="@string/sample_error_message"
             app:smsp_errorColor="@color/error_color"
-            app:smsp_floatingLabelColor="@color/floating_color"
-            app:smsp_highlightColor="@color/colorPrimary"
             app:smsp_hint="Province (Dropdown Mode)"
-            app:smsp_hintColor="@color/hint_color"
             app:smsp_hintTextSize="14sp"
             app:smsp_multilineError="false" />
 
@@ -62,12 +50,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:spinnerMode="dialog"
-            app:smsp_baseColor="@color/base_color"
             app:smsp_errorColor="@color/error_color"
             app:smsp_floatingLabelColor="@color/floating_color"
-            app:smsp_highlightColor="@color/colorPrimary"
             app:smsp_hint="Province (Dialog Mode)"
-            app:smsp_hintColor="@color/hint_color"
             app:smsp_hintTextSize="14sp"
             app:smsp_multilineError="true" />
 
@@ -76,12 +61,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:spinnerMode="dialog"
-            app:smsp_baseColor="@color/base_color"
             app:smsp_errorColor="@color/error_color"
             app:smsp_floatingLabelColor="@color/floating_color"
-            app:smsp_highlightColor="@color/colorPrimary"
             app:smsp_hint="Custom Color"
-            app:smsp_hintColor="@color/hint_color"
+
             app:smsp_hintTextSize="14sp"
             app:smsp_itemColor="@color/custom_item_color"
             app:smsp_itemListColor="@color/custom_item_list_color"
@@ -92,8 +75,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:smsp_alwaysShowFloatingLabel="false"
-            app:smsp_baseColor="@color/base_color"
             app:smsp_errorColor="@color/error_color"
+            app:smsp_floatingLabelColor="@color/floating_color"
             app:smsp_floatingLabelText="floating text"
             app:smsp_hint="Empty Item Spinner"
             app:smsp_showEmptyDropdown="false"
@@ -107,7 +90,6 @@
             android:hint="@string/input_text"
             android:maxLines="1"
             android:padding="0dp"
-            android:textColorHint="@color/floating_color"
             android:textSize="14sp" />
 
         <Button
@@ -118,7 +100,7 @@
             android:layout_marginTop="10dp"
             android:layout_marginEnd="5dp"
             android:layout_marginRight="5dp"
-            android:background="#2196F3"
+            android:background="#3F51B5"
             android:text="@string/show_error"
             android:textAllCaps="false"
             android:textColor="@color/smsp_white_color" />

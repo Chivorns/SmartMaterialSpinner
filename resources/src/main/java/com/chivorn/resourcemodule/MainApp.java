@@ -2,7 +2,6 @@ package com.chivorn.resourcemodule;
 
 import android.content.Intent;
 import android.net.Uri;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -36,8 +35,6 @@ public class MainApp extends AppCompatActivity implements View.OnClickListener {
         githubRepo = findViewById(R.id.git_repo_container);
         btnShowError = findViewById(R.id.btn_show_error);
         githubRepoBtn = findViewById(R.id.github_repo_btn);
-
-        setUnderlineColor(spProvince, spProvinceDialog, spCustomColor, spSearchable);
     }
 
     public void onClickListenter() {
@@ -62,12 +59,6 @@ public class MainApp extends AppCompatActivity implements View.OnClickListener {
             spProvinceDialog.setError(getResources().getString(R.string.sample_error_message));
             spCustomColor.setError(getResources().getString(R.string.sample_error_message));
             spSearchable.setError(getResources().getString(R.string.sample_error_message));
-        }
-    }
-
-    private void setUnderlineColor(SmartMaterialSpinner... spinners) {
-        for (SmartMaterialSpinner spinner : spinners) {
-            spinner.setUnderlineColor(ContextCompat.getColor(getApplicationContext(), R.color.underline_color));
         }
     }
 }
