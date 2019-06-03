@@ -2,7 +2,6 @@ package com.chivorn.smartmaterialspinner;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.DialogFragment;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -11,6 +10,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
+import android.support.v4.app.DialogFragment;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -29,10 +29,10 @@ import com.chivorn.smartmaterialspinner.util.SoftKeyboardUtil;
 import java.io.Serializable;
 import java.util.List;
 
-public class SearchableSpinnerDialog extends DialogFragment implements SearchView.OnQueryTextListener, SearchView.OnCloseListener {
+public class SearchableSpinnerDialog<T> extends DialogFragment implements SearchView.OnQueryTextListener, SearchView.OnCloseListener {
     private static final String LIST_ITEMS = "LIST_ITEMS";
     private static final String SAVE_INSTANCE_STATE_KEY = "SAVE_INSTANCE_STATE_KEY";
-    private ArrayAdapter searchArrayAdapter;
+    private ArrayAdapter<T> searchArrayAdapter;
     private ViewGroup searchHeaderView;
     private TextView tvSearchHeader;
     private SearchView searchView;
@@ -57,8 +57,8 @@ public class SearchableSpinnerDialog extends DialogFragment implements SearchVie
     public SearchableSpinnerDialog() {
     }
 
-    public static SearchableSpinnerDialog newInstance(List items) {
-        SearchableSpinnerDialog searchableSpinnerDialog = new SearchableSpinnerDialog();
+    public static <T> SearchableSpinnerDialog<T> newInstance(List<T> items) {
+        SearchableSpinnerDialog<T> searchableSpinnerDialog = new SearchableSpinnerDialog<>();
         Bundle args = new Bundle();
         args.putSerializable(LIST_ITEMS, (Serializable) items);
         searchableSpinnerDialog.setArguments(args);
@@ -70,6 +70,7 @@ public class SearchableSpinnerDialog extends DialogFragment implements SearchVie
         super.onCreate(savedInstanceState);
     }
 
+    @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         LayoutInflater inflater = LayoutInflater.from(getActivity());
@@ -95,7 +96,7 @@ public class SearchableSpinnerDialog extends DialogFragment implements SearchVie
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Window window = getDialog().getWindow();
         if (window != null) {
             window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
@@ -104,13 +105,16 @@ public class SearchableSpinnerDialog extends DialogFragment implements SearchVie
     }
 
     private void initSearchDialog(View rootView, Bundle savedInstanceState) {
-        SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
         searchHeaderView = rootView.findViewById(R.id.search_header_layout);
         tvSearchHeader = rootView.findViewById(R.id.tv_search_header);
         searchView = rootView.findViewById(R.id.search_view);
         searchListView = rootView.findViewById(R.id.search_list_item);
-        if (searchManager != null) {
-            searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
+
+        if (getActivity() != null) {
+            SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
+            if (searchManager != null) {
+                searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
+            }
         }
         searchView.setIconifiedByDefault(false);
         searchView.setOnQueryTextListener(this);
@@ -119,23 +123,25 @@ public class SearchableSpinnerDialog extends DialogFragment implements SearchVie
         searchView.setIconified(false);
         searchView.requestFocusFromTouch();
         SoftKeyboardUtil.hideSoftKeyboard(getActivity());
-        List items = (List) getArguments().getSerializable(LIST_ITEMS);
-        searchArrayAdapter = new ArrayAdapter<String>(getActivity(), R.layout.smart_material_spinner_search_list_item_layout, items) {
-            @NonNull
-            @Override
-            public View getView(int position, View convertView, @NonNull ViewGroup parent) {
-                View listView = super.getView(position, convertView, parent);
-                tvListItem = listView.findViewById(R.id.tv_search_list_item);
-                if (searchListItemColor != 0) {
-                    tvListItem.setTextColor(searchListItemColor);
-                }
+        List items = getArguments() != null ? (List) getArguments().getSerializable(LIST_ITEMS) : null;
+        if (items != null) {
+            searchArrayAdapter = new ArrayAdapter<T>(getActivity(), R.layout.smart_material_spinner_search_list_item_layout, items) {
+                @NonNull
+                @Override
+                public View getView(int position, View convertView, @NonNull ViewGroup parent) {
+                    View listView = super.getView(position, convertView, parent);
+                    tvListItem = listView.findViewById(R.id.tv_search_list_item);
+                    if (searchListItemColor != 0) {
+                        tvListItem.setTextColor(searchListItemColor);
+                    }
 
-                if (selectedSearchItemColor != 0 && position >= 0 && position == selectedPosition) {
-                    tvListItem.setTextColor(selectedSearchItemColor);
+                    if (selectedSearchItemColor != 0 && position >= 0 && position == selectedPosition) {
+                        tvListItem.setTextColor(selectedSearchItemColor);
+                    }
+                    return listView;
                 }
-                return listView;
-            }
-        };
+            };
+        }
         searchListView.setAdapter(searchArrayAdapter);
         searchListView.setTextFilterEnabled(true);
         searchListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -176,7 +182,7 @@ public class SearchableSpinnerDialog extends DialogFragment implements SearchVie
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
+    public void onSaveInstanceState(@NonNull Bundle outState) {
         outState.putSerializable(SAVE_INSTANCE_STATE_KEY, searchableItem);
         super.onSaveInstanceState(outState);
     }
@@ -211,8 +217,8 @@ public class SearchableSpinnerDialog extends DialogFragment implements SearchVie
         return true;
     }
 
-    public interface SearchableItem<T> extends Serializable {
-        void onSearchItemSelected(T item, int position);
+    public interface SearchableItem extends Serializable {
+        void onSearchItemSelected(Object item, int position);
     }
 
     public interface OnSearchTextChanged {

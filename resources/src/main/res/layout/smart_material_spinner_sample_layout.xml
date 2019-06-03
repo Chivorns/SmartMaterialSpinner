@@ -27,7 +27,7 @@
             android:layout_height="wrap_content"
             android:spinnerMode="dialog"
             app:smsp_error="@string/sample_error_message"
-            app:smsp_errorTextSize="12dp"
+            app:smsp_errorTextSize="12sp"
             app:smsp_hint="Searchable Spinner"
             app:smsp_hintTextSize="14sp"
             app:smsp_isSearchable="true"

@@ -1,14 +1,13 @@
 package com.chivorn.demojava;
 
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Toast;
 
 import com.chivorn.resourcemodule.MainApp;
 import com.chivorn.smartmaterialspinner.SmartMaterialSpinner;
-
-import java.util.ArrayList;
 
 public class MainActivity extends MainApp {
     @Override
@@ -17,51 +16,25 @@ public class MainActivity extends MainApp {
         setContentView(R.layout.smart_material_spinner_sample_layout);
 
         initBaseView();
+        initItemList();
         initSpinnerInJava();
-        onClickListenter();
+        onClickListener();
     }
 
     private void initSpinnerInJava() {
-        provinceList = new ArrayList<>();
-        provinceList.add("Banteay Meanchey");
-        provinceList.add("Battambang");
-        provinceList.add("Kampong Cham");
-        provinceList.add("Kampong Chhnang");
-        provinceList.add("Kampong Speu");
-        provinceList.add("Kampong Thom");
-        provinceList.add("Kampot");
-        provinceList.add("Kandal");
-        provinceList.add("Kep");
-        provinceList.add("Koh Kong");
-        provinceList.add("Kratie");
-        provinceList.add("Mondulkiri");
-        provinceList.add("Oddar Meanchey");
-        provinceList.add("Pailin");
-        provinceList.add("Phnom Penh");
-        provinceList.add("Preah Vihear");
-        provinceList.add("Prey Veng");
-        provinceList.add("Pursat");
-        provinceList.add("Ratanakiri");
-        provinceList.add("Siem Reap");
-        provinceList.add("Sihanoukville");
-        provinceList.add("Stung Treng");
-        provinceList.add("Svay Rieng");
-        provinceList.add("Takeo");
-        provinceList.add("Tbong Khmum");
-
         spProvince.setItems(provinceList);
         spProvinceDialog.setItems(provinceList);
         spCustomColor.setItems(provinceList);
         spSearchable.setItems(provinceList);
 
-        spCustomColor.setItemColor(getResources().getColor(R.color.custom_item_color));
-        spCustomColor.setSelectedItemColor(getResources().getColor(R.color.custom_selected_item_color));
-        spCustomColor.setItemListColor(getResources().getColor(R.color.custom_item_list_color));
+        spCustomColor.setItemColor(ContextCompat.getColor(this, R.color.custom_item_color));
+        spCustomColor.setSelectedItemColor(ContextCompat.getColor(this, R.color.custom_selected_item_color));
+        spCustomColor.setItemListColor(ContextCompat.getColor(this, R.color.custom_item_list_color));
 
         spProvince.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
-                spProvince.setError("You are selecting on spinner item -> \"" + provinceList.get(position) + "\" . You can show it both in XML and programmatically and you can display as single line or multiple lines");
+                spProvince.setError("You are selecting on spinner item -> \"" + spProvince.getItems().get(position) + "\" . You can show it both in XML and programmatically and you can display as single line or multiple lines");
             }
 
             @Override
@@ -73,7 +46,7 @@ public class MainActivity extends MainApp {
         spProvinceDialog.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
-                spProvinceDialog.setError("You are selecting on spinner item -> \"" + provinceList.get(position) + "\" . You can show it both in XML and programmatically and you can display as single line or multiple lines");
+                spProvinceDialog.setError("You are selecting on spinner item -> \"" + spProvinceDialog.getItems().get(position) + "\" . You can show it both in XML and programmatically and you can display as single line or multiple lines");
             }
 
             @Override
@@ -85,7 +58,7 @@ public class MainActivity extends MainApp {
         spCustomColor.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
-                spCustomColor.setError("You are selecting on spinner item -> \"" + provinceList.get(position) + "\" . You can show it both in XML and programmatically and you can display as single line or multiple lines");
+                spCustomColor.setError("You are selecting on spinner item -> \"" + spCustomColor.getItems().get(position) + "\" . You can show it both in XML and programmatically and you can display as single line or multiple lines");
             }
 
             @Override
@@ -97,7 +70,7 @@ public class MainActivity extends MainApp {
         spSearchable.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
-                spSearchable.setError("Your selected item is \"" + provinceList.get(position) + "\" .");
+                spSearchable.setError("Your selected item is \"" + spSearchable.getItems().get(position) + "\" .");
             }
 
             @Override
