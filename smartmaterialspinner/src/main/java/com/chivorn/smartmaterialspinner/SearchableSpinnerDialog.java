@@ -29,10 +29,10 @@ import com.chivorn.smartmaterialspinner.util.SoftKeyboardUtil;
 import java.io.Serializable;
 import java.util.List;
 
-public class SearchableSpinnerDialog<T> extends DialogFragment implements SearchView.OnQueryTextListener, SearchView.OnCloseListener {
+public class SearchableSpinnerDialog extends DialogFragment implements SearchView.OnQueryTextListener, SearchView.OnCloseListener {
     private static final String LIST_ITEMS = "LIST_ITEMS";
     private static final String SAVE_INSTANCE_STATE_KEY = "SAVE_INSTANCE_STATE_KEY";
-    private ArrayAdapter<T> searchArrayAdapter;
+    private ArrayAdapter searchArrayAdapter;
     private ViewGroup searchHeaderView;
     private TextView tvSearchHeader;
     private SearchView searchView;
@@ -57,8 +57,8 @@ public class SearchableSpinnerDialog<T> extends DialogFragment implements Search
     public SearchableSpinnerDialog() {
     }
 
-    public static <T> SearchableSpinnerDialog<T> newInstance(List<T> items) {
-        SearchableSpinnerDialog<T> searchableSpinnerDialog = new SearchableSpinnerDialog<>();
+    public static SearchableSpinnerDialog newInstance(List items) {
+        SearchableSpinnerDialog searchableSpinnerDialog = new SearchableSpinnerDialog();
         Bundle args = new Bundle();
         args.putSerializable(LIST_ITEMS, (Serializable) items);
         searchableSpinnerDialog.setArguments(args);
@@ -125,7 +125,7 @@ public class SearchableSpinnerDialog<T> extends DialogFragment implements Search
         SoftKeyboardUtil.hideSoftKeyboard(getActivity());
         List items = getArguments() != null ? (List) getArguments().getSerializable(LIST_ITEMS) : null;
         if (items != null) {
-            searchArrayAdapter = new ArrayAdapter<T>(getActivity(), R.layout.smart_material_spinner_search_list_item_layout, items) {
+            searchArrayAdapter = new ArrayAdapter<Object>(getActivity(), R.layout.smart_material_spinner_search_list_item_layout, items) {
                 @NonNull
                 @Override
                 public View getView(int position, View convertView, @NonNull ViewGroup parent) {
@@ -134,7 +134,6 @@ public class SearchableSpinnerDialog<T> extends DialogFragment implements Search
                     if (searchListItemColor != 0) {
                         tvListItem.setTextColor(searchListItemColor);
                     }
-
                     if (selectedSearchItemColor != 0 && position >= 0 && position == selectedPosition) {
                         tvListItem.setTextColor(selectedSearchItemColor);
                     }

@@ -22,10 +22,10 @@ public class MainActivity extends MainApp {
     }
 
     private void initSpinnerInJava() {
-        spProvince.setItems(provinceList);
-        spProvinceDialog.setItems(provinceList);
-        spCustomColor.setItems(provinceList);
-        spSearchable.setItems(provinceList);
+        spProvince.setItem(provinceList);
+        spProvinceDialog.setItem(provinceList);
+        spCustomColor.setItem(provinceList);
+        spSearchable.setItem(provinceList);
 
         spCustomColor.setItemColor(ContextCompat.getColor(this, R.color.custom_item_color));
         spCustomColor.setSelectedItemColor(ContextCompat.getColor(this, R.color.custom_selected_item_color));
@@ -34,48 +34,48 @@ public class MainActivity extends MainApp {
         spProvince.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
-                spProvince.setError("You are selecting on spinner item -> \"" + spProvince.getItems().get(position) + "\" . You can show it both in XML and programmatically and you can display as single line or multiple lines");
+                spProvince.setError("You are selecting on spinner item -> \"" + spProvince.getItem().get(position) + "\" . You can show it both in XML and programmatically and you can display as single line or multiple lines");
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
-                Toast.makeText(MainActivity.this, "On Nothing Selected", Toast.LENGTH_SHORT).show();
+                spProvince.setError("On Nothing Selected");
             }
         });
 
         spProvinceDialog.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
-                spProvinceDialog.setError("You are selecting on spinner item -> \"" + spProvinceDialog.getItems().get(position) + "\" . You can show it both in XML and programmatically and you can display as single line or multiple lines");
+                spProvinceDialog.setError("You are selecting on spinner item -> \"" + spProvinceDialog.getItem().get(position) + "\" . You can show it both in XML and programmatically and you can display as single line or multiple lines");
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
-                Toast.makeText(MainActivity.this, "On Nothing Selected", Toast.LENGTH_SHORT).show();
+                spProvinceDialog.setError("On Nothing Selected");
             }
         });
 
         spCustomColor.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
-                spCustomColor.setError("You are selecting on spinner item -> \"" + spCustomColor.getItems().get(position) + "\" . You can show it both in XML and programmatically and you can display as single line or multiple lines");
+                spCustomColor.setError("You are selecting on spinner item -> \"" + spCustomColor.getItem().get(position) + "\" . You can show it both in XML and programmatically and you can display as single line or multiple lines");
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
-                Toast.makeText(MainActivity.this, "On Nothing Selected", Toast.LENGTH_SHORT).show();
+                spCustomColor.setError("On Nothing Selected");
             }
         });
 
         spSearchable.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
-                spSearchable.setError("Your selected item is \"" + spSearchable.getItems().get(position) + "\" .");
+                spSearchable.setError("Your selected item is \"" + spSearchable.getItem().get(position) + "\" .");
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
-                Toast.makeText(MainActivity.this, "On Nothing Selected", Toast.LENGTH_SHORT).show();
+                spSearchable.setError("On Nothing Selected");
             }
         });
 

@@ -45,7 +45,7 @@ import com.chivorn.smartmaterialspinner.util.SoftKeyboardUtil;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAnimator.AnimatorUpdateListener, SearchableSpinnerDialog.SearchableItem {
+public class SmartMaterialSpinner extends AppCompatSpinner implements ValueAnimator.AnimatorUpdateListener, SearchableSpinnerDialog.SearchableItem {
     public static final int DEFAULT_ARROW_WIDTH_DP = 10;
     private static final String TAG = SmartMaterialSpinner.class.getSimpleName();
 
@@ -55,7 +55,7 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAn
     private StaticLayout staticLayout;
 
     private SearchableSpinnerDialog searchableSpinnerDialog;
-    private List<T> items;
+    private List<Object> item;
     private List<Object> searchDialogItem;
 
     private boolean isSearchable = false;
@@ -87,7 +87,7 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAn
     private int minContentHeight;
 
     //Properties about Error Label
-    private int lastPosition;
+    private int lastPosition = -1;
     private ObjectAnimator errorLabelAnimator;
     private int errorLabelPosX;
     private int minNbErrorLines;
@@ -98,7 +98,7 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAn
     private float floatingLabelPercent;
     private ObjectAnimator floatingLabelAnimator;
     private boolean isSelected;
-    private boolean floatingLabelVisible;
+    private boolean isFloatingLabelVisible;
     private int baseAlpha;
 
 
@@ -183,7 +183,7 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAn
         configSearchableDialog();
         setMinimumHeight(getPaddingTop() + getPaddingBottom() + minContentHeight);
         setBackgroundResource(R.drawable.smart_material_spinner_background);
-        setItems(new ArrayList<T>());
+        setItem(new ArrayList<>());
         configDropdownWidthAfterAttrReady();
     }
 
@@ -216,6 +216,7 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAn
         floatingLabelColor = typedArray.getColor(R.styleable.SmartMaterialSpinner_smsp_floatingLabelColor, ContextCompat.getColor(context, R.color.smsp_floating_label_color));
         multilineError = typedArray.getBoolean(R.styleable.SmartMaterialSpinner_smsp_multilineError, true);
         minNbErrorLines = typedArray.getInt(R.styleable.SmartMaterialSpinner_smsp_nbErrorLines, 1);
+        currentNbErrorLines = minNbErrorLines;
         alignLabels = typedArray.getBoolean(R.styleable.SmartMaterialSpinner_smsp_alignLabels, true);
         underlineSize = typedArray.getDimension(R.styleable.SmartMaterialSpinner_smsp_underlineSize, 0.6f);
         arrowColor = typedArray.getColor(R.styleable.SmartMaterialSpinner_smsp_arrowColor, baseColor);
@@ -244,13 +245,7 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAn
         }
 
         typedArray.recycle();
-
-        floatingLabelPercent = 0f;
-        errorLabelPosX = 0;
-        isSelected = false;
-        floatingLabelVisible = false;
         lastPosition = -1;
-        currentNbErrorLines = minNbErrorLines;
     }
 
     private void initSearchableDialogObject() {
@@ -321,7 +316,10 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAn
 
     @Override
     public int getSelectedItemPosition() {
-        return super.getSelectedItemPosition();
+        int selectedIndex = super.getSelectedItemPosition();
+        if (hint != null)
+            selectedIndex -= 1;
+        return selectedIndex;
     }
 
     private void initPadding() {
@@ -375,7 +373,7 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAn
 
     public void showFloatingLabel() {
         if (floatingLabelAnimator != null) {
-            floatingLabelVisible = true;
+            isFloatingLabelVisible = true;
             if (floatingLabelAnimator.isRunning()) {
                 floatingLabelAnimator.reverse();
             } else {
@@ -386,7 +384,7 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAn
 
     public void hideFloatingLabel() {
         if (floatingLabelAnimator != null) {
-            floatingLabelVisible = false;
+            isFloatingLabelVisible = false;
             floatingLabelAnimator.reverse();
         }
     }
@@ -566,7 +564,7 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAn
             } else {
                 textPaint.setColor(isEnabled() ? floatingLabelColor : disabledColor);
             }
-            if (floatingLabelAnimator.isRunning() || !floatingLabelVisible) {
+            if (floatingLabelAnimator.isRunning() || !isFloatingLabelVisible) {
                 textPaint.setAlpha((int) ((0.8 * floatingLabelPercent + 0.2) * baseAlpha * floatingLabelPercent));
             }
             textPaint.setTextSize(floatingLabelSize);
@@ -646,21 +644,15 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAn
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (hint != null || floatingLabelText != null) {
-                    if (!floatingLabelVisible && position != 0) {
+                    if (!isFloatingLabelVisible && position != -1) {
                         showFloatingLabel();
-                    } else if (floatingLabelVisible && (position == 0 && !alwaysShowFloatingLabel)) {
+                    } else if (isFloatingLabelVisible && (position == -1 && !alwaysShowFloatingLabel)) {
                         hideFloatingLabel();
                     }
                 }
-
-               /* if (position != lastPosition && error != null) {
-                    setError(error);
-                }*/
                 boolean isStartup = lastPosition == -1;
                 lastPosition = position;
-
                 if (listener != null) {
-                    position = hint != null ? position - 1 : position;
                     if (position >= 0) {
                         if (view instanceof TextView) {
                             TextView selectedItem = (TextView) parent.getChildAt(0);
@@ -668,9 +660,6 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAn
                             selectedItem.setTextColor(itemColor);
                         }
                         listener.onItemSelected(parent, view, position, id);
-                        setSearchSelectedPosition(position);
-                    } else if (position == -1 && !isStartup) {
-                        listener.onNothingSelected(parent);
                         setSearchSelectedPosition(position);
                     }
                 } else {
@@ -686,8 +675,11 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAn
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                if (listener != null) {
+                if (lastPosition != -1 && listener != null) {
                     listener.onNothingSelected(parent);
+                    if (isFloatingLabelVisible && !alwaysShowFloatingLabel) {
+                        hideFloatingLabel();
+                    }
                 }
             }
         };
@@ -1106,15 +1098,15 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAn
         }
     }
 
-    public void setItems(@NonNull List<T> items) {
-        this.items = items;
-        ArrayAdapter<T> adapter = new ArrayAdapter<>(getContext(), R.layout.smart_material_spinner_hint_item_layout, items);
+    public void setItem(@NonNull List<Object> item) {
+        this.item = item;
+        ArrayAdapter<Object> adapter = new ArrayAdapter<>(getContext(), R.layout.smart_material_spinner_hint_item_layout, item);
         adapter.setDropDownViewResource(R.layout.smart_material_spinner_dropdown_item);
         setAdapter(adapter);
     }
 
-    public List<T> getItems() {
-        return items;
+    public List<Object> getItem() {
+        return item;
     }
 
     @Override
@@ -1242,7 +1234,7 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAn
             if (dropdownItemView instanceof TextView) {
                 TextView itemTextView = (TextView) dropdownItemView;
                 itemTextView.setTextColor(itemListColor);
-                if (position >= 0 && position == getSelectedItemPosition() - 1) {
+                if (position >= 0 && position == getSelectedItemPosition()) {
                     itemTextView.setTextColor(selectedItemColor);
                 }
             }

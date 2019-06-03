@@ -18,14 +18,14 @@ class MainActivity : MainApp() {
     }
 
     private fun initSpinnerInKotlin() {
-        spProvince!!.items = (provinceList as List<Any>?)!!
-        spProvinceDialog!!.items = provinceList as List<Any>
-        spCustomColor!!.items = provinceList as List<Any>
-        spSearchable!!.items = provinceList as List<Any>
+        spProvince!!.item = (provinceList as List<Any>?)!!
+        spProvinceDialog!!.item = provinceList as List<Any>
+        spCustomColor!!.item = provinceList as List<Any>
+        spSearchable!!.item = provinceList as List<Any>
 
         spProvince!!.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(adapterView: AdapterView<*>, view: View, position: Int, id: Long) {
-                spProvince?.error = "You are selecting on spinner item -> \"" + spProvince.items[position] + "\" . You can show it both in XML and programmatically and you can display as single line or multiple lines"
+                spProvince?.error = "You are selecting on spinner item -> \"" + spProvince.item[position] + "\" . You can show it both in XML and programmatically and you can display as single line or multiple lines"
             }
 
             override fun onNothingSelected(adapterView: AdapterView<*>) {}
@@ -33,7 +33,7 @@ class MainActivity : MainApp() {
 
         spProvinceDialog!!.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(adapterView: AdapterView<*>, view: View, position: Int, id: Long) {
-                spProvinceDialog?.error = "You are selecting on spinner item -> \"" + spProvinceDialog.items[position] + "\" . You can show it both in XML and programmatically and you can display as single line or multiple lines"
+                spProvinceDialog?.error = "You are selecting on spinner item -> \"" + spProvinceDialog.item[position] + "\" . You can show it both in XML and programmatically and you can display as single line or multiple lines"
             }
 
             override fun onNothingSelected(adapterView: AdapterView<*>) {}
@@ -41,7 +41,7 @@ class MainActivity : MainApp() {
 
         spCustomColor!!.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(adapterView: AdapterView<*>, view: View, position: Int, id: Long) {
-                spCustomColor?.error = "You are selecting on spinner item -> \"" + spCustomColor.items[position] + "\" . You can show it both in XML and programmatically and you can display as single line or multiple lines"
+                spCustomColor?.error = "You are selecting on spinner item -> \"" + spCustomColor.item[position] + "\" . You can show it both in XML and programmatically and you can display as single line or multiple lines"
             }
 
             override fun onNothingSelected(adapterView: AdapterView<*>) {}
@@ -49,7 +49,7 @@ class MainActivity : MainApp() {
 
         spSearchable!!.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(adapterView: AdapterView<*>, view: View, position: Int, id: Long) {
-                spSearchable?.error = "Your selected item is \"" + spSearchable.items[position] + "\" ."
+                spSearchable?.error = "Your selected item is \"" + spSearchable.item[position] + "\" ."
             }
 
             override fun onNothingSelected(adapterView: AdapterView<*>) {}
