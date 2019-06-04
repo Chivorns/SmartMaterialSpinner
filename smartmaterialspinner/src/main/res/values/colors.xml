@@ -6,6 +6,7 @@
     <color name="smsp_default_text_color">#4e4b4b</color>
     <color name="smsp_disabled_color">#808080</color>
     <color name="smsp_error_color">#E42F6D</color>
+    <color name="smsp_search_header_text_color">#FFFFFF</color>
     <color name="smsp_search_header_background">#4E61CC</color>
     <color name="smsp_transparent_color">#00000000</color>
     <color name="smsp_white_color">#FFFFFF</color>

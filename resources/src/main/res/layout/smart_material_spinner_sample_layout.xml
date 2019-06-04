@@ -26,23 +26,27 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:spinnerMode="dialog"
-            app:smsp_error="@string/sample_error_message"
+            app:smsp_errorText="@string/sample_error_message"
+            app:smsp_errorTextColor="@color/error_color"
             app:smsp_errorTextSize="12sp"
+            app:smsp_floatingLabelColor="@color/floating_color"
             app:smsp_hint="Searchable Spinner"
-            app:smsp_hintTextSize="14sp"
+            app:smsp_hintSize="14sp"
             app:smsp_isSearchable="true"
             app:smsp_itemSize="14sp"
             app:smsp_multilineError="true"
-            app:smsp_searchHeaderColor="@color/smsp_search_header_background" />
+            app:smsp_searchHeaderBackgroundColor="@color/smsp_search_header_background"
+            app:smsp_searchHeaderText="Search/Select Province"
+            app:smsp_searchHeaderTextColor="#ffff" />
 
         <com.chivorn.smartmaterialspinner.SmartMaterialSpinner
             android:id="@+id/sp_provinces"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:smsp_error="@string/sample_error_message"
-            app:smsp_errorColor="@color/error_color"
+            app:smsp_errorText="@string/sample_error_message"
+            app:smsp_errorTextColor="@color/error_color"
             app:smsp_hint="Province (Dropdown Mode)"
-            app:smsp_hintTextSize="14sp"
+            app:smsp_hintSize="14sp"
             app:smsp_multilineError="false" />
 
         <com.chivorn.smartmaterialspinner.SmartMaterialSpinner
@@ -50,10 +54,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:spinnerMode="dialog"
-            app:smsp_errorColor="@color/error_color"
+            app:smsp_errorTextColor="@color/error_color"
             app:smsp_floatingLabelColor="@color/floating_color"
             app:smsp_hint="Province (Dialog Mode)"
-            app:smsp_hintTextSize="14sp"
+            app:smsp_hintSize="14sp"
             app:smsp_multilineError="true" />
 
         <com.chivorn.smartmaterialspinner.SmartMaterialSpinner
@@ -61,21 +65,20 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:spinnerMode="dialog"
-            app:smsp_errorColor="@color/error_color"
+            app:smsp_errorTextColor="@color/error_color"
             app:smsp_floatingLabelColor="@color/floating_color"
             app:smsp_hint="Custom Color"
-
-            app:smsp_hintTextSize="14sp"
+            app:smsp_hintSize="14sp"
             app:smsp_itemColor="@color/custom_item_color"
             app:smsp_itemListColor="@color/custom_item_list_color"
-            app:smsp_selectedItemColor="@color/custom_selected_item_color" />
+            app:smsp_selectedItemListColor="@color/custom_selected_item_color" />
 
         <com.chivorn.smartmaterialspinner.SmartMaterialSpinner
             android:id="@+id/sp_empty_item"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:smsp_alwaysShowFloatingLabel="false"
-            app:smsp_errorColor="@color/error_color"
+            app:smsp_errorTextColor="@color/error_color"
             app:smsp_floatingLabelColor="@color/floating_color"
             app:smsp_floatingLabelText="floating text"
             app:smsp_hint="Empty Item Spinner"

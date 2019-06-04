@@ -25,34 +25,42 @@ class MainActivity : MainApp() {
 
         spProvince!!.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(adapterView: AdapterView<*>, view: View, position: Int, id: Long) {
-                spProvince?.error = "You are selecting on spinner item -> \"" + spProvince.item[position] + "\" . You can show it both in XML and programmatically and you can display as single line or multiple lines"
+                spProvince?.errorText = "You are selecting on spinner item -> \"" + spProvince.item[position] + "\" . You can show it both in XML and programmatically and you can display as single line or multiple lines"
             }
 
-            override fun onNothingSelected(adapterView: AdapterView<*>) {}
+            override fun onNothingSelected(adapterView: AdapterView<*>) {
+                spProvince?.errorText = "On Nothing Selected"
+            }
         }
 
         spProvinceDialog!!.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(adapterView: AdapterView<*>, view: View, position: Int, id: Long) {
-                spProvinceDialog?.error = "You are selecting on spinner item -> \"" + spProvinceDialog.item[position] + "\" . You can show it both in XML and programmatically and you can display as single line or multiple lines"
+                spProvinceDialog?.errorText = "You are selecting on spinner item -> \"" + spProvinceDialog.item[position] + "\" . You can show it both in XML and programmatically and you can display as single line or multiple lines"
             }
 
-            override fun onNothingSelected(adapterView: AdapterView<*>) {}
+            override fun onNothingSelected(adapterView: AdapterView<*>) {
+                spProvinceDialog?.errorText = "On Nothing Selected"
+            }
         }
 
         spCustomColor!!.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(adapterView: AdapterView<*>, view: View, position: Int, id: Long) {
-                spCustomColor?.error = "You are selecting on spinner item -> \"" + spCustomColor.item[position] + "\" . You can show it both in XML and programmatically and you can display as single line or multiple lines"
+                spCustomColor?.errorText = "You are selecting on spinner item -> \"" + spCustomColor.item[position] + "\" . You can show it both in XML and programmatically and you can display as single line or multiple lines"
             }
 
-            override fun onNothingSelected(adapterView: AdapterView<*>) {}
+            override fun onNothingSelected(adapterView: AdapterView<*>) {
+                spCustomColor?.errorText = "On Nothing Selected"
+            }
         }
 
         spSearchable!!.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(adapterView: AdapterView<*>, view: View, position: Int, id: Long) {
-                spSearchable?.error = "Your selected item is \"" + spSearchable.item[position] + "\" ."
+                spSearchable?.errorText = "Your selected item is \"" + spSearchable.item[position] + "\" ."
             }
 
-            override fun onNothingSelected(adapterView: AdapterView<*>) {}
+            override fun onNothingSelected(adapterView: AdapterView<*>) {
+                spSearchable.errorText = "On Nothing Selected"
+            }
         }
 
         spEmptyItem!!.setOnEmptySpinnerClicked { Toast.makeText(this@MainActivity, getString(R.string.empty_item_spinner_click_msg), Toast.LENGTH_SHORT).show() }

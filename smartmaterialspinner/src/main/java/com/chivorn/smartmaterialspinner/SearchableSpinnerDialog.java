@@ -47,6 +47,7 @@ public class SearchableSpinnerDialog extends DialogFragment implements SearchVie
     private int selectedPosition = -1;
 
     private String searchHeaderText;
+    private int searchHeaderTextColor;
     private String searchHint;
     private int searchDialogGravity;
 
@@ -165,6 +166,10 @@ public class SearchableSpinnerDialog extends DialogFragment implements SearchVie
             tvSearchHeader.setText(searchHeaderText);
         }
 
+        if (searchHeaderTextColor != 0) {
+            tvSearchHeader.setTextColor(searchHeaderTextColor);
+        }
+
         if (headerBackgroundColor != 0) {
             searchHeaderView.setBackgroundColor(headerBackgroundColor);
         } else if (headerBackgroundDrawable != null) {
@@ -240,13 +245,17 @@ public class SearchableSpinnerDialog extends DialogFragment implements SearchVie
         searchHeaderText = header;
     }
 
-    public void setSearchHeaderBackground(int color) {
+    public void setSearchHeaderTextColor(int color) {
+        this.searchHeaderTextColor = color;
+    }
+
+    public void setSearchHeaderBackgroundColor(int color) {
         headerBackgroundColor = color;
         headerBackgroundDrawable = null;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
-    public void setSearchHeaderBackground(Drawable drawable) {
+    public void setSearchHeaderBackgroundColor(Drawable drawable) {
         headerBackgroundDrawable = drawable;
         headerBackgroundColor = 0;
     }

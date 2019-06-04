@@ -102,10 +102,10 @@ public class MainApp extends AppCompatActivity implements View.OnClickListener {
             intent.setData(Uri.parse(repoUrl));
             startActivity(intent);
         } else if (v.getId() == R.id.btn_show_error) {
-            spProvince.setError(getResources().getString(R.string.sample_error_message));
-            spProvinceDialog.setError(getResources().getString(R.string.sample_error_message));
-            spCustomColor.setError(getResources().getString(R.string.sample_error_message));
-            spSearchable.setError(getResources().getString(R.string.sample_error_message));
+            spProvince.setErrorText(getResources().getString(R.string.sample_error_message));
+            spProvinceDialog.setErrorText(getResources().getString(R.string.sample_error_message));
+            spCustomColor.setErrorText(getResources().getString(R.string.sample_error_message));
+            spSearchable.setErrorText(getResources().getString(R.string.sample_error_message));
         }
     }
 }

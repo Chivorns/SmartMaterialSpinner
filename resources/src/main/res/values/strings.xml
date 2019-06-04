@@ -3,7 +3,7 @@
     <string name="kotlin_app_name">SMSP-Kotlin</string>
     <string name="github_repo">Github Repo</string>
     <string name="empty_item_spinner_click_msg">Empty item spinner is clicked</string>
-    <string name="sample_error_message">This is error message. We use it to show at bottom of spinner field and you have two options to display. One single line and second is multiple line</string>
+    <string name="sample_error_message">This is error text message. We use it to show at bottom of spinner field and you have two options to display. One single line and second is multiple line</string>
     <string name="show_error">Show Error</string>
     <string name="input_text">Input text</string>
 </resources>

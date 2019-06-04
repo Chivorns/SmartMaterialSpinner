@@ -28,54 +28,54 @@ public class MainActivity extends MainApp {
         spSearchable.setItem(provinceList);
 
         spCustomColor.setItemColor(ContextCompat.getColor(this, R.color.custom_item_color));
-        spCustomColor.setSelectedItemColor(ContextCompat.getColor(this, R.color.custom_selected_item_color));
+        spCustomColor.setSelectedItemListColor(ContextCompat.getColor(this, R.color.custom_selected_item_color));
         spCustomColor.setItemListColor(ContextCompat.getColor(this, R.color.custom_item_list_color));
 
         spProvince.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
-                spProvince.setError("You are selecting on spinner item -> \"" + spProvince.getItem().get(position) + "\" . You can show it both in XML and programmatically and you can display as single line or multiple lines");
+                spProvince.setErrorText("You are selecting on spinner item -> \"" + spProvince.getItem().get(position) + "\" . You can show it both in XML and programmatically and you can display as single line or multiple lines");
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
-                spProvince.setError("On Nothing Selected");
+                spProvince.setErrorText("On Nothing Selected");
             }
         });
 
         spProvinceDialog.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
-                spProvinceDialog.setError("You are selecting on spinner item -> \"" + spProvinceDialog.getItem().get(position) + "\" . You can show it both in XML and programmatically and you can display as single line or multiple lines");
+                spProvinceDialog.setErrorText("You are selecting on spinner item -> \"" + spProvinceDialog.getItem().get(position) + "\" . You can show it both in XML and programmatically and you can display as single line or multiple lines");
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
-                spProvinceDialog.setError("On Nothing Selected");
+                spProvinceDialog.setErrorText("On Nothing Selected");
             }
         });
 
         spCustomColor.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
-                spCustomColor.setError("You are selecting on spinner item -> \"" + spCustomColor.getItem().get(position) + "\" . You can show it both in XML and programmatically and you can display as single line or multiple lines");
+                spCustomColor.setErrorText("You are selecting on spinner item -> \"" + spCustomColor.getItem().get(position) + "\" . You can show it both in XML and programmatically and you can display as single line or multiple lines");
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
-                spCustomColor.setError("On Nothing Selected");
+                spCustomColor.setErrorText("On Nothing Selected");
             }
         });
 
         spSearchable.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
-                spSearchable.setError("Your selected item is \"" + spSearchable.getItem().get(position) + "\" .");
+                spSearchable.setErrorText("Your selected item is \"" + spSearchable.getItem().get(position) + "\" .");
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
-                spSearchable.setError("On Nothing Selected");
+                spSearchable.setErrorText("On Nothing Selected");
             }
         });
 
