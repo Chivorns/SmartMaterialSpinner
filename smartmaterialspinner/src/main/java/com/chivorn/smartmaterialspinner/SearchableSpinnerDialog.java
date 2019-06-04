@@ -49,7 +49,7 @@ public class SearchableSpinnerDialog extends DialogFragment implements SearchVie
     private String searchHeaderText;
     private int searchHeaderTextColor;
     private String searchHint;
-    private int searchDialogGravity;
+    private int searchDialogGravity = Gravity.TOP;
 
     private SearchableItem searchableItem;
     private OnSearchTextChanged onSearchTextChanged;
@@ -85,7 +85,6 @@ public class SearchableSpinnerDialog extends DialogFragment implements SearchVie
         builder.setView(searchLayout);
 
         AlertDialog dialog = builder.create();
-        searchDialogGravity = Gravity.TOP;
         setGravity(dialog);
         dialog.setOnShowListener(new DialogInterface.OnShowListener() {
             @Override
@@ -276,13 +275,12 @@ public class SearchableSpinnerDialog extends DialogFragment implements SearchVie
         this.selectedPosition = position;
     }
 
-    public void setSearchDialogGravity(int searchDialogGravity) {
-        this.searchDialogGravity = searchDialogGravity;
-        setGravity(getDialog());
+    public void setGravity(int gravity) {
+        this.searchDialogGravity = gravity;
     }
 
     private void setGravity(Dialog dialog) {
-        if (dialog.getWindow() != null) {
+        if (dialog != null && dialog.getWindow() != null) {
             dialog.getWindow().setGravity(searchDialogGravity);
         }
     }

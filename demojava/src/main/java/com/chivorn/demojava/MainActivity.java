@@ -2,6 +2,7 @@ package com.chivorn.demojava;
 
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Toast;
@@ -27,6 +28,8 @@ public class MainActivity extends MainApp {
         spCustomColor.setItem(provinceList);
         spSearchable.setItem(provinceList);
 
+        spSearchable.setSearchDialogGravity(Gravity.TOP);
+        spSearchable.setArrowMarginRight(19);
         spCustomColor.setItemColor(ContextCompat.getColor(this, R.color.custom_item_color));
         spCustomColor.setSelectedItemListColor(ContextCompat.getColor(this, R.color.custom_selected_item_color));
         spCustomColor.setItemListColor(ContextCompat.getColor(this, R.color.custom_item_list_color));

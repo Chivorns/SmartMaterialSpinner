@@ -3,8 +3,8 @@
 <resources>
     <declare-styleable name="SmartMaterialSpinner">
         <attr name="smsp_typeface" format="string" />
-        <attr name="smsp_baseColor" format="integer" />
-        <attr name="smsp_highlightColor" format="integer" />
+        <attr name="smsp_baseColor" format="color|reference" />
+        <attr name="smsp_highlightColor" format="color|reference" />
 
         <attr name="smsp_itemView" format="reference" />
         <attr name="smsp_dropdownView" format="reference" />
@@ -34,10 +34,14 @@
         <attr name="smsp_alwaysShowFloatingLabel" format="boolean" />
         <attr name="smsp_floatingLabelText" format="string" />
         <attr name="smsp_floatingLabelSize" format="dimension" />
-        <attr name="smsp_floatingLabelColor" format="color" />
+        <attr name="smsp_floatingLabelColor" format="color|reference" />
 
         <attr name="smsp_arrowSize" format="dimension" />
         <attr name="smsp_arrowColor" format="color|reference" />
+        <attr name="smsp_arrowMarginLeft" format="dimension" />
+        <attr name="smsp_arrowMarginTop" format="dimension" />
+        <attr name="smsp_arrowMarginRight" format="dimension" />
+        <attr name="smsp_arrowMarginBottom" format="dimension" />
 
         <attr name="smsp_underlineSize" format="dimension" />
         <attr name="smsp_underlineColor" format="color|reference" />
@@ -45,7 +49,7 @@
         <attr name="smsp_enableErrorLabel" format="boolean" />
         <attr name="smsp_errorText" format="string" />
         <attr name="smsp_errorTextSize" format="dimension" />
-        <attr name="smsp_errorTextColor" format="integer" />
+        <attr name="smsp_errorTextColor" format="color|reference" />
         <attr name="smsp_multilineError" format="boolean" />
         <attr name="smsp_nbErrorLine" format="integer" />
 
