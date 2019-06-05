@@ -15,6 +15,8 @@ import android.graphics.Point;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
+import android.graphics.drawable.NinePatchDrawable;
+import android.graphics.drawable.StateListDrawable;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
@@ -192,7 +194,6 @@ public class SmartMaterialSpinner extends AppCompatSpinner implements ValueAnima
         configSearchableDialog();
         setMinimumHeight(getPaddingTop() + getPaddingBottom() + minContentHeight);
         setItem(new ArrayList<>());
-        configDropdownWidthAfterAttrReady();
     }
 
     private void initAttributes(Context context, AttributeSet attrs) {
@@ -275,7 +276,7 @@ public class SmartMaterialSpinner extends AppCompatSpinner implements ValueAnima
     }
 
     private void removeDefaultSelector(Drawable drawable) {
-        if (drawable instanceof LayerDrawable) {
+        if (drawable instanceof LayerDrawable || (drawable instanceof StateListDrawable && drawable.getCurrent() instanceof NinePatchDrawable)) {
             setBackgroundResource(R.drawable.smsp_transparent_color);
         }
     }
@@ -283,7 +284,7 @@ public class SmartMaterialSpinner extends AppCompatSpinner implements ValueAnima
     /*
      * Config dropdown width and height.
      */
-    private void configDropdownWidthAfterAttrReady() {
+    private void configDropdownWidthAfterDataReady() {
         this.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
@@ -645,7 +646,7 @@ public class SmartMaterialSpinner extends AppCompatSpinner implements ValueAnima
                     }
                     break;
                 case MotionEvent.ACTION_UP:
-                    if (!isShowEmptyDropdown && getCount() == 1 && hint != null && onEmptySpinnerClickListener != null) {
+                    if (isSpinnerClickable()) {
                         onEmptySpinnerClickListener.onEmptySpinnerClicked();
                     }
                     break;
@@ -655,7 +656,11 @@ public class SmartMaterialSpinner extends AppCompatSpinner implements ValueAnima
             }
             invalidate();
         }
-        return super.onTouchEvent(event);
+        if (isSpinnerClickable()) {
+            return true;
+        } else {
+            return super.onTouchEvent(event);
+        }
     }
 
     @Override
@@ -1089,10 +1094,9 @@ public class SmartMaterialSpinner extends AppCompatSpinner implements ValueAnima
                             FragmentManager fragmentManager = appCompatActivity.getSupportFragmentManager();
                             searchableSpinnerDialog.show(fragmentManager, "TAG");
                         }
-                        return true;
                     }
                 }
-                return false;
+                return isSearchable;
             }
         });
         invalidate();
@@ -1250,6 +1254,10 @@ public class SmartMaterialSpinner extends AppCompatSpinner implements ValueAnima
         this.onEmptySpinnerClickListener = onEmptySpinnerClickListener;
     }
 
+    private boolean isSpinnerClickable() {
+        return !isShowEmptyDropdown && getCount() == 1 && hint != null && onEmptySpinnerClickListener != null;
+    }
+
 
     /**
      * @deprecated {use @link #setPaddingSafe(int, int, int, int)} to keep internal computation OK
@@ -1277,6 +1285,7 @@ public class SmartMaterialSpinner extends AppCompatSpinner implements ValueAnima
     @Override
     public void setAdapter(SpinnerAdapter adapter) {
         if (adapter instanceof HintAdapter) {
+            this.hintAdapter = (HintAdapter) adapter;
             super.setAdapter(adapter);
         } else {
             hintAdapter = new HintAdapter(adapter, getContext());
@@ -1289,6 +1298,8 @@ public class SmartMaterialSpinner extends AppCompatSpinner implements ValueAnima
         ArrayAdapter<Object> adapter = new ArrayAdapter<>(getContext(), R.layout.smart_material_spinner_item_layout, item);
         adapter.setDropDownViewResource(R.layout.smart_material_spinner_dropdown_item_layout);
         setAdapter(adapter);
+        configDropdownWidthAfterDataReady();
+        invalidate();
     }
 
     public List<Object> getItem() {
@@ -1347,7 +1358,7 @@ public class SmartMaterialSpinner extends AppCompatSpinner implements ValueAnima
 
     public void setShowEmptyDropdown(boolean status) {
         this.isShowEmptyDropdown = status;
-        configDropdownWidthAfterAttrReady();
+        configDropdownWidthAfterDataReady();
     }
 
 
