@@ -6,4 +6,9 @@
     <string name="sample_error_message">This is error text message. We use it to show at bottom of spinner field and you have two options to display. One single line and second is multiple line</string>
     <string name="show_error">Show Error</string>
     <string name="input_text">Input text</string>
+    <string name="searchable_spinner">Searchable Spinner</string>
+    <string name="dropdown_spinner">Dropdown Spinner</string>
+    <string name="dialog_spinner">Dialog Spinner</string>
+    <string name="custom_color">Custom Color</string>
+    <string name="clickable_spinner">Clickable Spinner</string>
 </resources>

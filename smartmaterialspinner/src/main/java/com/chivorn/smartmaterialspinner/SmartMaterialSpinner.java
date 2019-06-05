@@ -3,7 +3,6 @@ package com.chivorn.smartmaterialspinner;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.res.TypedArray;
@@ -641,9 +640,7 @@ public class SmartMaterialSpinner extends AppCompatSpinner implements ValueAnima
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
                     isSelected = true;
-                    if (getContext() instanceof Activity) {
-                        SoftKeyboardUtil.hideSoftKeyboard((Activity) getContext());
-                    }
+                    SoftKeyboardUtil.hideSoftKeyboard(getContext());
                     break;
                 case MotionEvent.ACTION_UP:
                     if (isSpinnerClickable()) {
@@ -674,6 +671,9 @@ public class SmartMaterialSpinner extends AppCompatSpinner implements ValueAnima
         final OnItemSelectedListener onItemSelectedListener = new OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (isSearchable) {
+                    SoftKeyboardUtil.hideSoftKeyboard(getContext());
+                }
                 if (hint != null || floatingLabelText != null) {
                     if (!isFloatingLabelVisible && position != -1) {
                         showFloatingLabel();
@@ -1079,7 +1079,9 @@ public class SmartMaterialSpinner extends AppCompatSpinner implements ValueAnima
             @SuppressLint("ClickableViewAccessibility")
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_UP) {
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    SoftKeyboardUtil.hideSoftKeyboard(getContext());
+                } else if (event.getAction() == MotionEvent.ACTION_UP) {
                     if (isSearchable && hintAdapter != null) {
                         searchDialogItem.clear();
                         int itemStart = 0;

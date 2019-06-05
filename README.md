@@ -1,5 +1,5 @@
 # SmartMaterialSpinner 
-[ ![Download](https://api.bintray.com/packages/chivorn/maven/smartmaterialspinner/images/download.svg) ]
+![Download](https://api.bintray.com/packages/chivorn/maven/smartmaterialspinner/images/download.svg) 
 
 The best Android spinner library for your android application with more customization
 
@@ -9,6 +9,10 @@ The best Android spinner library for your android application with more customiz
 </a>
                                                                                                                    
 ## Available features
+- Spinner mode
+  - Dropdown mode ( android:spinnerMode="dropdown" ). By default it is dropdown mode
+  - Dialog mode ( android:spinnerMode="dialog" )
+  - Searchable mode ( app:smsp_isSearchable="true" )
 - Searchable spinner
   - smsp_isSearchable : Default is false. Set it to true to enable this feature.
   - smsp_enableSearchHeader: Default is true. Set it to false to hide search header.
@@ -16,8 +20,6 @@ The best Android spinner library for your android application with more customiz
   - smsp_searchHeaderTextColor: For changing header text color
   - smsp_searchHeaderBackgroundColor: For changing header background color
   - smsp_searchHint: To set query text hint
-- Typeface (smsp_typeface)
-- Base color and highlight color
 - Floating Label
   - smsp_enableFloatingLabel: Default is true. Set it to false to disable floating label.
   - smsp_alwaysShowFloatingLabel: Default is false. Set it to true for always display.
@@ -30,7 +32,6 @@ The best Android spinner library for your android application with more customiz
   - smsp_errorTextSize: For changing error text size
   - smsp_errorTextColor: for changing error text color
   - smsp_multilineError: Default is false. Update it to show as single line or multiple line
-- Empty dropdown clickable
 - Color customization to:
   - Item text color (smsp_itemColor)
   - Hint color (smsp_hintColor)
@@ -41,6 +42,9 @@ The best Android spinner library for your android application with more customiz
   - Selected item color (smsp_selectedItemListColor)
   - Arrow or selector color (smsp_arrowColor)
   - Underline color (smsp_underlineColor)
+- Empty dropdown clickable
+- Typeface (smsp_typeface)
+- Base color and highlight color
 
 ## Screenshot Demo
 
@@ -105,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
         provinceList.add("Kandal");
         provinceList.add("Kampot");
 
-        spProvince.setItems(provinceList);
+        spProvince.setItem(provinceList);
 
         spProvince.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -115,18 +119,6 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
-            }
-        });
-
-        spEmptyItem.setShowEmptyDropdown(false);
-        // Use this method instead of OnClicklistener() to handle touch even.
-        spEmptyItem.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_UP) {
-                    Toast.makeText(MainActivity.this, "Country spinner is clicked", Toast.LENGTH_SHORT).show();
-                }
-                return false;
             }
         });
     }
@@ -159,7 +151,7 @@ class MainActivity : AppCompatActivity() {
         provinceList!!.add("Kandal")
         provinceList!!.add("Kampot")
 
-        spProvince!!.setItems<Any>(provinceList!!)
+        spProvince!!.setItem<Any>(provinceList!!)
 
         spProvince!!.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(adapterView: AdapterView<*>, view: View, position: Int, id: Long) {
@@ -168,15 +160,6 @@ class MainActivity : AppCompatActivity() {
 
             override fun onNothingSelected(adapterView: AdapterView<*>) {}
         }
-
-        spEmptyItem!!.setShowEmptyDropdown(false)
-        // Use this method instead of OnClicklistener() to handle touch even.
-        spEmptyItem!!.setOnTouchListener(View.OnTouchListener { v, event ->
-            if (event.action == MotionEvent.ACTION_UP) {
-                Toast.makeText(this@MainActivity, "Country spinner is clicked", Toast.LENGTH_SHORT).show()
-            }
-            false
-        })
     }
 }
 ```

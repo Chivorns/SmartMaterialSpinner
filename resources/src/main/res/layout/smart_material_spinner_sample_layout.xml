@@ -12,20 +12,13 @@
         android:weightSum="2">
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginBottom="10dp"
-            android:gravity="center"
-            android:text="@string/lib_name"
-            android:textColor="@color/colorPrimary"
-            android:textSize="19sp" />
+            style="@style/headerTextStyle"
+            android:text="@string/searchable_spinner" />
 
         <com.chivorn.smartmaterialspinner.SmartMaterialSpinner
             android:id="@+id/sp_searchable"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:spinnerMode="dialog"
             app:smsp_errorText="@string/sample_error_message"
             app:smsp_errorTextColor="@color/error_color"
             app:smsp_errorTextSize="12sp"
@@ -39,6 +32,10 @@
             app:smsp_searchHeaderText="Search/Select Province"
             app:smsp_searchHeaderTextColor="#ffff" />
 
+        <TextView
+            style="@style/headerTextStyle"
+            android:text="@string/dropdown_spinner" />
+
         <com.chivorn.smartmaterialspinner.SmartMaterialSpinner
             android:id="@+id/sp_provinces"
             android:layout_width="match_parent"
@@ -48,6 +45,10 @@
             app:smsp_hint="Province (Dropdown Mode)"
             app:smsp_hintSize="14sp"
             app:smsp_multilineError="false" />
+
+        <TextView
+            style="@style/headerTextStyle"
+            android:text="@string/dialog_spinner" />
 
         <com.chivorn.smartmaterialspinner.SmartMaterialSpinner
             android:id="@+id/sp_provinces_dialog"
@@ -60,6 +61,10 @@
             app:smsp_hintSize="14sp"
             app:smsp_multilineError="true" />
 
+        <TextView
+            style="@style/headerTextStyle"
+            android:text="@string/custom_color" />
+
         <com.chivorn.smartmaterialspinner.SmartMaterialSpinner
             android:id="@+id/sp_custom_color"
             android:layout_width="match_parent"
@@ -71,7 +76,13 @@
             app:smsp_hintSize="14sp"
             app:smsp_itemColor="@color/custom_item_color"
             app:smsp_itemListColor="@color/custom_item_list_color"
+            app:smsp_itemListHintBackgroundColor="#7C4DFF"
+            app:smsp_itemListHintColor="#40C4FF"
             app:smsp_selectedItemListColor="@color/custom_selected_item_color" />
+
+        <TextView
+            style="@style/headerTextStyle"
+            android:text="@string/clickable_spinner" />
 
         <com.chivorn.smartmaterialspinner.SmartMaterialSpinner
             android:id="@+id/sp_empty_item"
@@ -84,16 +95,6 @@
             app:smsp_hint="Empty Item Spinner"
             app:smsp_showEmptyDropdown="false"
             app:smsp_underlineColor="@color/underline_color" />
-
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:background="@drawable/smsp_border_bottom"
-            android:focusable="false"
-            android:hint="@string/input_text"
-            android:maxLines="1"
-            android:padding="0dp"
-            android:textSize="14sp" />
 
         <Button
             android:id="@+id/btn_show_error"

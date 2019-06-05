@@ -24,8 +24,6 @@ import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.TextView;
 
-import com.chivorn.smartmaterialspinner.util.SoftKeyboardUtil;
-
 import java.io.Serializable;
 import java.util.List;
 
@@ -122,7 +120,6 @@ public class SearchableSpinnerDialog extends DialogFragment implements SearchVie
         searchView.setFocusable(true);
         searchView.setIconified(false);
         searchView.requestFocusFromTouch();
-        SoftKeyboardUtil.hideSoftKeyboard(getActivity());
         List items = getArguments() != null ? (List) getArguments().getSerializable(LIST_ITEMS) : null;
         if (items != null) {
             searchArrayAdapter = new ArrayAdapter<Object>(getActivity(), R.layout.smart_material_spinner_search_list_item_layout, items) {
