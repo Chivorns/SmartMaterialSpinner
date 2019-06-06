@@ -46,6 +46,15 @@
             app:smsp_hintSize="14sp"
             app:smsp_multilineError="false" />
 
+        <com.chivorn.smartmaterialspinner.SmartMaterialSpinner
+            android:id="@+id/sp_provinces_no_hint"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:smsp_errorText="@string/sample_error_message"
+            app:smsp_errorTextColor="@color/error_color"
+            app:smsp_hintSize="14sp"
+            app:smsp_multilineError="false" />
+
         <TextView
             style="@style/headerTextStyle"
             android:text="@string/dialog_spinner" />
@@ -93,7 +102,6 @@
             app:smsp_floatingLabelColor="@color/floating_color"
             app:smsp_floatingLabelText="floating text"
             app:smsp_hint="Empty Item Spinner"
-            app:smsp_showEmptyDropdown="false"
             app:smsp_underlineColor="@color/underline_color" />
 
         <Button

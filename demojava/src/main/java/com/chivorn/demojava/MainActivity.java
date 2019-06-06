@@ -23,10 +23,11 @@ public class MainActivity extends MainApp {
     }
 
     private void initSpinnerInJava() {
+        spSearchable.setItem(provinceList);
         spProvince.setItem(provinceList);
+        spProvinceNoHint.setItem(provinceList);
         spProvinceDialog.setItem(provinceList);
         spCustomColor.setItem(provinceList);
-        spSearchable.setItem(provinceList);
 
         spSearchable.setSearchDialogGravity(Gravity.TOP);
         spSearchable.setArrowMarginRight(19);

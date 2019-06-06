@@ -55,6 +55,7 @@ public class SmartMaterialSpinner extends AppCompatSpinner implements ValueAnima
     private Paint paint;
     private TextPaint textPaint;
     private StaticLayout staticLayout;
+    private TextView tvDropdownItem;
 
     private SearchableSpinnerDialog searchableSpinnerDialog;
     private List<Object> item;
@@ -65,6 +66,7 @@ public class SmartMaterialSpinner extends AppCompatSpinner implements ValueAnima
     private String searchHeaderText;
     private int searchHeaderTextColor;
     private String searchHint;
+    private boolean isSelecting;
 
     private Path selectorPath;
     private Point[] selectorPoints;
@@ -140,7 +142,6 @@ public class SmartMaterialSpinner extends AppCompatSpinner implements ValueAnima
     private boolean enableFloatingLabel;
     private boolean alwaysShowFloatingLabel;
     private boolean isRtl;
-    private boolean isShowEmptyDropdown;
     private boolean isEnableDefaultSelect = true;
 
     private HintAdapter hintAdapter;
@@ -240,7 +241,6 @@ public class SmartMaterialSpinner extends AppCompatSpinner implements ValueAnima
         isRtl = typedArray.getBoolean(R.styleable.SmartMaterialSpinner_smsp_isRtl, false);
         itemView = typedArray.getResourceId(R.styleable.SmartMaterialSpinner_smsp_itemView, R.layout.smart_material_spinner_item_layout);
         dropdownView = typedArray.getResourceId(R.styleable.SmartMaterialSpinner_smsp_dropdownView, R.layout.smart_material_spinner_dropdown_item_layout);
-        isShowEmptyDropdown = typedArray.getBoolean(R.styleable.SmartMaterialSpinner_smsp_showEmptyDropdown, false);
         isSearchable = typedArray.getBoolean(R.styleable.SmartMaterialSpinner_smsp_isSearchable, false);
         isEnableSearchHeader = typedArray.getBoolean(R.styleable.SmartMaterialSpinner_smsp_enableSearchHeader, true);
         searchHeaderText = typedArray.getString(R.styleable.SmartMaterialSpinner_smsp_searchHeaderText);
@@ -292,7 +292,7 @@ public class SmartMaterialSpinner extends AppCompatSpinner implements ValueAnima
                 }
                 SmartMaterialSpinner.this.setDropDownWidth(SmartMaterialSpinner.this.getWidth());
                 SmartMaterialSpinner.this.setDropDownVerticalOffset(SmartMaterialSpinner.this.getHeight());
-                if (!isShowEmptyDropdown && getCount() == 1 && hint != null) {
+                if (getCount() == 1 && hint != null) {
                     SmartMaterialSpinner.this.setDropDownWidth(0);
                     SmartMaterialSpinner.this.setDropDownVerticalOffset(0);
                 }
@@ -640,6 +640,7 @@ public class SmartMaterialSpinner extends AppCompatSpinner implements ValueAnima
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
                     isSelected = true;
+                    isSelecting = true;
                     SoftKeyboardUtil.hideSoftKeyboard(getContext());
                     break;
                 case MotionEvent.ACTION_UP:
@@ -681,25 +682,19 @@ public class SmartMaterialSpinner extends AppCompatSpinner implements ValueAnima
                         hideFloatingLabel();
                     }
                 }
-                boolean isStartup = lastPosition == -1;
                 lastPosition = position;
                 if (listener != null) {
                     if (position >= 0) {
-                        if (view instanceof TextView) {
-                            TextView selectedItem = (TextView) parent.getChildAt(0);
-                            selectedItem.setTextSize(TypedValue.COMPLEX_UNIT_PX, itemSize);
-                            selectedItem.setTextColor(itemColor);
-                        }
+                        tvDropdownItem.setTextSize(TypedValue.COMPLEX_UNIT_PX, itemSize);
+                        tvDropdownItem.setTextColor(itemColor);
                         listener.onItemSelected(parent, view, position, id);
                         setSearchSelectedPosition(position);
                     }
                 } else {
-                    if (position > 0 && !isStartup) {
-                        if (view instanceof TextView) {
-                            TextView selectedItem = (TextView) parent.getChildAt(0);
-                            selectedItem.setTextSize(TypedValue.COMPLEX_UNIT_PX, itemSize);
-                            selectedItem.setTextColor(itemColor);
-                        }
+                    if (view instanceof TextView) {
+                        TextView selectedItem = (TextView) parent.getChildAt(0);
+                        selectedItem.setTextSize(TypedValue.COMPLEX_UNIT_PX, itemSize);
+                        selectedItem.setTextColor(itemColor);
                     }
                 }
             }
@@ -1257,7 +1252,7 @@ public class SmartMaterialSpinner extends AppCompatSpinner implements ValueAnima
     }
 
     private boolean isSpinnerClickable() {
-        return !isShowEmptyDropdown && getCount() == 1 && hint != null && onEmptySpinnerClickListener != null;
+        return getCount() == 1 && hint != null && onEmptySpinnerClickListener != null;
     }
 
 
@@ -1354,15 +1349,6 @@ public class SmartMaterialSpinner extends AppCompatSpinner implements ValueAnima
         return (hintAdapter == null || position < 0) ? INVALID_ROW_ID : hintAdapter.getItemId(position);
     }
 
-    public boolean isShowEmptyDropdown() {
-        return isShowEmptyDropdown;
-    }
-
-    public void setShowEmptyDropdown(boolean status) {
-        this.isShowEmptyDropdown = status;
-        configDropdownWidthAfterDataReady();
-    }
-
 
     /*
      * **********************************************************************************
@@ -1435,10 +1421,10 @@ public class SmartMaterialSpinner extends AppCompatSpinner implements ValueAnima
             position = hint != null ? position - 1 : position;
             View dropdownItemView = (isDropDownView ? mSpinnerAdapter.getDropDownView(position, convertView, parent) : mSpinnerAdapter.getView(position, convertView, parent));
             if (dropdownItemView instanceof TextView) {
-                TextView itemTextView = (TextView) dropdownItemView;
-                itemTextView.setTextColor(itemListColor);
+                tvDropdownItem = (TextView) dropdownItemView;
+                tvDropdownItem.setTextColor(itemListColor);
                 if (position >= 0 && position == getSelectedItemPosition()) {
-                    itemTextView.setTextColor(selectedItemListColor);
+                    tvDropdownItem.setTextColor(selectedItemListColor);
                 }
             }
             return dropdownItemView;
@@ -1448,6 +1434,13 @@ public class SmartMaterialSpinner extends AppCompatSpinner implements ValueAnima
             final LayoutInflater inflater = LayoutInflater.from(mContext);
             final int resId = isDropDownView ? dropdownView : itemView;
             final TextView textView = (TextView) inflater.inflate(resId, parent, false);
+            if (lastPosition >= 0 || isSelecting) {
+                textView.setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                    }
+                });
+            }
             textView.setText(hint);
             textView.setTextColor(SmartMaterialSpinner.this.isEnabled() ? hintColor : disabledColor);
             if (hintSize != -1)
