@@ -44,10 +44,11 @@ import android.widget.TextView;
 
 import com.chivorn.smartmaterialspinner.util.SoftKeyboardUtil;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SmartMaterialSpinner extends AppCompatSpinner implements ValueAnimator.AnimatorUpdateListener, SearchableSpinnerDialog.SearchableItem {
+public class SmartMaterialSpinner extends AppCompatSpinner implements ValueAnimator.AnimatorUpdateListener, SearchableSpinnerDialog.OnSearchDialogEventListener, Serializable {
     public static final int DEFAULT_ARROW_WIDTH_DP = 10;
     private static final String TAG = SmartMaterialSpinner.class.getSimpleName();
 
@@ -66,7 +67,6 @@ public class SmartMaterialSpinner extends AppCompatSpinner implements ValueAnima
     private String searchHeaderText;
     private int searchHeaderTextColor;
     private String searchHint;
-    private boolean isSelecting;
 
     private Path selectorPath;
     private Point[] selectorPoints;
@@ -152,6 +152,8 @@ public class SmartMaterialSpinner extends AppCompatSpinner implements ValueAnima
     private Integer dropdownView;
 
     private OnEmptySpinnerClickListener onEmptySpinnerClickListener;
+    private OnSpinnerEventListener spinnerEventsListener;
+    private boolean isShowing = false;
 
     /*
      * **********************************************************************************
@@ -260,8 +262,8 @@ public class SmartMaterialSpinner extends AppCompatSpinner implements ValueAnima
 
     private void initSearchableDialogObject() {
         searchDialogItem = new ArrayList<>();
-        searchableSpinnerDialog = SearchableSpinnerDialog.newInstance(searchDialogItem);
-        searchableSpinnerDialog.setOnSearchItemSelectedListener(this);
+        searchableSpinnerDialog = SearchableSpinnerDialog.newInstance(this, searchDialogItem);
+        //  searchableSpinnerDialog.setOnSearchDialogEventListener(this);
     }
 
     private void configSearchableDialog() {
@@ -633,6 +635,38 @@ public class SmartMaterialSpinner extends AppCompatSpinner implements ValueAnima
      * **********************************************************************************
      */
 
+    private void configSearchable() {
+        setOnTouchListener(new OnTouchListener() {
+            @SuppressLint("ClickableViewAccessibility")
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    SoftKeyboardUtil.hideSoftKeyboard(getContext());
+                } else if (event.getAction() == MotionEvent.ACTION_UP) {
+                    if (isSearchable && hintAdapter != null) {
+                        searchDialogItem.clear();
+                        int itemStart = 0;
+                        if (hint != null) {
+                            itemStart = 1;
+                        }
+                        for (int i = itemStart; i < hintAdapter.getCount(); i++) {
+                            searchDialogItem.add(hintAdapter.getItem(i));
+                        }
+                        AppCompatActivity appCompatActivity = scanForActivity(getContext());
+                        if (appCompatActivity != null) {
+                            FragmentManager fragmentManager = appCompatActivity.getSupportFragmentManager();
+                            searchableSpinnerDialog.show(fragmentManager, "TAG");
+                            if (spinnerEventsListener != null) {
+                                spinnerEventsListener.onSpinnerOpened(SmartMaterialSpinner.this);
+                            }
+                        }
+                    }
+                }
+                return isSearchable;
+            }
+        });
+    }
+
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouchEvent(MotionEvent event) {
@@ -640,7 +674,6 @@ public class SmartMaterialSpinner extends AppCompatSpinner implements ValueAnima
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
                     isSelected = true;
-                    isSelecting = true;
                     SoftKeyboardUtil.hideSoftKeyboard(getContext());
                     break;
                 case MotionEvent.ACTION_UP:
@@ -663,8 +696,34 @@ public class SmartMaterialSpinner extends AppCompatSpinner implements ValueAnima
 
     @Override
     public boolean performClick() {
-        super.performClick();
-        return true;
+        isShowing = true;
+        if (spinnerEventsListener != null) {
+            spinnerEventsListener.onSpinnerOpened(this);
+        }
+        return super.performClick();
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasWindowFocus) {
+        if (isShowing() && hasWindowFocus) {
+            dismiss();
+        }
+        super.onWindowFocusChanged(hasWindowFocus);
+    }
+
+    public void setOnSpinnerEventListener(OnSpinnerEventListener onSpinnerEventListener) {
+        this.spinnerEventsListener = onSpinnerEventListener;
+    }
+
+    public void dismiss() {
+        isShowing = false;
+        if (spinnerEventsListener != null) {
+            spinnerEventsListener.onSpinnerClosed(this);
+        }
+    }
+
+    public boolean isShowing() {
+        return isShowing;
     }
 
     @Override
@@ -672,6 +731,7 @@ public class SmartMaterialSpinner extends AppCompatSpinner implements ValueAnima
         final OnItemSelectedListener onItemSelectedListener = new OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                lastPosition = position;
                 if (isSearchable) {
                     SoftKeyboardUtil.hideSoftKeyboard(getContext());
                 }
@@ -682,14 +742,16 @@ public class SmartMaterialSpinner extends AppCompatSpinner implements ValueAnima
                         hideFloatingLabel();
                     }
                 }
-                lastPosition = position;
                 if (listener != null) {
                     if (position >= 0) {
-                        tvDropdownItem.setTextSize(TypedValue.COMPLEX_UNIT_PX, itemSize);
-                        tvDropdownItem.setTextColor(itemColor);
-                        listener.onItemSelected(parent, view, position, id);
-                        setSearchSelectedPosition(position);
+                        if (view instanceof TextView) {
+                            TextView selectedItem = (TextView) parent.getChildAt(0);
+                            selectedItem.setTextSize(TypedValue.COMPLEX_UNIT_PX, itemSize);
+                            selectedItem.setTextColor(itemColor);
+                        }
                     }
+                    listener.onItemSelected(parent, view, position, id);
+                    setSearchSelectedPosition(position);
                 } else {
                     if (view instanceof TextView) {
                         TextView selectedItem = (TextView) parent.getChildAt(0);
@@ -725,6 +787,13 @@ public class SmartMaterialSpinner extends AppCompatSpinner implements ValueAnima
                 selectedIndex += 1;
             }
             setSelection(selectedIndex);
+        }
+    }
+
+    @Override
+    public void onSearchableSpinnerDismiss() {
+        if (spinnerEventsListener != null) {
+            spinnerEventsListener.onSpinnerClosed(this);
         }
     }
 
@@ -1070,32 +1139,7 @@ public class SmartMaterialSpinner extends AppCompatSpinner implements ValueAnima
 
     public void setSearchable(boolean searchable) {
         this.isSearchable = searchable;
-        setOnTouchListener(new OnTouchListener() {
-            @SuppressLint("ClickableViewAccessibility")
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    SoftKeyboardUtil.hideSoftKeyboard(getContext());
-                } else if (event.getAction() == MotionEvent.ACTION_UP) {
-                    if (isSearchable && hintAdapter != null) {
-                        searchDialogItem.clear();
-                        int itemStart = 0;
-                        if (hint != null) {
-                            itemStart = 1;
-                        }
-                        for (int i = itemStart; i < hintAdapter.getCount(); i++) {
-                            searchDialogItem.add(hintAdapter.getItem(i));
-                        }
-                        AppCompatActivity appCompatActivity = scanForActivity(getContext());
-                        if (appCompatActivity != null) {
-                            FragmentManager fragmentManager = appCompatActivity.getSupportFragmentManager();
-                            searchableSpinnerDialog.show(fragmentManager, "TAG");
-                        }
-                    }
-                }
-                return isSearchable;
-            }
-        });
+        configSearchable();
         invalidate();
     }
 
@@ -1243,11 +1287,23 @@ public class SmartMaterialSpinner extends AppCompatSpinner implements ValueAnima
         invalidate();
     }
 
+    /**
+     * Listening for no item spinner perform clicked event.
+     */
     public interface OnEmptySpinnerClickListener {
         void onEmptySpinnerClicked();
     }
 
-    public void setOnEmptySpinnerClicked(OnEmptySpinnerClickListener onEmptySpinnerClickListener) {
+    /**
+     * Listening for open/closed events.
+     */
+    public interface OnSpinnerEventListener {
+        void onSpinnerOpened(SmartMaterialSpinner spinner);
+
+        void onSpinnerClosed(SmartMaterialSpinner spinner);
+    }
+
+    public void setOnEmptySpinnerClickListener(OnEmptySpinnerClickListener onEmptySpinnerClickListener) {
         this.onEmptySpinnerClickListener = onEmptySpinnerClickListener;
     }
 
@@ -1434,7 +1490,7 @@ public class SmartMaterialSpinner extends AppCompatSpinner implements ValueAnima
             final LayoutInflater inflater = LayoutInflater.from(mContext);
             final int resId = isDropDownView ? dropdownView : itemView;
             final TextView textView = (TextView) inflater.inflate(resId, parent, false);
-            if (lastPosition >= 0 || isSelecting) {
+            if (isShowing()) {
                 textView.setOnClickListener(new OnClickListener() {
                     @Override
                     public void onClick(View v) {

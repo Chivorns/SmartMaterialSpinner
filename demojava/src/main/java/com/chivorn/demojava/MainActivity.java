@@ -2,6 +2,7 @@ package com.chivorn.demojava;
 
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
@@ -35,59 +36,55 @@ public class MainActivity extends MainApp {
         spCustomColor.setSelectedItemListColor(ContextCompat.getColor(this, R.color.custom_selected_item_color));
         spCustomColor.setItemListColor(ContextCompat.getColor(this, R.color.custom_item_list_color));
 
-        spProvince.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
-                spProvince.setErrorText("You are selecting on spinner item -> \"" + spProvince.getItem().get(position) + "\" . You can show it both in XML and programmatically and you can display as single line or multiple lines");
-            }
+        setOnEmptySpinnerClickListener(spEmptyItem);
+        setOnItemSelectedListener(spSearchable, spProvince, spProvinceNoHint, spProvinceDialog, spCustomColor, spEmptyItem);
+        setOnSpinnerEventListener(spSearchable, spProvince, spProvinceNoHint, spProvinceDialog, spCustomColor, spEmptyItem);
+    }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-                spProvince.setErrorText("On Nothing Selected");
-            }
-        });
+    private void setOnItemSelectedListener(SmartMaterialSpinner... spinners) {
+        for (final SmartMaterialSpinner spinner : spinners) {
+            spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
+                    if (spinner.getId() == R.id.sp_searchable) {
+                        spinner.setErrorText("Your selected item is \"" + spinner.getItem().get(position) + "\" .");
+                    } else {
+                        spinner.setErrorText("You are selecting on spinner item -> \"" + spinner.getItem().get(position) + "\" . You can show it both in XML and programmatically and you can display as single line or multiple lines");
+                    }
+                }
 
-        spProvinceDialog.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
-                spProvinceDialog.setErrorText("You are selecting on spinner item -> \"" + spProvinceDialog.getItem().get(position) + "\" . You can show it both in XML and programmatically and you can display as single line or multiple lines");
-            }
+                @Override
+                public void onNothingSelected(AdapterView<?> adapterView) {
+                    spinner.setErrorText("On Nothing Selected");
+                }
+            });
+        }
+    }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-                spProvinceDialog.setErrorText("On Nothing Selected");
-            }
-        });
+    private void setOnSpinnerEventListener(SmartMaterialSpinner... spinners) {
+        for (SmartMaterialSpinner spinner : spinners) {
+            spinner.setOnSpinnerEventListener(new SmartMaterialSpinner.OnSpinnerEventListener() {
+                @Override
+                public void onSpinnerOpened(SmartMaterialSpinner spinner) {
+                    Log.i("SpinnerEventListener", "onSpinnerOpened: ");
+                }
 
-        spCustomColor.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
-                spCustomColor.setErrorText("You are selecting on spinner item -> \"" + spCustomColor.getItem().get(position) + "\" . You can show it both in XML and programmatically and you can display as single line or multiple lines");
-            }
+                @Override
+                public void onSpinnerClosed(SmartMaterialSpinner spinner) {
+                    Log.i("SpinnerEventListener", "onSpinnerClosed: ");
+                }
+            });
+        }
+    }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-                spCustomColor.setErrorText("On Nothing Selected");
-            }
-        });
-
-        spSearchable.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
-                spSearchable.setErrorText("Your selected item is \"" + spSearchable.getItem().get(position) + "\" .");
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-                spSearchable.setErrorText("On Nothing Selected");
-            }
-        });
-
-        spEmptyItem.setOnEmptySpinnerClicked(new SmartMaterialSpinner.OnEmptySpinnerClickListener() {
-            @Override
-            public void onEmptySpinnerClicked() {
-                Toast.makeText(MainActivity.this, getString(R.string.empty_item_spinner_click_msg), Toast.LENGTH_SHORT).show();
-            }
-        });
+    private void setOnEmptySpinnerClickListener(SmartMaterialSpinner... spinners) {
+        for (SmartMaterialSpinner spinner : spinners) {
+            spinner.setOnEmptySpinnerClickListener(new SmartMaterialSpinner.OnEmptySpinnerClickListener() {
+                @Override
+                public void onEmptySpinnerClicked() {
+                    Toast.makeText(MainActivity.this, getString(R.string.empty_item_spinner_click_msg), Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
     }
 }
