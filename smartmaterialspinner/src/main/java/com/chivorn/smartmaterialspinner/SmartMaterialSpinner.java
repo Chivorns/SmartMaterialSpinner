@@ -48,7 +48,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SmartMaterialSpinner extends AppCompatSpinner implements ValueAnimator.AnimatorUpdateListener, SearchableSpinnerDialog.OnSearchDialogEventListener, Serializable {
+public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAnimator.AnimatorUpdateListener, SearchableSpinnerDialog.OnSearchDialogEventListener, Serializable {
     public static final int DEFAULT_ARROW_WIDTH_DP = 10;
     private static final String TAG = SmartMaterialSpinner.class.getSimpleName();
 
@@ -59,7 +59,7 @@ public class SmartMaterialSpinner extends AppCompatSpinner implements ValueAnima
     private TextView tvDropdownItem;
 
     private SearchableSpinnerDialog searchableSpinnerDialog;
-    private List<Object> item;
+    private List<T> item;
     private List<Object> searchDialogItem;
 
     private boolean isSearchable = false;
@@ -195,7 +195,7 @@ public class SmartMaterialSpinner extends AppCompatSpinner implements ValueAnima
         initOnItemSelectedListener();
         configSearchableDialog();
         setMinimumHeight(getPaddingTop() + getPaddingBottom() + minContentHeight);
-        setItem(new ArrayList<>());
+        setItem(new ArrayList<T>());
     }
 
     private void initAttributes(Context context, AttributeSet attrs) {
@@ -1346,16 +1346,16 @@ public class SmartMaterialSpinner extends AppCompatSpinner implements ValueAnima
         }
     }
 
-    public void setItem(@NonNull List<Object> item) {
+    public void setItem(@NonNull List<T> item) {
         this.item = item;
-        ArrayAdapter<Object> adapter = new ArrayAdapter<>(getContext(), R.layout.smart_material_spinner_item_layout, item);
+        ArrayAdapter<T> adapter = new ArrayAdapter<>(getContext(), R.layout.smart_material_spinner_item_layout, item);
         adapter.setDropDownViewResource(R.layout.smart_material_spinner_dropdown_item_layout);
         setAdapter(adapter);
         configDropdownWidthAfterDataReady();
         invalidate();
     }
 
-    public List<Object> getItem() {
+    public List<T> getItem() {
         return item;
     }
 
