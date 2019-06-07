@@ -31,7 +31,7 @@ class MainActivity : MainApp() {
         setOnSpinnerEventListener(spSearchable, spProvince, spProvinceNoHint, spProvinceDialog, spCustomColor, spEmptyItem)
     }
 
-    private fun setOnItemSelectedListener(vararg spinners: SmartMaterialSpinner) {
+    private fun setOnItemSelectedListener(vararg spinners: SmartMaterialSpinner<*>) {
         for (spinner in spinners) {
             spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(adapterView: AdapterView<*>, view: View, position: Int, id: Long) {
@@ -49,21 +49,21 @@ class MainActivity : MainApp() {
         }
     }
 
-    private fun setOnSpinnerEventListener(vararg spinners: SmartMaterialSpinner) {
+    private fun setOnSpinnerEventListener(vararg spinners: SmartMaterialSpinner<*>) {
         for (spinner in spinners) {
             spinner.setOnSpinnerEventListener(object : SmartMaterialSpinner.OnSpinnerEventListener {
-                override fun onSpinnerOpened(spinner: SmartMaterialSpinner) {
+                override fun onSpinnerOpened(spinner: SmartMaterialSpinner<*>) {
                     Log.i("SpinnerEventListener", "onSpinnerOpened: ")
                 }
 
-                override fun onSpinnerClosed(spinner: SmartMaterialSpinner) {
+                override fun onSpinnerClosed(spinner: SmartMaterialSpinner<*>) {
                     Log.i("SpinnerEventListener", "onSpinnerClosed: ")
                 }
             })
         }
     }
 
-    private fun setOnEmptySpinnerClickListener(vararg spinners: SmartMaterialSpinner) {
+    private fun setOnEmptySpinnerClickListener(vararg spinners: SmartMaterialSpinner<*>) {
         for (spinner in spinners) {
             spinner.setOnEmptySpinnerClickListener { Toast.makeText(this@MainActivity, getString(R.string.empty_item_spinner_click_msg), Toast.LENGTH_SHORT).show() }
         }
