@@ -5,53 +5,113 @@ The best Android spinner library for your android application with more customiz
 
 ## Available on Play Store
 <a href="https://play.google.com/store/apps/details?id=com.chivorn.smsp.demojava" target="_blank">
-  <img src="https://github.com/Chivorns/Resources/blob/master/google-play-badge.png" alt="Play Store" width="200" ">
+  <img src="https://github.com/Chivorns/Resources/blob/master/google-play-badge.png" alt="Play Store" width="140" ">
 </a>
                                                                                                                    
 ## Available features
-- Spinner mode
-  - Dropdown mode ( android:spinnerMode="dropdown" ). By default it is dropdown mode
-  - Dialog mode ( android:spinnerMode="dialog" )
-  - Searchable mode ( app:smsp_isSearchable="true" )
-- Searchable spinner
-  - smsp_isSearchable : Default is false. Set it to true to enable this feature.
-  - smsp_enableSearchHeader: Default is true. Set it to false to hide search header.
-  - smsp_searchHeaderText: Text display as header text
-  - smsp_searchHeaderTextColor: For changing header text color
-  - smsp_searchHeaderBackgroundColor: For changing header background color
-  - smsp_searchHint: To set query text hint
-- Floating Label
-  - smsp_enableFloatingLabel: Default is true. Set it to false to disable floating label.
-  - smsp_alwaysShowFloatingLabel: Default is false. Set it to true for always display.
-  - smsp_floatingLabelText: Update it to what text you want. If the value is not set, it get from hint. 
-  - smsp_floatingLabelSize: For changing floating label size
-  - smsp_floatingLabelColor: For changing floating label color
-- Error Label
-  - smsp_enableErrorLabel: Default it is true.
-  - smsp_errorText: Your error message text.
-  - smsp_errorTextSize: For changing error text size
-  - smsp_errorTextColor: for changing error text color
-  - smsp_multilineError: Default is false. Update it to show as single line or multiple line
-- Color customization to:
-  - Item text color (smsp_itemColor)
-  - Hint color (smsp_hintColor)
-  - Floating Label color (smsp_floatingLabelColor)
-  - Error Text color (smsp_errorTextColor)
-  - List Item Hint color and background (smsp_itemListHintColor && smsp_itemListHintBackgroundColor)
-  - List Item color (smsp_itemListColor)
-  - Selected item color (smsp_selectedItemListColor)
-  - Arrow or selector color (smsp_arrowColor)
-  - Underline color (smsp_underlineColor)
-- Empty dropdown clickable
-- Typeface (smsp_typeface)
-- Base color and highlight color
+### Spinner mode
+  * Dropdown mode ( android:spinnerMode="dropdown" ). By default it is dropdown mode
+  * Dialog mode ( android:spinnerMode="dialog" )
+  * Searchable mode ( app:smsp_isSearchable="true" )
+### Searchable spinner
+  * smsp_isSearchable : Default is false. Set it to true to enable this feature.
+  * smsp_enableSearchHeader: Default is true. Set it to false to hide search header.
+  * smsp_searchHeaderText: Text display as header text
+  * smsp_searchHeaderTextColor: For changing header text color
+  * smsp_searchHeaderBackgroundColor: For changing header background color
+  * smsp_searchHint: To set query text hint
+### Hint Label
+
+
+### Floating Label
+  * smsp_enableFloatingLabel: Default is true. Set it to false to disable floating label.
+  * smsp_alwaysShowFloatingLabel: Default is false. Set it to true for always display.
+  * smsp_floatingLabelText: Update it to what text you want. If the value is not set, it get from hint. 
+  * smsp_floatingLabelSize: For changing floating label size
+  * smsp_floatingLabelColor: For changing floating label color
+### Error Label
+  * smsp_enableErrorLabel: Default it is true.
+  * smsp_errorText: Your error message text.
+  * smsp_errorTextSize: For changing error text size
+  * smsp_errorTextColor: for changing error text color
+  * smsp_multilineError: Default is false. Update it to show as single line or multiple line
+### Color customization to:
+  * Item text color (smsp_itemColor)
+  * Hint color (smsp_hintColor)
+  * Floating Label color (smsp_floatingLabelColor)
+  * Error Text color (smsp_errorTextColor)
+  * List Item Hint color and background (smsp_itemListHintColor && smsp_itemListHintBackgroundColor)
+  * List Item color (smsp_itemListColor)
+  * Selected item color (smsp_selectedItemListColor)
+  * Arrow or selector color (smsp_arrowColor)
+  * Underline color (smsp_underlineColor)
+### Empty dropdown clickable
+### Typeface (smsp_typeface)
+### Base color and highlight color
 
 ## Screenshot Demo
 
-![](https://github.com/Chivorns/SmartMaterialSpinner/blob/master/resources/src/main/assets/1.smsp_no_select.png)
-![](https://github.com/Chivorns/SmartMaterialSpinner/blob/master/resources/src/main/assets/2.smsp_dropdown.png)
-![](https://github.com/Chivorns/SmartMaterialSpinner/blob/master/resources/src/main/assets/3.smsp_selected.png)
+<table border="0">
+ <tr>
+    <td> 
+        <a target="_blank">
+            <img src="https://github.com/Chivorns/Resources/blob/master/smsp/search_home.JPEG" alt="Play Store" width="250" >
+        </a>
+    </td>
+   <td>
+        <a target="_blank">
+            <img src="https://github.com/Chivorns/Resources/blob/master/smsp/search_1.JPEG" alt="Play Store" width="250">
+        </a>
+    </td>
+    <td>
+        <a target="_blank">
+            <img src="https://github.com/Chivorns/Resources/blob/master/smsp/search_2.JPEG" alt="Play Store" width="250">
+        </a>
+    </td>
+ </tr>
+</table>
 
+<table border="0">
+
+ <tr>
+    <td> 
+         <a target="_blank">
+            <img src="https://github.com/Chivorns/Resources/blob/master/smsp/search_3.JPEG" alt="Play Store" width="250">
+        </a>
+    </td>
+    <td> 
+        <a target="_blank">
+            <img src="https://github.com/Chivorns/Resources/blob/master/smsp/search_4.JPEG" alt="Play Store" width="250">
+        </a>
+    </td>
+   <td>
+        <a target="_blank">
+            <img src="https://github.com/Chivorns/Resources/blob/master/smsp/smsp_dropdown.JPEG" alt="Play Store" width="250">
+        </a>
+    </td>
+ </tr>
+</table>
+
+<table border="0">
+ <tr>
+    <td>
+        <a target="_blank">
+            <img src="https://github.com/Chivorns/Resources/blob/master/smsp/smsp_dropdown_no_hint.JPEG" alt="Play Store" width="250">
+        </a>
+    </td>
+    <td>
+        <a target="_blank">
+            <img src="https://github.com/Chivorns/Resources/blob/master/smsp/smsp_dialog.JPEG" alt="Play Store" width="250">
+        </a>
+    </td>
+      <td>
+        <a target="_blank">
+            <img src="https://github.com/Chivorns/Resources/blob/master/smsp/smsp_custom_color.JPEG" alt="Play Store" width="250">
+        </a>
+    </td>
+ </tr>
+</table>
+                                                                                                                
 ## Usage
 ### Add the dependencies to your gradle file:
 
