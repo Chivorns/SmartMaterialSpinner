@@ -294,7 +294,7 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAn
                 }
                 SmartMaterialSpinner.this.setDropDownWidth(SmartMaterialSpinner.this.getWidth());
                 SmartMaterialSpinner.this.setDropDownVerticalOffset(SmartMaterialSpinner.this.getHeight());
-                if (getCount() == 1 && hint != null) {
+                if (isSpinnerEmpty()) {
                     SmartMaterialSpinner.this.setDropDownWidth(0);
                     SmartMaterialSpinner.this.setDropDownVerticalOffset(0);
                 }
@@ -518,7 +518,7 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAn
     }
 
     private boolean isSpinnerEmpty() {
-        return (hintAdapter.getCount() == 0 && hint == null) || (hintAdapter.getCount() == 1 && hint != null);
+        return (hintAdapter.getCount() == 0 && hint == null) || (hintAdapter.getCount() == 1 && getCount() == 0 && hint != null) || (item.size() == 0 && getCount() == 1 && hint != null);
     }
 
     private AppCompatActivity scanForActivity(Context context) {
@@ -608,7 +608,7 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAn
 
     private void drawSelector(Canvas canvas, int posX, int posY) {
         if (isSelected || hasFocus()) {
-            paint.setColor(highlightColor);
+            paint.setColor(arrowColor); //highlightColor
         } else {
             paint.setColor(isEnabled() ? arrowColor : disabledColor);
         }
@@ -635,69 +635,45 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAn
      * **********************************************************************************
      */
 
-    private void configSearchable() {
-        setOnTouchListener(new OnTouchListener() {
-            @SuppressLint("ClickableViewAccessibility")
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    SoftKeyboardUtil.hideSoftKeyboard(getContext());
-                } else if (event.getAction() == MotionEvent.ACTION_UP) {
-                    if (isSearchable && hintAdapter != null) {
-                        searchDialogItem.clear();
-                        int itemStart = 0;
-                        if (hint != null) {
-                            itemStart = 1;
-                        }
-                        for (int i = itemStart; i < hintAdapter.getCount(); i++) {
-                            searchDialogItem.add(hintAdapter.getItem(i));
-                        }
-                        AppCompatActivity appCompatActivity = scanForActivity(getContext());
-                        if (appCompatActivity != null) {
-                            FragmentManager fragmentManager = appCompatActivity.getSupportFragmentManager();
-                            searchableSpinnerDialog.show(fragmentManager, "TAG");
-                            if (spinnerEventsListener != null) {
-                                spinnerEventsListener.onSpinnerOpened(SmartMaterialSpinner.this);
-                            }
-                        }
-                    }
-                }
-                return isSearchable;
-            }
-        });
-    }
-
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        if (isEnabled()) {
-            switch (event.getAction()) {
-                case MotionEvent.ACTION_DOWN:
-                    isSelected = true;
-                    SoftKeyboardUtil.hideSoftKeyboard(getContext());
-                    break;
-                case MotionEvent.ACTION_UP:
-                    if (isSpinnerClickable()) {
-                        onEmptySpinnerClickListener.onEmptySpinnerClicked();
-                    }
-                    break;
-                case MotionEvent.ACTION_CANCEL:
-                    isSelected = false;
-                    break;
-            }
-            invalidate();
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            SoftKeyboardUtil.hideSoftKeyboard(getContext());
         }
-        if (isSpinnerClickable()) {
-            return true;
-        } else {
-            return super.onTouchEvent(event);
-        }
+        return super.onTouchEvent(event);
     }
 
     @Override
     public boolean performClick() {
-        isShowing = true;
+        SoftKeyboardUtil.hideSoftKeyboard(getContext());
+        if (isSpinnerClickable()) {
+            onEmptySpinnerClickListener.onEmptySpinnerClicked();
+            return true;
+        } else if (isSearchable && hintAdapter != null) {
+            searchDialogItem.clear();
+            int itemStart = 0;
+            if (hint != null) {
+                itemStart = 1;
+            }
+            for (int i = itemStart; i < hintAdapter.getCount(); i++) {
+                searchDialogItem.add(hintAdapter.getItem(i));
+            }
+            AppCompatActivity appCompatActivity = scanForActivity(getContext());
+            if (appCompatActivity != null) {
+                FragmentManager fragmentManager = appCompatActivity.getSupportFragmentManager();
+                searchableSpinnerDialog.show(fragmentManager, "TAG");
+                if (spinnerEventsListener != null) {
+                    spinnerEventsListener.onSpinnerOpened(SmartMaterialSpinner.this);
+                }
+                return true;
+            }
+        } else if (isSpinnerEmpty()) {
+            return true;
+        }
+
         if (spinnerEventsListener != null) {
+            isShowing = true;
             spinnerEventsListener.onSpinnerOpened(this);
         }
         return super.performClick();
@@ -792,9 +768,7 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAn
 
     @Override
     public void onSearchableSpinnerDismiss() {
-        if (spinnerEventsListener != null) {
-            spinnerEventsListener.onSpinnerClosed(this);
-        }
+        dismiss();
     }
 
 
@@ -902,6 +876,9 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAn
 
     public void setHint(CharSequence hint) {
         this.hint = hint;
+        if (isSpinnerEmpty()) {
+            setAdapter(getAdapter());
+        }
         invalidate();
     }
 
@@ -1139,7 +1116,6 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAn
 
     public void setSearchable(boolean searchable) {
         this.isSearchable = searchable;
-        configSearchable();
         invalidate();
     }
 
@@ -1308,7 +1284,7 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAn
     }
 
     private boolean isSpinnerClickable() {
-        return getCount() == 1 && hint != null && onEmptySpinnerClickListener != null;
+        return isSpinnerEmpty() && onEmptySpinnerClickListener != null;
     }
 
 

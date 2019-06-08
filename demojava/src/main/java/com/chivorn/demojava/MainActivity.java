@@ -11,7 +11,7 @@ import android.widget.Toast;
 import com.chivorn.resourcemodule.MainApp;
 import com.chivorn.smartmaterialspinner.SmartMaterialSpinner;
 
-public class MainActivity extends MainApp {
+public class MainActivity<T> extends MainApp<T> {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

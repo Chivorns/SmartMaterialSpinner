@@ -14,22 +14,22 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class MainApp extends AppCompatActivity implements View.OnClickListener {
+public class MainApp<T> extends AppCompatActivity implements View.OnClickListener {
     private final String repoUrl = "https://github.com/Chivorns/SmartMaterialSpinner";
 
-    protected SmartMaterialSpinner spSearchable;
-    protected SmartMaterialSpinner spProvince;
-    protected SmartMaterialSpinner spProvinceNoHint;
-    protected SmartMaterialSpinner spProvinceDialog;
-    protected SmartMaterialSpinner spCustomColor;
-    protected SmartMaterialSpinner spEmptyItem;
+    protected SmartMaterialSpinner<T> spSearchable;
+    protected SmartMaterialSpinner<String> spProvince;
+    protected SmartMaterialSpinner<T> spProvinceNoHint;
+    protected SmartMaterialSpinner<T> spProvinceDialog;
+    protected SmartMaterialSpinner<T> spCustomColor;
+    protected SmartMaterialSpinner<T> spEmptyItem;
 
     private LinearLayout githubRepo;
     private Button btnShowError;
     private Button githubRepoBtn;
     private Intent intent;
 
-    protected List<Object> provinceList;
+    protected List provinceList;
 
     public void initBaseView() {
         spSearchable = findViewById(R.id.sp_searchable);

@@ -112,7 +112,7 @@
             android:layout_marginTop="10dp"
             android:layout_marginEnd="5dp"
             android:layout_marginRight="5dp"
-            android:background="#3F51B5"
+            android:background="#6194EB"
             android:text="@string/show_error"
             android:textAllCaps="false"
             android:textColor="@color/smsp_white_color" />
