@@ -194,7 +194,7 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAn
         initFloatingLabelAnimator();
         initOnItemSelectedListener();
         configSearchableDialog();
-        setMinimumHeight(getPaddingTop() + getPaddingBottom() + minContentHeight);
+        setMinimumHeight((int) (getPaddingTop() + getPaddingBottom() + minContentHeight + (itemSize > hintSize ? itemSize : hintSize)));
         setItem(new ArrayList<T>());
     }
 
@@ -467,7 +467,7 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAn
         int right = innerPaddingRight;
         int bottom = innerPaddingBottom + extraPaddingBottom;
         super.setPadding(left, top, right, bottom);
-        setMinimumHeight(top + bottom + minContentHeight);
+        setMinimumHeight((int) (top + bottom + minContentHeight + (itemSize > hintSize ? itemSize : hintSize)));
     }
 
     private boolean needScrollingAnimation() {
@@ -603,7 +603,8 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAn
                 canvas.drawText(textToDraw, startX + rightLeftSpinnerPadding, startYFloatingLabel, textPaint);
             }
         }
-        drawSelector(canvas, (getWidth() - rightLeftSpinnerPadding - arrowMarginRight + arrowMarginLeft), getPaddingTop() + dpToPx(6) - arrowMarginBottom + arrowMarginTop);
+        //  drawSelector(canvas, (getWidth() - rightLeftSpinnerPadding - arrowMarginRight + arrowMarginLeft), getPaddingTop() + dpToPx(6) - arrowMarginBottom + arrowMarginTop);
+        drawSelector(canvas, (getWidth() - rightLeftSpinnerPadding - arrowMarginRight + arrowMarginLeft), (int) (getPaddingTop() - arrowMarginBottom + arrowMarginTop + minContentHeight / 2F + itemSize / 2 - floatingLabelTopSpacing));
     }
 
     private void drawSelector(Canvas canvas, int posX, int posY) {
@@ -708,6 +709,7 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAn
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 lastPosition = position;
+                updateSelectedItemStyle(parent, view);
                 if (isSearchable) {
                     SoftKeyboardUtil.hideSoftKeyboard(getContext());
                 }
@@ -719,21 +721,8 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAn
                     }
                 }
                 if (listener != null) {
-                    if (position >= 0) {
-                        if (view instanceof TextView) {
-                            TextView selectedItem = (TextView) parent.getChildAt(0);
-                            selectedItem.setTextSize(TypedValue.COMPLEX_UNIT_PX, itemSize);
-                            selectedItem.setTextColor(itemColor);
-                        }
-                    }
                     listener.onItemSelected(parent, view, position, id);
                     setSearchSelectedPosition(position);
-                } else {
-                    if (view instanceof TextView) {
-                        TextView selectedItem = (TextView) parent.getChildAt(0);
-                        selectedItem.setTextSize(TypedValue.COMPLEX_UNIT_PX, itemSize);
-                        selectedItem.setTextColor(itemColor);
-                    }
                 }
             }
 
@@ -748,6 +737,16 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAn
             }
         };
         super.setOnItemSelectedListener(onItemSelectedListener);
+    }
+
+    private void updateSelectedItemStyle(AdapterView<?> parent, View view) {
+        if (view instanceof TextView) {
+            TextView selectedItem = (TextView) parent.getChildAt(0);
+            selectedItem.setTextSize(TypedValue.COMPLEX_UNIT_PX, itemSize);
+            selectedItem.setTextColor(itemColor);
+            //  selectedItem.setPadding(selectedItem.getPaddingLeft(), selectedItem.getPaddingTop(), arrowMarginRight + dpToPx(14), selectedItem.getPaddingBottom());
+            selectedItem.setPadding(selectedItem.getPaddingLeft(), selectedItem.getPaddingTop(), (int) (arrowMarginRight + itemSize * 0.4), selectedItem.getPaddingBottom());
+        }
     }
 
     @Override
@@ -840,6 +839,7 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAn
 
     public void setHintSize(float hintSize) {
         this.hintSize = dpToPx(hintSize);
+        updatePadding();
         invalidate();
     }
 
@@ -1074,6 +1074,7 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAn
 
     public void setItemSize(float itemSize) {
         this.itemSize = dpToPx(itemSize);
+        updatePadding();
         invalidate();
     }
 
@@ -1261,22 +1262,6 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAn
         this.arrowMarginRight = right;
         this.arrowMarginBottom = bottom;
         invalidate();
-    }
-
-    /**
-     * Listening for no item spinner perform clicked event.
-     */
-    public interface OnEmptySpinnerClickListener {
-        void onEmptySpinnerClicked();
-    }
-
-    /**
-     * Listening for open/closed events.
-     */
-    public interface OnSpinnerEventListener {
-        void onSpinnerOpened(SmartMaterialSpinner spinner);
-
-        void onSpinnerClosed(SmartMaterialSpinner spinner);
     }
 
     public void setOnEmptySpinnerClickListener(OnEmptySpinnerClickListener onEmptySpinnerClickListener) {
@@ -1488,5 +1473,21 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAn
         private SpinnerAdapter getWrappedAdapter() {
             return mSpinnerAdapter;
         }
+    }
+
+    /**
+     * Listening for no item spinner perform clicked event.
+     */
+    public interface OnEmptySpinnerClickListener {
+        void onEmptySpinnerClicked();
+    }
+
+    /**
+     * Listening for open/closed events.
+     */
+    public interface OnSpinnerEventListener {
+        void onSpinnerOpened(SmartMaterialSpinner spinner);
+
+        void onSpinnerClosed(SmartMaterialSpinner spinner);
     }
 }

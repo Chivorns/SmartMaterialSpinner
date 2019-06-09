@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="smsp_underline_top_spacing">11dp</dimen>
+    <dimen name="smsp_underline_top_spacing">4dp</dimen>
     <dimen name="smsp_underline_bottom_spacing">-13dp</dimen>
     <dimen name="smsp_floating_label_inside_spacing">6dp</dimen>
     <dimen name="smsp_floating_label_top_spacing">6dp</dimen>
     <dimen name="smsp_floating_label_bottom_spacing">5dp</dimen>
     <dimen name="smsp_right_left_spinner_padding">0dp</dimen>
     <dimen name="label_text_size">12sp</dimen>
-    <dimen name="smsp_min_content_height">20dp</dimen>
+    <dimen name="smsp_min_content_height">6dp</dimen>
     <dimen name="smsp_error_label_spacing">12dp</dimen>
     <dimen name="smsp_default_text_and_hint_size">14sp</dimen>
     <dimen name="smsp_default_hint_size">14sp</dimen>
