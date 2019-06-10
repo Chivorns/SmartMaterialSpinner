@@ -54,7 +54,8 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAn
 
     //Paint objects
     private Paint paint;
-    private TextPaint textPaint;
+    private TextPaint errorTextPaint;
+    private TextPaint fltLabelTextPaint;
     private StaticLayout staticLayout;
     private TextView tvDropdownItem;
 
@@ -84,7 +85,7 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAn
     //@see dimens.xml
     private int underlineTopSpacing;
     private int underlineBottomSpacing;
-    private int errorLabelSpacing;
+    private int errorLabelMarginTop;
     private int floatingLabelTopSpacing;
     private int floatingLabelBottomSpacing;
     private int floatingLabelInsideSpacing;
@@ -154,6 +155,7 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAn
     private OnEmptySpinnerClickListener onEmptySpinnerClickListener;
     private OnSpinnerEventListener spinnerEventsListener;
     private boolean isShowing = false;
+    private boolean isErrorScrollPaddingInvoked = false;
 
     /*
      * **********************************************************************************
@@ -316,15 +318,19 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAn
     }
 
     private void initPaintObjects() {
-        int labelTextSize = getResources().getDimensionPixelSize(R.dimen.label_text_size);
+        int errorTextSize = getResources().getDimensionPixelSize(R.dimen.smsp_default_error_text_size);
+        int floatingLabelSize = getResources().getDimensionPixelSize(R.dimen.smsp_default_floating_label_size);
         paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        textPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
-        textPaint.setTextSize(labelTextSize);
+        errorTextPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
+        fltLabelTextPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
+        errorTextPaint.setTextSize(errorTextSize);
+        fltLabelTextPaint.setTextSize(floatingLabelSize);
         if (typeface != null) {
-            textPaint.setTypeface(typeface);
+            errorTextPaint.setTypeface(typeface);
+            fltLabelTextPaint.setTypeface(typeface);
         }
-        textPaint.setColor(baseColor);
-        baseAlpha = textPaint.getAlpha();
+        errorTextPaint.setColor(baseColor);
+        baseAlpha = errorTextPaint.getAlpha();
 
         selectorPath = new Path();
         selectorPath.setFillType(Path.FillType.EVEN_ODD);
@@ -353,10 +359,14 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAn
     }
 
     private void updateBottomPadding() {
-        Paint.FontMetrics textMetrics = textPaint.getFontMetrics();
+        Paint.FontMetrics textMetrics = errorTextPaint.getFontMetrics();
         extraPaddingBottom = underlineTopSpacing + underlineBottomSpacing;
         if (errorText != null) {
-            extraPaddingBottom = underlineTopSpacing + dpToPx(4);
+            if (isMultilineError) {
+                extraPaddingBottom = underlineTopSpacing + dpToPx(4);
+            } else {
+                extraPaddingBottom = (int) (underlineTopSpacing + dpToPx(4) - (errorTextSize / 7F * 1.3F));
+            }
         }
         if (enableErrorLabel) {
             extraPaddingBottom += (int) ((textMetrics.descent - textMetrics.ascent) * currentNbErrorLines);
@@ -373,7 +383,7 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAn
         floatingLabelBottomSpacing = getResources().getDimensionPixelSize(R.dimen.smsp_floating_label_bottom_spacing);
         rightLeftSpinnerPadding = alignLabel ? getResources().getDimensionPixelSize(R.dimen.smsp_right_left_spinner_padding) : 0;
         floatingLabelInsideSpacing = getResources().getDimensionPixelSize(R.dimen.smsp_floating_label_inside_spacing);
-        errorLabelSpacing = getResources().getDimensionPixelSize(R.dimen.smsp_error_label_spacing);
+        errorLabelMarginTop = getResources().getDimensionPixelSize(R.dimen.smsp_error_label_margin_top);
         minContentHeight = getResources().getDimensionPixelSize(R.dimen.smsp_min_content_height);
 
         arrowMarginLeft = typedArray.getDimensionPixelSize(R.styleable.SmartMaterialSpinner_smsp_arrowMarginLeft, 0);
@@ -420,7 +430,7 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAn
     }
 
     private void startErrorScrollingAnimator() {
-        int textWidth = Math.round(textPaint.measureText(errorText.toString()));
+        int textWidth = Math.round(errorTextPaint.measureText(errorText.toString()));
         if (errorLabelAnimator == null) {
             errorLabelAnimator = ObjectAnimator.ofInt(this, "errorLabelPosX", 0, textWidth + getWidth() / 2);
             errorLabelAnimator.setStartDelay(1000);
@@ -475,14 +485,15 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAn
     private boolean needScrollingAnimation() {
         if (errorText != null) {
             float screenWidth = getWidth() - rightLeftSpinnerPadding;
-            float errorTextWidth = textPaint.measureText(errorText.toString(), 0, errorText.length());
+            float errorTextWidth = errorTextPaint.measureText(errorText.toString(), 0, errorText.length());
             return errorTextWidth > screenWidth;
         }
         return false;
     }
 
     private void configStaticLayout(CharSequence charSequence, TextPaint textPaint, int mWidth) {
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+        textPaint.setTextSize(errorTextSize);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             StaticLayout.Builder builder = StaticLayout.Builder.obtain(charSequence, 0, charSequence.length(), textPaint, mWidth)
                     .setAlignment(Layout.Alignment.ALIGN_NORMAL)
                     .setLineSpacing(0.0F, 1.0F)
@@ -505,14 +516,14 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAn
                             getViewTreeObserver().removeOnGlobalLayoutListener(this);
                         }
                         mWidth[0] = getWidth() - getPaddingRight() - getPaddingLeft();
-                        configStaticLayout(errorText, textPaint, mWidth[0]);
+                        configStaticLayout(errorText, errorTextPaint, mWidth[0]);
                         int nbErrorLines = staticLayout.getLineCount();
                         targetNbLines[0] = Math.max(minNbErrorLine, nbErrorLines);
                     }
                 });
                 return targetNbLines[0];
             }
-            configStaticLayout(errorText, textPaint, mWidth[0]);
+            configStaticLayout(errorText, errorTextPaint, mWidth[0]);
             int nbErrorLines = staticLayout.getLineCount();
             targetNbLines[0] = Math.max(minNbErrorLine, nbErrorLines);
         }
@@ -551,27 +562,32 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAn
 
         if (errorText != null && enableErrorLabel) {
             lineHeight = dpToPx(underlineSize);
-            int startYErrorLabel = startYLine + errorLabelSpacing + lineHeight;
+            float startYErrorLabel = startYLine + errorLabelMarginTop + lineHeight + (errorTextSize / 2F * 1.5F) - 32.94F;
             paint.setColor(underlineColor);
-            textPaint.setColor(errorTextColor);
-            textPaint.setTextSize(errorTextSize);
+            errorTextPaint.setColor(errorTextColor);
+            errorTextPaint.setTextSize(errorTextSize);
             //Error Label Drawing
             if (isMultilineError) {
+                startYErrorLabel = startYLine + errorLabelMarginTop + lineHeight;
                 canvas.save();
-                canvas.translate(startX + rightLeftSpinnerPadding, startYErrorLabel - errorLabelSpacing);
+                canvas.translate(startX + rightLeftSpinnerPadding - errorLabelPosX, startYErrorLabel - errorLabelMarginTop);
                 if (staticLayout == null) {
                     int mWidth = getWidth() - getPaddingRight() - getPaddingLeft();
-                    configStaticLayout(errorText, textPaint, mWidth);
+                    configStaticLayout(errorText, errorTextPaint, mWidth);
                 }
                 staticLayout.draw(canvas);
                 canvas.restore();
             } else {
                 //scrolling
-                canvas.drawText(errorText.toString(), startX + rightLeftSpinnerPadding - errorLabelPosX, startYErrorLabel, textPaint);
+                if (!isErrorScrollPaddingInvoked) {
+                    isErrorScrollPaddingInvoked = true;
+                    updateBottomPadding();
+                }
+                canvas.drawText(errorText.toString(), startX + rightLeftSpinnerPadding - errorLabelPosX, startYErrorLabel + errorLabelMarginTop, errorTextPaint);
                 if (errorLabelPosX > 0) {
                     canvas.save();
-                    canvas.translate(textPaint.measureText(errorText.toString()) + getWidth() / 2F, 0);
-                    canvas.drawText(errorText.toString(), startX + rightLeftSpinnerPadding - errorLabelPosX, startYErrorLabel, textPaint);
+                    canvas.translate(errorTextPaint.measureText(errorText.toString()) + getWidth() / 2F, 0);
+                    canvas.drawText(errorText.toString(), startX + rightLeftSpinnerPadding - errorLabelPosX, startYErrorLabel + errorLabelMarginTop, errorTextPaint);
                     canvas.restore();
                 }
             }
@@ -590,19 +606,19 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAn
         //Floating Label Drawing
         if ((hint != null || floatingLabelText != null) && enableFloatingLabel) {
             if (isSelected || hasFocus()) {
-                textPaint.setColor(floatingLabelColor); // highlightColor
+                fltLabelTextPaint.setColor(floatingLabelColor); // highlightColor
             } else {
-                textPaint.setColor(isEnabled() ? floatingLabelColor : disabledColor);
+                fltLabelTextPaint.setColor(isEnabled() ? floatingLabelColor : disabledColor);
             }
             if (floatingLabelAnimator.isRunning() || !isFloatingLabelVisible) {
-                textPaint.setAlpha((int) ((0.8 * floatingLabelPercent + 0.2) * baseAlpha * floatingLabelPercent));
+                fltLabelTextPaint.setAlpha((int) ((0.8 * floatingLabelPercent + 0.2) * baseAlpha * floatingLabelPercent));
             }
-            textPaint.setTextSize(floatingLabelSize);
+            fltLabelTextPaint.setTextSize(floatingLabelSize);
             String textToDraw = floatingLabelText != null ? floatingLabelText.toString() : hint.toString();
             if (isRtl) {
-                canvas.drawText(textToDraw, getWidth() - rightLeftSpinnerPadding - textPaint.measureText(textToDraw), startYFloatingLabel, textPaint);
+                canvas.drawText(textToDraw, getWidth() - rightLeftSpinnerPadding - fltLabelTextPaint.measureText(textToDraw), startYFloatingLabel, fltLabelTextPaint);
             } else {
-                canvas.drawText(textToDraw, startX + rightLeftSpinnerPadding, startYFloatingLabel, textPaint);
+                canvas.drawText(textToDraw, startX + rightLeftSpinnerPadding, startYFloatingLabel, fltLabelTextPaint);
             }
         }
         //  drawSelector(canvas, (getWidth() - rightLeftSpinnerPadding - arrowMarginRight + arrowMarginLeft), getPaddingTop() + dpToPx(6) - arrowMarginBottom + arrowMarginTop);
@@ -798,8 +814,9 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAn
 
     public void setBaseColor(int baseColor) {
         this.baseColor = baseColor;
-        textPaint.setColor(baseColor);
-        baseAlpha = textPaint.getAlpha();
+        errorTextPaint.setColor(baseColor);
+        fltLabelTextPaint.setColor(baseColor);
+        baseAlpha = errorTextPaint.getAlpha();
         invalidate();
     }
 
@@ -960,7 +977,8 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAn
     public void setTypeface(Typeface typeface) {
         this.typeface = typeface;
         if (typeface != null) {
-            textPaint.setTypeface(typeface);
+            errorTextPaint.setTypeface(typeface);
+            fltLabelTextPaint.setTypeface(typeface);
         }
         invalidate();
     }
