@@ -638,6 +638,14 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAn
      * **********************************************************************************
      */
 
+    @Override
+    protected void onVisibilityChanged(@NonNull View view, int visibility) {
+        if (visibility == VISIBLE) {
+            configDropdownWidthAfterDataReady();
+        }
+        super.onVisibilityChanged(view, visibility);
+    }
+
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouchEvent(MotionEvent event) {
@@ -1457,8 +1465,10 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAn
             final LayoutInflater inflater = LayoutInflater.from(mContext);
             final int resId = isDropDownView ? dropdownView : itemView;
             final TextView textView = (TextView) inflater.inflate(resId, parent, false);
-            // parent.setPadding(0, 0, 0, 0);
             if (isShowing()) {
+                if (!isSearchable && parent.getPaddingTop() != 0 && textView.getVisibility() == VISIBLE) {
+                    parent.setPadding(0, 0, 0, 0);
+                }
                 textView.setOnClickListener(new OnClickListener() {
                     @Override
                     public void onClick(View v) {
