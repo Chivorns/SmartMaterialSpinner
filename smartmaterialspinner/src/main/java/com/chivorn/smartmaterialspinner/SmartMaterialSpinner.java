@@ -292,8 +292,10 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAn
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                     SmartMaterialSpinner.this.getViewTreeObserver().removeOnGlobalLayoutListener(this);
                 }
-                SmartMaterialSpinner.this.setDropDownWidth(SmartMaterialSpinner.this.getWidth());
-                SmartMaterialSpinner.this.setDropDownVerticalOffset(SmartMaterialSpinner.this.getHeight());
+                if (getWidth() != 0 && getHeight() != 0) {
+                    SmartMaterialSpinner.this.setDropDownWidth(getWidth());
+                    SmartMaterialSpinner.this.setDropDownVerticalOffset(getHeight());
+                }
                 if (isSpinnerEmpty()) {
                     SmartMaterialSpinner.this.setDropDownWidth(0);
                     SmartMaterialSpinner.this.setDropDownVerticalOffset(0);
@@ -484,7 +486,7 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAn
             StaticLayout.Builder builder = StaticLayout.Builder.obtain(charSequence, 0, charSequence.length(), textPaint, mWidth)
                     .setAlignment(Layout.Alignment.ALIGN_NORMAL)
                     .setLineSpacing(0.0F, 1.0F)
-                    .setIncludePad(false);
+                    .setIncludePad(true);
             staticLayout = builder.build();
         } else {
             staticLayout = new StaticLayout(errorText, textPaint, mWidth, Layout.Alignment.ALIGN_NORMAL, 1.0F, 0.0F, true);
@@ -649,6 +651,7 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAn
     public boolean performClick() {
         SoftKeyboardUtil.hideSoftKeyboard(getContext());
         if (isSpinnerClickable()) {
+            isShowing = false;
             onEmptySpinnerClickListener.onEmptySpinnerClicked();
             return true;
         } else if (isSearchable && hintAdapter != null) {
@@ -663,18 +666,22 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAn
             AppCompatActivity appCompatActivity = scanForActivity(getContext());
             if (appCompatActivity != null) {
                 FragmentManager fragmentManager = appCompatActivity.getSupportFragmentManager();
-                searchableSpinnerDialog.show(fragmentManager, "TAG");
+                if (!isShowing()) {
+                    isShowing = true;
+                    searchableSpinnerDialog.show(fragmentManager, "TAG");
+                }
                 if (spinnerEventsListener != null) {
                     spinnerEventsListener.onSpinnerOpened(SmartMaterialSpinner.this);
                 }
                 return true;
             }
         } else if (isSpinnerEmpty()) {
+            isShowing = false;
             return true;
         }
 
+        isShowing = true;
         if (spinnerEventsListener != null) {
-            isShowing = true;
             spinnerEventsListener.onSpinnerOpened(this);
         }
         return super.performClick();
@@ -1423,7 +1430,6 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAn
 
         @Override
         public View getDropDownView(int position, View convertView, ViewGroup parent) {
-            parent.setPadding(0, 0, 0, 0);
             return buildView(position, convertView, parent, true);
         }
 
@@ -1451,6 +1457,7 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAn
             final LayoutInflater inflater = LayoutInflater.from(mContext);
             final int resId = isDropDownView ? dropdownView : itemView;
             final TextView textView = (TextView) inflater.inflate(resId, parent, false);
+            // parent.setPadding(0, 0, 0, 0);
             if (isShowing()) {
                 textView.setOnClickListener(new OnClickListener() {
                     @Override
