@@ -8,7 +8,7 @@ import android.widget.Toast
 import com.chivorn.resourcemodule.MainApp
 import com.chivorn.smartmaterialspinner.SmartMaterialSpinner
 
-class MainActivity : MainApp() {
+class MainActivity<T> : MainApp<T>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.smart_material_spinner_sample_layout)
@@ -20,11 +20,11 @@ class MainActivity : MainApp() {
     }
 
     private fun initSpinnerInKotlin() {
-        spSearchable!!.item = provinceList as List<Any>
-        spProvince!!.item = (provinceList as List<Any>?)!!
-        spProvinceNoHint!!.item = provinceList
-        spProvinceDialog!!.item = provinceList as List<Any>
-        spCustomColor!!.item = provinceList as List<Any>
+        spSearchable!!.item = provinceList as MutableList<T>?
+        spProvince!!.item = (provinceList as MutableList<String>?)!!
+        spProvinceNoHint!!.item = provinceList as MutableList<T>?
+        spProvinceDialog!!.item = provinceList as MutableList<T>?
+        spCustomColor!!.item = provinceList as MutableList<T>?
 
         setOnEmptySpinnerClickListener(spEmptyItem)
         setOnItemSelectedListener(spSearchable, spProvince, spProvinceNoHint, spProvinceDialog, spCustomColor, spEmptyItem)
