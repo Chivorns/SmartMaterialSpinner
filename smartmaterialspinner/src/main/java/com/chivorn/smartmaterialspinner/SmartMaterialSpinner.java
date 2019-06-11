@@ -2,7 +2,6 @@ package com.chivorn.smartmaterialspinner;
 
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.res.TypedArray;
@@ -35,10 +34,12 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.view.WindowManager;
 import android.view.animation.LinearInterpolator;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
+import android.widget.EditText;
 import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 
@@ -102,6 +103,7 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAn
     private int errorLabelPosX;
     private int minNbErrorLine;
     private float currentNbErrorLines;
+    private ErrorTextAlignment errorTextAlignment = ErrorTextAlignment.ALIGN_LEFT;
 
 
     //Properties about Floating Label (
@@ -219,6 +221,7 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAn
         disabledColor = ContextCompat.getColor(context, R.color.smsp_disabled_color);
         underlineColor = typedArray.getColor(R.styleable.SmartMaterialSpinner_smsp_underlineColor, ContextCompat.getColor(context, R.color.smsp_underline_color));
         errorText = typedArray.getString(R.styleable.SmartMaterialSpinner_smsp_errorText);
+        errorTextAlignment = getErrorTextAlignment(typedArray.getInt(R.styleable.SmartMaterialSpinner_smsp_errorTextAlignment, 0));
         hint = typedArray.getString(R.styleable.SmartMaterialSpinner_smsp_hint);
         floatingLabelText = typedArray.getString(R.styleable.SmartMaterialSpinner_smsp_floatingLabelText);
         hintColor = typedArray.getColor(R.styleable.SmartMaterialSpinner_smsp_hintColor, ContextCompat.getColor(context, R.color.smsp_hint_color));
@@ -495,12 +498,12 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAn
         textPaint.setTextSize(errorTextSize);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             StaticLayout.Builder builder = StaticLayout.Builder.obtain(charSequence, 0, charSequence.length(), textPaint, mWidth)
-                    .setAlignment(Layout.Alignment.ALIGN_NORMAL)
+                    .setAlignment(getErrorTextLayoutAlignment(errorTextAlignment))
                     .setLineSpacing(0.0F, 1.0F)
                     .setIncludePad(true);
             staticLayout = builder.build();
         } else {
-            staticLayout = new StaticLayout(errorText, textPaint, mWidth, Layout.Alignment.ALIGN_NORMAL, 1.0F, 0.0F, true);
+            staticLayout = new StaticLayout(errorText, textPaint, mWidth, getErrorTextLayoutAlignment(errorTextAlignment), 1.0F, 0.0F, true);
         }
     }
 
@@ -662,13 +665,22 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAn
         super.onVisibilityChanged(view, visibility);
     }
 
-    @SuppressLint("ClickableViewAccessibility")
     @Override
-    public boolean onTouchEvent(MotionEvent event) {
+    public boolean dispatchTouchEvent(MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
             SoftKeyboardUtil.hideSoftKeyboard(getContext());
+            AppCompatActivity appCompatActivity = scanForActivity(getContext());
+            if (appCompatActivity != null) {
+                appCompatActivity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+                View view = appCompatActivity.getCurrentFocus();
+                if (view instanceof EditText) {
+                    view.clearFocus();
+                    SoftKeyboardUtil.hideSoftKeyboard(getContext());
+                    return performClick();
+                }
+            }
         }
-        return super.onTouchEvent(event);
+        return super.dispatchTouchEvent(event);
     }
 
     @Override
@@ -890,6 +902,41 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAn
 
     public void setErrorTextColor(int errorTextColor) {
         this.errorTextColor = errorTextColor;
+        invalidate();
+    }
+
+    private Layout.Alignment getErrorTextLayoutAlignment(ErrorTextAlignment errorTextAlignment) {
+        switch (errorTextAlignment) {
+            case ALIGN_LEFT:
+                return Layout.Alignment.ALIGN_NORMAL;
+            case ALIGN_CENTER:
+                return Layout.Alignment.ALIGN_CENTER;
+            case ALIGN_RIGHT:
+                return Layout.Alignment.ALIGN_OPPOSITE;
+            default:
+                return Layout.Alignment.ALIGN_NORMAL;
+        }
+    }
+
+    private ErrorTextAlignment getErrorTextAlignment(int attrNum) {
+        switch (attrNum) {
+            case 0:
+                return ErrorTextAlignment.ALIGN_LEFT;
+            case 1:
+                return ErrorTextAlignment.ALIGN_CENTER;
+            case 2:
+                return ErrorTextAlignment.ALIGN_RIGHT;
+            default:
+                return ErrorTextAlignment.ALIGN_LEFT;
+        }
+    }
+
+    public ErrorTextAlignment getErrorTextAlignment() {
+        return errorTextAlignment;
+    }
+
+    public void setErrorTextAlignment(ErrorTextAlignment errorTextAlignment) {
+        this.errorTextAlignment = errorTextAlignment;
         invalidate();
     }
 
@@ -1524,5 +1571,11 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAn
         void onSpinnerOpened(SmartMaterialSpinner spinner);
 
         void onSpinnerClosed(SmartMaterialSpinner spinner);
+    }
+
+    public enum ErrorTextAlignment {
+        ALIGN_LEFT,
+        ALIGN_CENTER,
+        ALIGN_RIGHT,
     }
 }

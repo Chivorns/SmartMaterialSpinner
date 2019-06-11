@@ -52,6 +52,11 @@
         <attr name="smsp_errorTextColor" format="color|reference" />
         <attr name="smsp_multilineError" format="boolean" />
         <attr name="smsp_nbErrorLine" format="integer" />
+        <attr name="smsp_errorTextAlignment" format="enum">
+            <enum name="align_left" value="0" />
+            <enum name="align_center" value="1" />
+            <enum name="align_right" value="2" />
+        </attr>
 
         <attr name="smsp_alignLabel" format="boolean" />
         <attr name="smsp_isRtl" format="boolean" />
