@@ -2,6 +2,7 @@ package com.chivorn.smartmaterialspinner;
 
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.res.TypedArray;
@@ -676,16 +677,23 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAn
                 if (view instanceof EditText) {
                     view.clearFocus();
                     SoftKeyboardUtil.hideSoftKeyboard(getContext());
-                    return performClick();
                 }
             }
         }
         return super.dispatchTouchEvent(event);
     }
 
+    @SuppressLint("ClickableViewAccessibility")
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        if (event.getAction() == MotionEvent.ACTION_UP) {
+            return performClick();
+        }
+        return true;
+    }
+
     @Override
     public boolean performClick() {
-        SoftKeyboardUtil.hideSoftKeyboard(getContext());
         if (isSpinnerClickable()) {
             isShowing = false;
             onEmptySpinnerClickListener.onEmptySpinnerClicked();
