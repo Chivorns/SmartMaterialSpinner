@@ -21,4 +21,13 @@
         <item name="android:background">#6194EB</item>
         <item name="android:padding">3dp</item>
     </style>
+
+    <style name="spinnerStyle" parent="defaultViewStyle">
+        <item name="smsp_errorTextColor">@color/error_color</item>
+        <item name="smsp_floatingLabelColor">@color/floating_color</item>
+        <item name="smsp_underlineColor">@color/underline_color</item>
+        <item name="smsp_errorTextSize">13sp</item>
+        <item name="smsp_itemSize">14sp</item>
+        <item name="smsp_hintSize">14sp</item>
+    </style>
 </resources>

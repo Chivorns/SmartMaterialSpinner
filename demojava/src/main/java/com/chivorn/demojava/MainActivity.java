@@ -1,5 +1,6 @@
 package com.chivorn.demojava;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
@@ -31,6 +32,7 @@ public class MainActivity<T> extends MainApp<T> {
         spCustomColor.setItem(provinceList);
 
         spSearchable.setSearchDialogGravity(Gravity.TOP);
+        spSearchable.setErrorTextAlignment(SmartMaterialSpinner.ErrorTextAlignment.ALIGN_LEFT);
         spSearchable.setArrowMarginRight(19);
         spCustomColor.setItemColor(ContextCompat.getColor(this, R.color.custom_item_color));
         spCustomColor.setSelectedItemListColor(ContextCompat.getColor(this, R.color.custom_selected_item_color));
@@ -39,6 +41,7 @@ public class MainActivity<T> extends MainApp<T> {
         setOnEmptySpinnerClickListener(spEmptyItem);
         setOnItemSelectedListener(spSearchable, spProvince, spProvinceNoHint, spProvinceDialog, spCustomColor, spEmptyItem);
         setOnSpinnerEventListener(spSearchable, spProvince, spProvinceNoHint, spProvinceDialog, spCustomColor, spEmptyItem);
+        //  setErrorTextSize(90, spSearchable, spProvince, spProvinceNoHint, spProvinceDialog, spCustomColor, spEmptyItem);
     }
 
     private void setOnItemSelectedListener(SmartMaterialSpinner... spinners) {
@@ -85,6 +88,21 @@ public class MainActivity<T> extends MainApp<T> {
                     Toast.makeText(MainActivity.this, getString(R.string.empty_item_spinner_click_msg), Toast.LENGTH_SHORT).show();
                 }
             });
+        }
+    }
+
+    private void setErrorTextSize(int size, SmartMaterialSpinner... spinners) {
+        for (SmartMaterialSpinner spinner : spinners) {
+            spinner.setErrorTextSize(size);
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        super.onClick(v);
+        if (v.getId() == com.chivorn.resourcemodule.R.id.btn_goto_runtime_render) {
+            intent = new Intent(getApplicationContext(), RuntimeRenderViewActivity.class);
+            startActivity(intent);
         }
     }
 }

@@ -20,11 +20,11 @@ class MainActivity<T> : MainApp<T>() {
     }
 
     private fun initSpinnerInKotlin() {
-        spSearchable!!.item = provinceList as MutableList<T>?
-        spProvince!!.item = (provinceList as MutableList<String>?)!!
-        spProvinceNoHint!!.item = provinceList as MutableList<T>?
-        spProvinceDialog!!.item = provinceList as MutableList<T>?
-        spCustomColor!!.item = provinceList as MutableList<T>?
+        spSearchable!!.item = provinceList
+        spProvince!!.item = provinceList
+        spProvinceNoHint!!.item = provinceList
+        spProvinceDialog!!.item = provinceList
+        spCustomColor!!.item = provinceList
 
         setOnEmptySpinnerClickListener(spEmptyItem)
         setOnItemSelectedListener(spSearchable, spProvince, spProvinceNoHint, spProvinceDialog, spCustomColor, spEmptyItem)

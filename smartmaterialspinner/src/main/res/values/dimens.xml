@@ -1,18 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="smsp_underline_top_spacing">4dp</dimen>
-    <dimen name="smsp_underline_bottom_spacing">-13dp</dimen>
     <dimen name="smsp_floating_label_inside_spacing">6dp</dimen>
     <dimen name="smsp_floating_label_top_spacing">6dp</dimen>
     <dimen name="smsp_floating_label_bottom_spacing">5dp</dimen>
+
     <dimen name="smsp_right_left_spinner_padding">0dp</dimen>
-    <dimen name="label_text_size">12sp</dimen>
     <dimen name="smsp_min_content_height">6dp</dimen>
-    <dimen name="smsp_error_label_margin_top">5dp</dimen>
+
+    <dimen name="smsp_underline_top_spacing">8dp</dimen>
+    <dimen name="smsp_error_text_margin_top">5dp</dimen>
+    <dimen name="smsp_error_text_margin_bottom">5dp</dimen>
+    <dimen name="smsp_error_text_padding_top_bottom">0dp</dimen>
+
+    <dimen name="smsp_label_text_size">12sp</dimen>
     <dimen name="smsp_default_text_and_hint_size">14sp</dimen>
     <dimen name="smsp_default_hint_size">14sp</dimen>
     <dimen name="smsp_default_floating_label_size">12sp</dimen>
-    <dimen name="smsp_default_error_text_size">12sp</dimen>
+    <dimen name="smsp_default_error_text_size">13sp</dimen>
     <dimen name="smsp_default_arrow_margin_right">19dp</dimen>
 
 </resources>

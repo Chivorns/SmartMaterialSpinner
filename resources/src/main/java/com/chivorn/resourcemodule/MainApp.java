@@ -10,26 +10,27 @@ import android.widget.LinearLayout;
 import com.chivorn.smartmaterialspinner.SmartMaterialSpinner;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.Locale;
 
 public class MainApp<T> extends AppCompatActivity implements View.OnClickListener {
     private final String repoUrl = "https://github.com/Chivorns/SmartMaterialSpinner";
 
-    protected SmartMaterialSpinner<T> spSearchable;
+    protected SmartMaterialSpinner<String> spSearchable;
     protected SmartMaterialSpinner<String> spProvince;
-    protected SmartMaterialSpinner<T> spProvinceNoHint;
-    protected SmartMaterialSpinner<T> spProvinceDialog;
-    protected SmartMaterialSpinner<T> spCustomColor;
-    protected SmartMaterialSpinner<T> spEmptyItem;
+    protected SmartMaterialSpinner<String> spProvinceNoHint;
+    protected SmartMaterialSpinner<String> spProvinceDialog;
+    protected SmartMaterialSpinner<String> spCustomColor;
+    protected SmartMaterialSpinner<String> spEmptyItem;
 
     private LinearLayout githubRepo;
     private Button btnShowError;
+    private Button btnGotoRuntimeRender;
     private Button githubRepoBtn;
-    private Intent intent;
+    protected Intent intent;
 
-    protected List provinceList;
+    protected List<String> provinceList;
+    protected List<String> countryList;
 
     public void initBaseView() {
         spSearchable = findViewById(R.id.sp_searchable);
@@ -40,11 +41,14 @@ public class MainApp<T> extends AppCompatActivity implements View.OnClickListene
         spEmptyItem = findViewById(R.id.sp_empty_item);
         githubRepo = findViewById(R.id.git_repo_container);
         btnShowError = findViewById(R.id.btn_show_error);
+        btnGotoRuntimeRender = findViewById(R.id.btn_goto_runtime_render);
         githubRepoBtn = findViewById(R.id.github_repo_btn);
     }
 
     public void initItemList() {
         provinceList = new ArrayList<>();
+        countryList = new ArrayList<>();
+
         provinceList.add("Banteay Meanchey");
         provinceList.add("Battambang");
         provinceList.add("Kampong Cham");
@@ -72,20 +76,13 @@ public class MainApp<T> extends AppCompatActivity implements View.OnClickListene
         provinceList.add("Tbong Khmum");
         provinceList.add("The best Android spinner library for your android application with more customization");
 
-        provinceList.add(111);
-        provinceList.add(222);
-        provinceList.add(333);
-        provinceList.add(444);
-        provinceList.add(555.555);
 
-        provinceList.add(true);
-
-        Map<String, String> map = new HashMap<>();
-        map.put("A", "This is value of A");
-        map.put("B", "This is value of B");
-        map.put("C", "This is value of C");
-
-        provinceList.add(map);
+        String[] isoCountryCodes = Locale.getISOCountries();
+        for (String countryCode : isoCountryCodes) {
+            Locale locale = new Locale("", countryCode);
+            String countryName = locale.getDisplayCountry();
+            countryList.add(countryName);
+        }
     }
 
     public void onClickListener() {
@@ -96,6 +93,10 @@ public class MainApp<T> extends AppCompatActivity implements View.OnClickListene
 
         if (btnShowError != null) {
             btnShowError.setOnClickListener(this);
+        }
+
+        if (btnGotoRuntimeRender != null) {
+            btnGotoRuntimeRender.setOnClickListener(this);
         }
     }
 

@@ -11,6 +11,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Point;
+import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
@@ -60,6 +61,7 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAn
     private TextPaint fltLabelTextPaint;
     private StaticLayout staticLayout;
     private TextView tvDropdownItem;
+    private Rect errorTextRect;
 
     private SearchableSpinnerDialog searchableSpinnerDialog;
     private List<T> item;
@@ -86,8 +88,10 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAn
 
     //@see dimens.xml
     private int underlineTopSpacing;
-    private int underlineBottomSpacing;
-    private int errorLabelMarginTop;
+    private int errorTextMarginTop;
+    private int errorTextMarginBottom;
+    private int errorTextPaddingTopBottom;
+    float errorTextWidth, errorTextHeight;
     private int floatingLabelTopSpacing;
     private int floatingLabelBottomSpacing;
     private int floatingLabelInsideSpacing;
@@ -217,7 +221,7 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAn
         }
         baseColor = typedArray.getColor(R.styleable.SmartMaterialSpinner_smsp_baseColor, defaultBaseColor);
         highlightColor = typedArray.getColor(R.styleable.SmartMaterialSpinner_smsp_highlightColor, defaultHighlightColor);
-        errorTextSize = typedArray.getDimension(R.styleable.SmartMaterialSpinner_smsp_errorTextSize, getResources().getDimension(R.dimen.smsp_default_error_text_size));
+        errorTextSize = typedArray.getDimension(R.styleable.SmartMaterialSpinner_smsp_errorTextSize, getResources().getDimensionPixelSize(R.dimen.smsp_default_error_text_size));
         errorTextColor = typedArray.getColor(R.styleable.SmartMaterialSpinner_smsp_errorTextColor, defaultErrorColor);
         disabledColor = ContextCompat.getColor(context, R.color.smsp_disabled_color);
         underlineColor = typedArray.getColor(R.styleable.SmartMaterialSpinner_smsp_underlineColor, ContextCompat.getColor(context, R.color.smsp_underline_color));
@@ -283,7 +287,7 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAn
     }
 
     private void removeDefaultSelector(Drawable drawable) {
-        if (drawable instanceof LayerDrawable || (drawable instanceof StateListDrawable && drawable.getCurrent() instanceof NinePatchDrawable)) {
+        if (drawable instanceof LayerDrawable || drawable instanceof NinePatchDrawable || (drawable instanceof StateListDrawable && drawable.getCurrent() instanceof NinePatchDrawable)) {
             setBackgroundResource(R.drawable.smsp_transparent_color);
         }
     }
@@ -327,6 +331,7 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAn
         paint = new Paint(Paint.ANTI_ALIAS_FLAG);
         errorTextPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
         fltLabelTextPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
+        errorTextRect = new Rect();
         errorTextPaint.setTextSize(errorTextSize);
         fltLabelTextPaint.setTextSize(floatingLabelSize);
         if (typeface != null) {
@@ -364,30 +369,38 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAn
 
     private void updateBottomPadding() {
         Paint.FontMetrics textMetrics = errorTextPaint.getFontMetrics();
-        extraPaddingBottom = underlineTopSpacing + underlineBottomSpacing;
         if (errorText != null) {
-            if (isMultilineError) {
-                extraPaddingBottom = underlineTopSpacing + dpToPx(4);
-            } else {
-                extraPaddingBottom = (int) (underlineTopSpacing + dpToPx(4) - (errorTextSize / 7F * 1.3F));
-            }
+            extraPaddingBottom = (int) (errorTextMarginTop + underlineTopSpacing + errorTextMarginBottom + underlineSize) + errorTextPaddingTopBottom * 2;
+        } else {
+            extraPaddingBottom = underlineTopSpacing + errorTextMarginBottom;
         }
         if (enableErrorLabel) {
             extraPaddingBottom += (int) ((textMetrics.descent - textMetrics.ascent) * currentNbErrorLines);
         }
         updatePadding();
+        measureErrorText();
+    }
+
+    private void updatePadding() {
+        int left = innerPaddingLeft;
+        int top = innerPaddingTop + extraPaddingTop;
+        int right = innerPaddingRight;
+        int bottom = innerPaddingBottom + extraPaddingBottom;
+        super.setPadding(left, top, right, bottom);
+        setMinimumHeight((int) (top + bottom + minContentHeight + (itemSize > hintSize ? itemSize : hintSize)));
     }
 
     private void initDimensions(Context context, AttributeSet attrs) {
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.SmartMaterialSpinner);
 
         underlineTopSpacing = getResources().getDimensionPixelSize(R.dimen.smsp_underline_top_spacing);
-        underlineBottomSpacing = getResources().getDimensionPixelSize(R.dimen.smsp_underline_bottom_spacing);
+        errorTextMarginBottom = getResources().getDimensionPixelSize(R.dimen.smsp_error_text_margin_bottom);
         floatingLabelTopSpacing = getResources().getDimensionPixelSize(R.dimen.smsp_floating_label_top_spacing);
         floatingLabelBottomSpacing = getResources().getDimensionPixelSize(R.dimen.smsp_floating_label_bottom_spacing);
         rightLeftSpinnerPadding = alignLabel ? getResources().getDimensionPixelSize(R.dimen.smsp_right_left_spinner_padding) : 0;
         floatingLabelInsideSpacing = getResources().getDimensionPixelSize(R.dimen.smsp_floating_label_inside_spacing);
-        errorLabelMarginTop = getResources().getDimensionPixelSize(R.dimen.smsp_error_label_margin_top);
+        errorTextMarginTop = getResources().getDimensionPixelSize(R.dimen.smsp_error_text_margin_top);
+        errorTextPaddingTopBottom = getResources().getDimensionPixelSize(R.dimen.smsp_error_text_padding_top_bottom);
         minContentHeight = getResources().getDimensionPixelSize(R.dimen.smsp_min_content_height);
 
         arrowMarginLeft = typedArray.getDimensionPixelSize(R.styleable.SmartMaterialSpinner_smsp_arrowMarginLeft, 0);
@@ -477,15 +490,6 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAn
         return px * displayMetrics.density;
     }
 
-    private void updatePadding() {
-        int left = innerPaddingLeft;
-        int top = innerPaddingTop + extraPaddingTop;
-        int right = innerPaddingRight;
-        int bottom = innerPaddingBottom + extraPaddingBottom;
-        super.setPadding(left, top, right, bottom);
-        setMinimumHeight((int) (top + bottom + minContentHeight + (itemSize > hintSize ? itemSize : hintSize)));
-    }
-
     private boolean needScrollingAnimation() {
         if (errorText != null) {
             float screenWidth = getWidth() - rightLeftSpinnerPadding;
@@ -525,17 +529,19 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAn
                         targetNbLines[0] = Math.max(minNbErrorLine, nbErrorLines);
                     }
                 });
+                currentNbErrorLines = targetNbLines[0];
                 return targetNbLines[0];
             }
             configStaticLayout(errorText, errorTextPaint, mWidth[0]);
             int nbErrorLines = staticLayout.getLineCount();
             targetNbLines[0] = Math.max(minNbErrorLine, nbErrorLines);
         }
+        currentNbErrorLines = targetNbLines[0];
         return targetNbLines[0];
     }
 
     private boolean isSpinnerEmpty() {
-        return (hintAdapter.getCount() == 0 && hint == null) || (hintAdapter.getCount() == 1 && getCount() == 0 && hint != null) || (item.size() == 0 && getCount() == 1 && hint != null);
+        return (hintAdapter != null && hintAdapter.getCount() == 0 && hint == null) || (hintAdapter != null && hintAdapter.getCount() == 1 && getCount() == 0 && hint != null) || (item != null && item.size() == 0 && getCount() == 1 && hint != null);
     }
 
     private AppCompatActivity scanForActivity(Context context) {
@@ -559,26 +565,24 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAn
         super.onDraw(canvas);
         int startX = 0;
         int endX = getWidth();
-        int lineHeight;
+        int lineHeight = dpToPx(underlineSize);
 
         int startYLine = getHeight() - getPaddingBottom() + underlineTopSpacing;
         int startYFloatingLabel = (int) (getPaddingTop() - floatingLabelPercent * floatingLabelBottomSpacing);
 
         if (errorText != null && enableErrorLabel) {
-            lineHeight = dpToPx(underlineSize);
-            float startYErrorLabel = startYLine + errorLabelMarginTop + lineHeight + (errorTextSize / 2F * 1.5F) - 32.94F;
             paint.setColor(underlineColor);
             errorTextPaint.setColor(errorTextColor);
             errorTextPaint.setTextSize(errorTextSize);
+            float startYErrorLabel = startYLine + errorTextMarginTop + errorTextPaddingTopBottom + lineHeight;
+
             //Error Label Drawing
             if (isMultilineError) {
-                startYErrorLabel = startYLine + errorLabelMarginTop + lineHeight;
-                canvas.save();
-                canvas.translate(startX + rightLeftSpinnerPadding - errorLabelPosX, startYErrorLabel - errorLabelMarginTop);
                 if (staticLayout == null) {
-                    int mWidth = getWidth() - getPaddingRight() - getPaddingLeft();
-                    configStaticLayout(errorText, errorTextPaint, mWidth);
+                    prepareBottomPadding();
                 }
+                canvas.save();
+                canvas.translate(startX + rightLeftSpinnerPadding - errorLabelPosX, startYErrorLabel - dpToPx(4));
                 staticLayout.draw(canvas);
                 canvas.restore();
             } else {
@@ -587,16 +591,15 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAn
                     isErrorScrollPaddingInvoked = true;
                     updateBottomPadding();
                 }
-                canvas.drawText(errorText.toString(), startX + rightLeftSpinnerPadding - errorLabelPosX, startYErrorLabel + errorLabelMarginTop, errorTextPaint);
+                canvas.drawText(errorText.toString(), startX + rightLeftSpinnerPadding - errorLabelPosX, startYErrorLabel + errorTextHeight, errorTextPaint);
                 if (errorLabelPosX > 0) {
                     canvas.save();
                     canvas.translate(errorTextPaint.measureText(errorText.toString()) + getWidth() / 2F, 0);
-                    canvas.drawText(errorText.toString(), startX + rightLeftSpinnerPadding - errorLabelPosX, startYErrorLabel + errorLabelMarginTop, errorTextPaint);
+                    canvas.drawText(errorText.toString(), startX + rightLeftSpinnerPadding - errorLabelPosX, startYErrorLabel + errorTextHeight, errorTextPaint);
                     canvas.restore();
                 }
             }
         } else {
-            lineHeight = dpToPx(underlineSize);
             if (isSelected || hasFocus()) {
                 paint.setColor(underlineColor); // highlightColor
             } else {
@@ -1121,7 +1124,6 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAn
 
     public void setErrorText(CharSequence errorText) {
         this.errorText = errorText;
-        updateBottomPadding();
         if (errorLabelAnimator != null) {
             errorLabelAnimator.end();
         }
@@ -1130,12 +1132,21 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAn
         } else if (needScrollingAnimation()) {
             startErrorScrollingAnimator();
         }
+        updateBottomPadding();
         requestLayout();
     }
 
     public void setErrorText(int resId) {
         CharSequence error = getResources().getString(resId);
         setErrorText(error);
+    }
+
+    private void measureErrorText() {
+        if (errorText != null) {
+            errorTextPaint.getTextBounds(errorText.toString(), 0, errorText.length(), errorTextRect);
+            errorTextWidth = errorTextPaint.measureText(errorText.toString());
+            errorTextHeight = errorTextRect.height();
+        }
     }
 
     @Override

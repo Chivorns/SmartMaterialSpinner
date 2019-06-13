@@ -17,16 +17,10 @@
 
         <com.chivorn.smartmaterialspinner.SmartMaterialSpinner
             android:id="@+id/sp_searchable"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            style="@style/spinnerStyle"
             app:smsp_errorText="@string/sample_error_message"
-            app:smsp_errorTextColor="@color/error_color"
-            app:smsp_errorTextSize="12sp"
-            app:smsp_floatingLabelColor="@color/floating_color"
             app:smsp_hint="Searchable Spinner"
-            app:smsp_hintSize="14sp"
             app:smsp_isSearchable="true"
-            app:smsp_itemSize="14sp"
             app:smsp_multilineError="true"
             app:smsp_searchHeaderBackgroundColor="@color/smsp_search_header_background"
             app:smsp_searchHeaderText="Search/Select Province"
@@ -38,21 +32,15 @@
 
         <com.chivorn.smartmaterialspinner.SmartMaterialSpinner
             android:id="@+id/sp_provinces"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            style="@style/spinnerStyle"
             app:smsp_errorText="@string/sample_error_message"
-            app:smsp_errorTextColor="@color/error_color"
             app:smsp_hint="Province (Dropdown Mode)"
-            app:smsp_hintSize="14sp"
             app:smsp_multilineError="false" />
 
         <com.chivorn.smartmaterialspinner.SmartMaterialSpinner
             android:id="@+id/sp_provinces_no_hint"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            style="@style/spinnerStyle"
             app:smsp_errorText="@string/sample_error_message"
-            app:smsp_errorTextColor="@color/error_color"
-            app:smsp_hintSize="14sp"
             app:smsp_multilineError="false" />
 
         <TextView
@@ -61,13 +49,9 @@
 
         <com.chivorn.smartmaterialspinner.SmartMaterialSpinner
             android:id="@+id/sp_provinces_dialog"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            style="@style/spinnerStyle"
             android:spinnerMode="dialog"
-            app:smsp_errorTextColor="@color/error_color"
-            app:smsp_floatingLabelColor="@color/floating_color"
             app:smsp_hint="Province (Dialog Mode)"
-            app:smsp_hintSize="14sp"
             app:smsp_multilineError="true" />
 
         <TextView
@@ -76,8 +60,7 @@
 
         <com.chivorn.smartmaterialspinner.SmartMaterialSpinner
             android:id="@+id/sp_custom_color"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            style="@style/spinnerStyle"
             android:spinnerMode="dialog"
             app:smsp_errorTextColor="@color/error_color"
             app:smsp_floatingLabelColor="@color/floating_color"
@@ -95,14 +78,10 @@
 
         <com.chivorn.smartmaterialspinner.SmartMaterialSpinner
             android:id="@+id/sp_empty_item"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            style="@style/spinnerStyle"
             app:smsp_alwaysShowFloatingLabel="false"
-            app:smsp_errorTextColor="@color/error_color"
-            app:smsp_floatingLabelColor="@color/floating_color"
             app:smsp_floatingLabelText="floating text"
-            app:smsp_hint="Empty Item Spinner"
-            app:smsp_underlineColor="@color/underline_color" />
+            app:smsp_hint="Empty Item Spinner" />
 
         <Button
             android:id="@+id/btn_show_error"
@@ -113,7 +92,22 @@
             android:layout_marginEnd="5dp"
             android:layout_marginRight="5dp"
             android:background="#6194EB"
+            android:padding="10dp"
             android:text="@string/show_error"
+            android:textAllCaps="false"
+            android:textColor="@color/smsp_white_color" />
+
+        <Button
+            android:id="@+id/btn_goto_runtime_render"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginRight="5dp"
+            android:background="#6194EB"
+            android:padding="10dp"
+            android:text="@string/goto_runtime_render"
             android:textAllCaps="false"
             android:textColor="@color/smsp_white_color" />
 
