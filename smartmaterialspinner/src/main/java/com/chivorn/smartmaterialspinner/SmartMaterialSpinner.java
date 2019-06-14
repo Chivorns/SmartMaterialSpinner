@@ -89,8 +89,8 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAn
 
     //@see dimens.xml
     private int underlineTopSpacing;
-    private int errorTextMarginTop;
-    private int errorTextMarginBottom;
+    private int errorTextPaddingTop;
+    private int errorTextPaddingBottom;
     private int errorTextPaddingTopBottom;
     float errorTextWidth, errorTextHeight;
     private int floatingLabelTopSpacing;
@@ -98,10 +98,10 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAn
     private int floatingLabelInsideSpacing;
     private int rightLeftSpinnerPadding;
     private int minContentHeight;
-    private int arrowMarginLeft;
-    private int arrowMarginTop;
-    private int arrowMarginRight;
-    private int arrowMarginBottom;
+    private int arrowPaddingLeft;
+    private int arrowPaddingTop;
+    private int arrowPaddingRight;
+    private int arrowPaddingBottom;
 
     //Properties about Error Label
     private int lastPosition = -1;
@@ -355,9 +355,9 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAn
     private void updateBottomPadding() {
         Paint.FontMetrics textMetrics = errorTextPaint.getFontMetrics();
         if (errorText != null) {
-            extraPaddingBottom = (int) (errorTextMarginTop + underlineTopSpacing + errorTextMarginBottom + underlineSize) + errorTextPaddingTopBottom * 2;
+            extraPaddingBottom = (int) (errorTextPaddingTop + underlineTopSpacing + errorTextPaddingBottom + underlineSize) + errorTextPaddingTopBottom * 2;
         } else {
-            extraPaddingBottom = underlineTopSpacing + errorTextMarginBottom;
+            extraPaddingBottom = underlineTopSpacing + errorTextPaddingBottom;
         }
         if (enableErrorLabel) {
             extraPaddingBottom += (int) ((textMetrics.descent - textMetrics.ascent) * currentNbErrorLines);
@@ -379,19 +379,19 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAn
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.SmartMaterialSpinner);
 
         underlineTopSpacing = getResources().getDimensionPixelSize(R.dimen.smsp_underline_top_spacing);
-        errorTextMarginBottom = getResources().getDimensionPixelSize(R.dimen.smsp_error_text_margin_bottom);
+        errorTextPaddingBottom = getResources().getDimensionPixelSize(R.dimen.smsp_error_text_padding_bottom);
         floatingLabelTopSpacing = getResources().getDimensionPixelSize(R.dimen.smsp_floating_label_top_spacing);
         floatingLabelBottomSpacing = getResources().getDimensionPixelSize(R.dimen.smsp_floating_label_bottom_spacing);
         rightLeftSpinnerPadding = alignLabel ? getResources().getDimensionPixelSize(R.dimen.smsp_right_left_spinner_padding) : 0;
         floatingLabelInsideSpacing = getResources().getDimensionPixelSize(R.dimen.smsp_floating_label_inside_spacing);
-        errorTextMarginTop = getResources().getDimensionPixelSize(R.dimen.smsp_error_text_margin_top);
+        errorTextPaddingTop = getResources().getDimensionPixelSize(R.dimen.smsp_error_text_padding_top);
         errorTextPaddingTopBottom = getResources().getDimensionPixelSize(R.dimen.smsp_error_text_padding_top_bottom);
         minContentHeight = getResources().getDimensionPixelSize(R.dimen.smsp_min_content_height);
 
-        arrowMarginLeft = typedArray.getDimensionPixelSize(R.styleable.SmartMaterialSpinner_smsp_arrowMarginLeft, 0);
-        arrowMarginTop = typedArray.getDimensionPixelSize(R.styleable.SmartMaterialSpinner_smsp_arrowMarginTop, 0);
-        arrowMarginRight = typedArray.getDimensionPixelSize(R.styleable.SmartMaterialSpinner_smsp_arrowMarginRight, getResources().getDimensionPixelSize(R.dimen.smsp_default_arrow_margin_right));
-        arrowMarginBottom = typedArray.getDimensionPixelSize(R.styleable.SmartMaterialSpinner_smsp_arrowMarginBottom, 0);
+        arrowPaddingLeft = typedArray.getDimensionPixelSize(R.styleable.SmartMaterialSpinner_smsp_arrowPaddingLeft, 0);
+        arrowPaddingTop = typedArray.getDimensionPixelSize(R.styleable.SmartMaterialSpinner_smsp_arrowPaddingTop, 0);
+        arrowPaddingRight = typedArray.getDimensionPixelSize(R.styleable.SmartMaterialSpinner_smsp_arrowPaddingRight, getResources().getDimensionPixelSize(R.dimen.smsp_default_arrow_padding_right));
+        arrowPaddingBottom = typedArray.getDimensionPixelSize(R.styleable.SmartMaterialSpinner_smsp_arrowPaddingBottom, 0);
 
         typedArray.recycle();
     }
@@ -559,7 +559,7 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAn
             paint.setColor(underlineColor);
             errorTextPaint.setColor(errorTextColor);
             errorTextPaint.setTextSize(errorTextSize);
-            float startYErrorLabel = startYLine + errorTextMarginTop + errorTextPaddingTopBottom + lineHeight;
+            float startYErrorLabel = startYLine + errorTextPaddingTop + errorTextPaddingTopBottom + lineHeight;
 
             //Error Label Drawing
             if (isMultilineError) {
@@ -613,8 +613,8 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAn
                 canvas.drawText(textToDraw, startX + rightLeftSpinnerPadding, startYFloatingLabel, fltLabelTextPaint);
             }
         }
-        //  drawSelector(canvas, (getWidth() - rightLeftSpinnerPadding - arrowMarginRight + arrowMarginLeft), getPaddingTop() + dpToPx(6) - arrowMarginBottom + arrowMarginTop);
-        drawSelector(canvas, (getWidth() - rightLeftSpinnerPadding - arrowMarginRight + arrowMarginLeft), (int) (getPaddingTop() - arrowMarginBottom + arrowMarginTop + minContentHeight / 2F + itemSize / 2 - floatingLabelTopSpacing));
+        //  drawSelector(canvas, (getWidth() - rightLeftSpinnerPadding - arrowPaddingRight + arrowPaddingLeft), getPaddingTop() + dpToPx(6) - arrowPaddingBottom + arrowPaddingTop);
+        drawSelector(canvas, (getWidth() - rightLeftSpinnerPadding - arrowPaddingRight + arrowPaddingLeft), (int) (getPaddingTop() - arrowPaddingBottom + arrowPaddingTop + minContentHeight / 2F + itemSize / 2 - floatingLabelTopSpacing));
     }
 
     private void drawSelector(Canvas canvas, int posX, int posY) {
@@ -845,8 +845,8 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAn
             TextView selectedItem = (TextView) parent.getChildAt(0);
             selectedItem.setTextSize(TypedValue.COMPLEX_UNIT_PX, itemSize);
             selectedItem.setTextColor(itemColor);
-            //  selectedItem.setPadding(selectedItem.getPaddingLeft(), selectedItem.getPaddingTop(), arrowMarginRight + dpToPx(14), selectedItem.getPaddingBottom());
-            selectedItem.setPadding(selectedItem.getPaddingLeft(), selectedItem.getPaddingTop(), (int) (arrowMarginRight + itemSize * 0.4), selectedItem.getPaddingBottom());
+            //  selectedItem.setPadding(selectedItem.getPaddingLeft(), selectedItem.getPaddingTop(), arrowPaddingRight + dpToPx(14), selectedItem.getPaddingBottom());
+            selectedItem.setPadding(selectedItem.getPaddingLeft(), selectedItem.getPaddingTop(), (int) (arrowPaddingRight + itemSize * 0.4), selectedItem.getPaddingBottom());
         }
     }
 
@@ -1368,47 +1368,47 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAn
         invalidate();
     }*/
 
-    public int getArrowMarginLeft() {
-        return arrowMarginLeft;
+    public int getArrowPaddingLeft() {
+        return arrowPaddingLeft;
     }
 
-    public void setArrowMarginLeft(int padding) {
-        this.arrowMarginLeft = dpToPx(padding);
+    public void setArrowPaddingLeft(int padding) {
+        this.arrowPaddingLeft = dpToPx(padding);
         invalidate();
     }
 
-    public int getArrowMarginTop() {
-        return arrowMarginTop;
+    public int getArrowPaddingTop() {
+        return arrowPaddingTop;
     }
 
-    public void setArrowMarginTop(int padding) {
-        this.arrowMarginTop = dpToPx(padding);
+    public void setArrowPaddingTop(int padding) {
+        this.arrowPaddingTop = dpToPx(padding);
         invalidate();
     }
 
-    public int getArrowMarginRight() {
-        return arrowMarginRight;
+    public int getArrowPaddingRight() {
+        return arrowPaddingRight;
     }
 
-    public void setArrowMarginRight(int padding) {
-        this.arrowMarginRight = dpToPx(padding);
+    public void setArrowPaddingRight(int padding) {
+        this.arrowPaddingRight = dpToPx(padding);
         invalidate();
     }
 
-    public int getArrowMarginBottom() {
-        return arrowMarginBottom;
+    public int getArrowPaddingBottom() {
+        return arrowPaddingBottom;
     }
 
-    public void setArrowMarginBottom(int padding) {
-        this.arrowMarginBottom = dpToPx(padding);
+    public void setArrowPaddingBottom(int padding) {
+        this.arrowPaddingBottom = dpToPx(padding);
         invalidate();
     }
 
     public void setArrowPadding(int left, int top, int right, int bottom) {
-        this.arrowMarginLeft = left;
-        this.arrowMarginTop = top;
-        this.arrowMarginRight = right;
-        this.arrowMarginBottom = bottom;
+        this.arrowPaddingLeft = left;
+        this.arrowPaddingTop = top;
+        this.arrowPaddingRight = right;
+        this.arrowPaddingBottom = bottom;
         invalidate();
     }
 

@@ -33,7 +33,7 @@ public class MainActivity<T> extends MainApp<T> {
 
         spSearchable.setSearchDialogGravity(Gravity.TOP);
         spSearchable.setErrorTextAlignment(SmartMaterialSpinner.ErrorTextAlignment.ALIGN_LEFT);
-        spSearchable.setArrowMarginRight(19);
+        spSearchable.setArrowPaddingRight(19);
         spCustomColor.setItemColor(ContextCompat.getColor(this, R.color.custom_item_color));
         spCustomColor.setSelectedItemListColor(ContextCompat.getColor(this, R.color.custom_selected_item_color));
         spCustomColor.setItemListColor(ContextCompat.getColor(this, R.color.custom_item_list_color));
