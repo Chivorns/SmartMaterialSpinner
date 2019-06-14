@@ -61,8 +61,9 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAn
     private TextPaint errorTextPaint;
     private TextPaint fltLabelTextPaint;
     private StaticLayout staticLayout;
-    private TextView tvDropdownItem;
     private Rect errorTextRect;
+    private TextPaint itemTextPaint;
+    private Rect itemTextRect;
 
     private SearchableSpinnerDialog searchableSpinnerDialog;
     private List<T> item;
@@ -88,6 +89,8 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAn
     private int extraPaddingBottom;
 
     //@see dimens.xml
+    private float itemTextWidth;
+    private float itemTextHeight;
     private int underlineTopSpacing;
     private int errorTextPaddingTop;
     private int errorTextPaddingBottom;
@@ -199,8 +202,8 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAn
         removeDefaultSelector(getBackground());
         initSearchableDialogObject();
         initAttributes(context, attrs);
-        initPaintObjects();
         initDimensions(context, attrs);
+        initPaintObjects();
         initPadding();
         initFloatingLabelAnimator();
         initOnItemSelectedListener();
@@ -321,15 +324,23 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAn
     private void initPaintObjects() {
         int errorTextSize = getResources().getDimensionPixelSize(R.dimen.smsp_default_error_text_size);
         int floatingLabelSize = getResources().getDimensionPixelSize(R.dimen.smsp_default_floating_label_size);
+
         paint = new Paint(Paint.ANTI_ALIAS_FLAG);
         errorTextPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
         fltLabelTextPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
+        itemTextPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
+
         errorTextRect = new Rect();
+        itemTextRect = new Rect();
+
+        //  itemTextPaint.setTextSize(itemSize);
         errorTextPaint.setTextSize(errorTextSize);
         fltLabelTextPaint.setTextSize(floatingLabelSize);
+
         if (typeface != null) {
             errorTextPaint.setTypeface(typeface);
             fltLabelTextPaint.setTypeface(typeface);
+            itemTextPaint.setTypeface(typeface);
         }
         errorTextPaint.setColor(baseColor);
         baseAlpha = errorTextPaint.getAlpha();
@@ -828,7 +839,6 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAn
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 lastPosition = position;
-                updateSelectedItemStyle(parent, view);
                 if (isSearchable) {
                     SoftKeyboardUtil.hideSoftKeyboard(getContext());
                 }
@@ -858,15 +868,6 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAn
         super.setOnItemSelectedListener(onItemSelectedListener);
     }
 
-    private void updateSelectedItemStyle(AdapterView<?> parent, View view) {
-        if (view instanceof TextView) {
-            TextView selectedItem = (TextView) parent.getChildAt(0);
-            selectedItem.setTextSize(TypedValue.COMPLEX_UNIT_PX, itemSize);
-            selectedItem.setTextColor(itemColor);
-            //  selectedItem.setPadding(selectedItem.getPaddingLeft(), selectedItem.getPaddingTop(), arrowPaddingRight + dpToPx(14), selectedItem.getPaddingBottom());
-            selectedItem.setPadding(selectedItem.getPaddingLeft(), selectedItem.getPaddingTop(), (int) (arrowPaddingRight + itemSize * 0.4), selectedItem.getPaddingBottom());
-        }
-    }
 
     @Override
     public void onAnimationUpdate(ValueAnimator animation) {
@@ -966,6 +967,7 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAn
 
     public void setErrorTextSize(float errorTextSize) {
         this.errorTextSize = dpToPx(errorTextSize);
+        measureErrorText();
         invalidate();
     }
 
@@ -1207,9 +1209,19 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAn
 
     private void measureErrorText() {
         if (errorText != null) {
+            errorTextPaint.setTextSize(errorTextSize);
             errorTextPaint.getTextBounds(errorText.toString(), 0, errorText.length(), errorTextRect);
             errorTextWidth = errorTextPaint.measureText(errorText.toString());
             errorTextHeight = errorTextRect.height();
+        }
+    }
+
+    private void measureItemText(String itemText) {
+        if (itemText != null) {
+            //  itemTextPaint.setTextSize(itemSize);
+            itemTextPaint.getTextBounds(itemText, 0, itemText.length(), itemTextRect);
+            itemTextWidth = itemTextPaint.measureText(itemText);
+            itemTextHeight = itemTextRect.height();
         }
     }
 
@@ -1461,13 +1473,8 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAn
 
     @Override
     public void setAdapter(SpinnerAdapter adapter) {
-        if (adapter instanceof HintAdapter) {
-            this.hintAdapter = (HintAdapter) adapter;
-            super.setAdapter(adapter);
-        } else {
-            hintAdapter = new HintAdapter(adapter, getContext());
-            super.setAdapter(hintAdapter);
-        }
+        hintAdapter = new HintAdapter(adapter, getContext());
+        super.setAdapter(hintAdapter);
     }
 
     public void setItem(@NonNull List<T> item) {
@@ -1589,18 +1596,17 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAn
                     return new View(getContext());
                 }
             }
+
             //workaround to have multiple types in spinner
             if (convertView != null) {
                 convertView = (convertView.getTag() != null && convertView.getTag() instanceof Integer && (Integer) convertView.getTag() != HINT_TYPE) ? convertView : null;
             }
+
             position = hint != null ? position - 1 : position;
             View dropdownItemView = (isDropDownView ? mSpinnerAdapter.getDropDownView(position, convertView, parent) : mSpinnerAdapter.getView(position, convertView, parent));
             if (dropdownItemView instanceof TextView) {
-                tvDropdownItem = (TextView) dropdownItemView;
-                tvDropdownItem.setTextColor(itemListColor);
-                if (position >= 0 && position == getSelectedItemPosition()) {
-                    tvDropdownItem.setTextColor(selectedItemListColor);
-                }
+                TextView textView = (TextView) dropdownItemView;
+                updateSpinnerItemStyle(parent, textView, isDropDownView, false, position);
             }
             return dropdownItemView;
         }
@@ -1609,30 +1615,50 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAn
             final LayoutInflater inflater = LayoutInflater.from(mContext);
             final int resId = isDropDownView ? dropdownView : itemView;
             final TextView textView = (TextView) inflater.inflate(resId, parent, false);
+            textView.setTag(HINT_TYPE);
+            updateSpinnerItemStyle(parent, textView, isDropDownView, true, -1);
+
             if (isShowing()) {
-                if (!isSearchable && parent.getPaddingTop() != 0 && textView.getVisibility() == VISIBLE) {
-                    // parent.setPadding(0, 0, 0, 0);
-                }
                 textView.setOnClickListener(new OnClickListener() {
                     @Override
                     public void onClick(View v) {
                     }
                 });
             }
-            textView.setText(hint);
-            textView.setTextColor(SmartMaterialSpinner.this.isEnabled() ? hintColor : disabledColor);
-            if (hintSize != -1)
-                textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, hintSize);
-            if (isDropDownView) {
-                textView.setTextColor(itemListHintColor);
-                textView.setBackgroundColor(itemListHintBackground);
-            }
-            textView.setTag(HINT_TYPE);
             return textView;
         }
 
         private SpinnerAdapter getWrappedAdapter() {
             return mSpinnerAdapter;
+        }
+
+        private void updateSpinnerItemStyle(ViewGroup parent, TextView textView, boolean isDropDownView, boolean isHint, int position) {
+            if (isHint) {
+                textView.setText(hint);
+                textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, hintSize);
+                if (isDropDownView) {
+                    textView.setTextColor(itemListHintColor);
+                    textView.setBackgroundColor(itemListHintBackground);
+                } else {
+                    textView.setTextColor(SmartMaterialSpinner.this.isEnabled() ? hintColor : disabledColor);
+                    measureItemText(textView.getText().toString());
+                    textView.setPadding(textView.getPaddingLeft(), textView.getPaddingTop(), (int) (arrowPaddingRight + itemTextHeight), textView.getPaddingBottom());
+                }
+            } else {
+                if (isDropDownView) {
+                    parent.setPadding(0, 0, 0, 0);
+                    //parent.setBackgroundColor(Color.parseColor("#A8F700"));
+                    textView.setTextColor(itemListColor);
+                    if (position >= 0 && position == getSelectedItemPosition()) {
+                        textView.setTextColor(selectedItemListColor);
+                    }
+                } else {
+                    textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, itemSize);
+                    textView.setTextColor(itemColor);
+                    measureItemText(textView.getText().toString());
+                    textView.setPadding(textView.getPaddingLeft(), textView.getPaddingTop(), (int) (arrowPaddingRight + itemTextHeight), textView.getPaddingBottom());
+                }
+            }
         }
     }
 

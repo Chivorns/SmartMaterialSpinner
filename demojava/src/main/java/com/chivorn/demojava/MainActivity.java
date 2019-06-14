@@ -41,6 +41,7 @@ public class MainActivity<T> extends MainApp<T> {
         setOnEmptySpinnerClickListener(spEmptyItem);
         setOnItemSelectedListener(spSearchable, spProvince, spProvinceNoHint, spProvinceDialog, spCustomColor, spEmptyItem);
         setOnSpinnerEventListener(spSearchable, spProvince, spProvinceNoHint, spProvinceDialog, spCustomColor, spEmptyItem);
+        // setItemTextSize(90, spSearchable, spProvince, spProvinceNoHint, spProvinceDialog, spCustomColor, spEmptyItem);
         //  setErrorTextSize(90, spSearchable, spProvince, spProvinceNoHint, spProvinceDialog, spCustomColor, spEmptyItem);
         //  setSelection(3, spSearchable, spProvince, spProvinceNoHint, spProvinceDialog, spCustomColor);
         // clearSelection(spSearchable, spProvince, spProvinceNoHint, spProvinceDialog, spCustomColor);
@@ -90,6 +91,12 @@ public class MainActivity<T> extends MainApp<T> {
                     Toast.makeText(MainActivity.this, getString(R.string.empty_item_spinner_click_msg), Toast.LENGTH_SHORT).show();
                 }
             });
+        }
+    }
+
+    private void setItemTextSize(float size, SmartMaterialSpinner... spinners) {
+        for (SmartMaterialSpinner spinner : spinners) {
+            spinner.setItemSize(size);
         }
     }
 
