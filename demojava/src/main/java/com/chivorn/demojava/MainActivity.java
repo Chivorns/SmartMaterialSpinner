@@ -42,6 +42,8 @@ public class MainActivity<T> extends MainApp<T> {
         setOnItemSelectedListener(spSearchable, spProvince, spProvinceNoHint, spProvinceDialog, spCustomColor, spEmptyItem);
         setOnSpinnerEventListener(spSearchable, spProvince, spProvinceNoHint, spProvinceDialog, spCustomColor, spEmptyItem);
         //  setErrorTextSize(90, spSearchable, spProvince, spProvinceNoHint, spProvinceDialog, spCustomColor, spEmptyItem);
+        //  setSelection(3, spSearchable, spProvince, spProvinceNoHint, spProvinceDialog, spCustomColor);
+        // clearSelection(spSearchable, spProvince, spProvinceNoHint, spProvinceDialog, spCustomColor);
     }
 
     private void setOnItemSelectedListener(SmartMaterialSpinner... spinners) {
@@ -94,6 +96,18 @@ public class MainActivity<T> extends MainApp<T> {
     private void setErrorTextSize(int size, SmartMaterialSpinner... spinners) {
         for (SmartMaterialSpinner spinner : spinners) {
             spinner.setErrorTextSize(size);
+        }
+    }
+
+    private void setSelection(int index, SmartMaterialSpinner... spinners) {
+        for (SmartMaterialSpinner spinner : spinners) {
+            spinner.setSelection(index);
+        }
+    }
+
+    private void clearSelection(SmartMaterialSpinner... spinners) {
+        for (SmartMaterialSpinner spinner : spinners) {
+            spinner.clearSelection();
         }
     }
 

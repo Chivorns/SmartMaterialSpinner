@@ -751,6 +751,12 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAn
     }
 
     @Override
+    public long getSelectedItemId() {
+        long itemId = super.getSelectedItemId();
+        return hint != null ? itemId - 1 : itemId;
+    }
+
+    @Override
     public Object getItemAtPosition(int position) {
         if (hint != null) {
             position++;
@@ -767,24 +773,36 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAn
     }
 
     @Override
-    public void setSelection(final int position) {
+    public void setSelection(int position) {
+        if (isShowing && !isSearchable && hint != null) {
+            position -= 1;
+        }
         if (isReSelectable) {
             ignoreOldSelectionByReflection();
         }
+        final int finalPosition = position;
         this.post(new Runnable() {
             @Override
             public void run() {
-                SmartMaterialSpinner.super.setSelection(position);
+                SmartMaterialSpinner.super.setSelection(hint != null ? finalPosition + 1 : finalPosition);
             }
         });
     }
 
     @Override
     public void setSelection(int position, boolean animate) {
+        if (isShowing && !isSearchable && hint != null) {
+            position -= 1;
+        }
         if (isReSelectable) {
             ignoreOldSelectionByReflection();
         }
-        super.setSelection(position, animate);
+        final int finalPosition = position;
+        super.setSelection(hint != null ? finalPosition + 1 : finalPosition, animate);
+    }
+
+    public void clearSelection() {
+        setSelection(-1);
     }
 
     @Override
@@ -859,9 +877,6 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAn
     public void onSearchItemSelected(Object item, int position) {
         int selectedIndex = searchDialogItem.indexOf(item);
         if (position >= 0) {
-            if (hint != null) {
-                selectedIndex += 1;
-            }
             setSelection(selectedIndex);
         }
     }
