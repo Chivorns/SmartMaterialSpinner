@@ -32,12 +32,12 @@ allprojects {
         options.addBooleanOption('Xdoclint:none', true)
     }
 
-    gradle.projectsEvaluated {
+    /*gradle.projectsEvaluated {
         tasks.withType(JavaCompile) {
             options.compilerArgs << "-Xlint:deprecation"
             options.compilerArgs << "-Xlint:unchecked"
         }
-    }
+    }*/
 }
 
 task clean(type: Delete) {

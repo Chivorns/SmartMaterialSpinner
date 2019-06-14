@@ -448,7 +448,7 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAn
             errorLabelAnimator = ObjectAnimator.ofInt(this, "errorLabelPosX", 0, textWidth + getWidth() / 2);
             errorLabelAnimator.setStartDelay(1000);
             errorLabelAnimator.setInterpolator(new LinearInterpolator());
-            errorLabelAnimator.setDuration(500 * errorText.length() - errorText.length());
+            errorLabelAnimator.setDuration((long) (230 * errorText.length() + errorTextSize * 100));
             errorLabelAnimator.addUpdateListener(this);
             errorLabelAnimator.setRepeatCount(ValueAnimator.INFINITE);
         } else {
