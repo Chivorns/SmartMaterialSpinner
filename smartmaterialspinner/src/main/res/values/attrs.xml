@@ -61,5 +61,6 @@
         <attr name="smsp_alignLabel" format="boolean" />
         <attr name="smsp_isRtl" format="boolean" />
         <!--<attr name="smsp_enableDefaultSelect" format="boolean" />-->
+        <attr name="smsp_isReSelectable" format="boolean" />
     </declare-styleable>
 </resources>

@@ -35,6 +35,7 @@
             style="@style/spinnerStyle"
             app:smsp_errorText="@string/sample_error_message"
             app:smsp_hint="Province (Dropdown Mode)"
+            app:smsp_isReSelectable="true"
             app:smsp_multilineError="false" />
 
         <com.chivorn.smartmaterialspinner.SmartMaterialSpinner
