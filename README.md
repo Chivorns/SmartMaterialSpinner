@@ -20,7 +20,16 @@ The best Android spinner library for your android application with more customiz
   * smsp_searchHeaderTextColor: For changing header text color
   * smsp_searchHeaderBackgroundColor: For changing header background color
   * smsp_searchHint: To set query text hint
+### Spinner item
+  * smsp_itemSize
+  * smsp_itemColor
+
 ### Hint Label
+  * smsp_hint
+  * smsp_hintSize
+  * smsp_hintColor
+  * smsp_itemListHintColor
+  * smsp_itemListHintBackgroundColor
 
 
 ### Floating Label
@@ -35,6 +44,7 @@ The best Android spinner library for your android application with more customiz
   * smsp_errorTextSize: For changing error text size
   * smsp_errorTextColor: for changing error text color
   * smsp_multilineError: Default is false. Update it to show as single line or multiple line
+  * smsp_errorTextAlignment: Align error text to left, center or right
 ### Color customization to:
   * Item text color (smsp_itemColor)
   * Hint color (smsp_hintColor)
@@ -46,8 +56,14 @@ The best Android spinner library for your android application with more customiz
   * Arrow or selector color (smsp_arrowColor)
   * Underline color (smsp_underlineColor)
 ### Empty dropdown clickable
-### Typeface (smsp_typeface)
-### Base color and highlight color
+  * In case if you want to design view with empty spinner and apply click event and here it is.
+### Underline
+  * smsp_underlineSize
+  * smsp_underlineColor
+### Re-selectable feature
+  * smsp_isReSelectable: Allow re-selectable for current selected item. By default it is false
+### RTL (Right To Left) feature
+  * smsp_isRtl: To change position of view from right to left or left to right. I will update more on it.
 
 ## Screenshot Demo
 
@@ -55,17 +71,17 @@ The best Android spinner library for your android application with more customiz
  <tr>
     <td> 
         <a target="_blank">
-            <img src="https://github.com/Chivorns/Resources/blob/master/smsp/search_home.JPEG" alt="Play Store" width="250" >
+            <img src="https://github.com/Chivorns/Resources/blob/master/smsp/smsp_home.jpg" alt="SmartMaterialSpinner" width="250" >
         </a>
     </td>
    <td>
         <a target="_blank">
-            <img src="https://github.com/Chivorns/Resources/blob/master/smsp/search_1.JPEG" alt="Play Store" width="250">
+            <img src="https://github.com/Chivorns/Resources/blob/master/smsp/search_1.jpg" alt="SmartMaterialSpinner" width="250">
         </a>
     </td>
     <td>
         <a target="_blank">
-            <img src="https://github.com/Chivorns/Resources/blob/master/smsp/search_2.JPEG" alt="Play Store" width="250">
+            <img src="https://github.com/Chivorns/Resources/blob/master/smsp/smsp_dropdown.jpg" alt="SmartMaterialSpinner" width="250">
         </a>
     </td>
  </tr>
@@ -76,37 +92,17 @@ The best Android spinner library for your android application with more customiz
  <tr>
     <td> 
          <a target="_blank">
-            <img src="https://github.com/Chivorns/Resources/blob/master/smsp/search_3.JPEG" alt="Play Store" width="250">
+            <img src="https://github.com/Chivorns/Resources/blob/master/smsp/smsp_dropdown_no_hint.JPEG" alt="SmartMaterialSpinner" width="250">
         </a>
     </td>
     <td> 
         <a target="_blank">
-            <img src="https://github.com/Chivorns/Resources/blob/master/smsp/search_4.JPEG" alt="Play Store" width="250">
+            <img src="https://github.com/Chivorns/Resources/blob/master/smsp/smsp_dialog.jpg" alt="SmartMaterialSpinner" width="250">
         </a>
     </td>
    <td>
         <a target="_blank">
-            <img src="https://github.com/Chivorns/Resources/blob/master/smsp/smsp_dropdown.JPEG" alt="Play Store" width="250">
-        </a>
-    </td>
- </tr>
-</table>
-
-<table border="0">
- <tr>
-    <td>
-        <a target="_blank">
-            <img src="https://github.com/Chivorns/Resources/blob/master/smsp/smsp_dropdown_no_hint.JPEG" alt="Play Store" width="250">
-        </a>
-    </td>
-    <td>
-        <a target="_blank">
-            <img src="https://github.com/Chivorns/Resources/blob/master/smsp/smsp_dialog.JPEG" alt="Play Store" width="250">
-        </a>
-    </td>
-      <td>
-        <a target="_blank">
-            <img src="https://github.com/Chivorns/Resources/blob/master/smsp/smsp_custom_color.JPEG" alt="Play Store" width="250">
+           <img src="https://github.com/Chivorns/Resources/blob/master/smsp/smsp_custom_color.jpg" alt="SmartMaterialSpinner" width="250">
         </a>
     </td>
  </tr>
