@@ -629,24 +629,25 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAn
     }
 
     private void drawSelector(Canvas canvas, int posX, int posY) {
-        if (isSelected || hasFocus()) {
-            paint.setColor(arrowColor); //highlightColor
-        } else {
-            paint.setColor(isEnabled() ? arrowColor : disabledColor);
-        }
-
+        paint.setColor(isEnabled() ? arrowColor : disabledColor);
         Point point1 = selectorPoints[0];
         Point point2 = selectorPoints[1];
         Point point3 = selectorPoints[2];
+        int arrowHalfSizeInt = (int) arrowSize / 2;
 
-        point1.set(posX, posY);
-        point2.set((int) (posX - (arrowSize)), posY);
-        point3.set((int) (posX - (arrowSize / 2)), (int) (posY + (arrowSize / 2)));
-
+        if (isShowing) {
+            point1.set(posX - arrowHalfSizeInt, posY);
+            point2.set(posX - arrowHalfSizeInt * 2, posY + arrowHalfSizeInt);
+            point3.set(posX, posY + arrowHalfSizeInt);
+        } else {
+            point1.set(posX, posY);
+            point2.set(posX - arrowHalfSizeInt * 2, posY);
+            point3.set(posX - arrowHalfSizeInt, posY + arrowHalfSizeInt);
+        }
         selectorPath.reset();
         selectorPath.moveTo(point1.x, point1.y);
-        selectorPath.lineTo(point2.x, point2.y);
-        selectorPath.lineTo(point3.x, point3.y);
+        selectorPath.lineTo(point2.x, point2.y); // Bottom left
+        selectorPath.lineTo(point3.x, point3.y); // Bottom right
         selectorPath.close();
         canvas.drawPath(selectorPath, paint);
     }
