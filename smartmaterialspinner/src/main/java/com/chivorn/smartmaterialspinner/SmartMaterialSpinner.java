@@ -308,7 +308,7 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAn
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                     SmartMaterialSpinner.this.getViewTreeObserver().removeOnGlobalLayoutListener(this);
                 }
-                if (getWidth() != 0 && getHeight() != 0) {
+                if (getWidth() != 0 && getHeight() != 0 && getDropDownWidth() != 0) {
                     SmartMaterialSpinner.this.setDropDownWidth(getWidth());
                     SmartMaterialSpinner.this.setDropDownVerticalOffset(getHeight());
                 }
@@ -1446,6 +1446,16 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAn
 
     private boolean isSpinnerClickable() {
         return isSpinnerEmpty() && onEmptySpinnerClickListener != null;
+    }
+
+    private String getSpinnerId() {
+        String spinnerId = null;
+        Drawable.Callback drawableCallback = SmartMaterialSpinner.this.getBackground().getCallback();
+        if (drawableCallback != null) {
+            spinnerId = drawableCallback.toString();
+            spinnerId = spinnerId.substring(spinnerId.lastIndexOf("app:id/") + 7, spinnerId.length() - 1);
+        }
+        return spinnerId;
     }
 
 

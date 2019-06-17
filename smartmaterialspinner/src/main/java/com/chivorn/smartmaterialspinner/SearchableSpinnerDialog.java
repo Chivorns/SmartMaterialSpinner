@@ -11,6 +11,8 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.DialogFragment;
+import android.support.v7.widget.AppCompatTextView;
+import android.support.v7.widget.SearchView;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -21,7 +23,6 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.SearchView;
 import android.widget.TextView;
 
 import java.io.Serializable;
@@ -33,7 +34,7 @@ public class SearchableSpinnerDialog extends DialogFragment implements SearchVie
     private static final String INSTANCE_SPINNER_KEY = "SmartMaterialSpinner";
     private ArrayAdapter searchArrayAdapter;
     private ViewGroup searchHeaderView;
-    private TextView tvSearchHeader;
+    private AppCompatTextView tvSearchHeader;
     private SearchView searchView;
     private ListView searchListView;
     private TextView tvListItem;

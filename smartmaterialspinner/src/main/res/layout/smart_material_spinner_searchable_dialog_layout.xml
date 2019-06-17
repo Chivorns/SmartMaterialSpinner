@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:background="@color/smsp_search_header_background">
 
-        <TextView
+        <android.support.v7.widget.AppCompatTextView
             android:id="@+id/tv_search_header"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -31,7 +31,7 @@
         android:paddingEnd="8dp"
         android:paddingBottom="8dp">
 
-        <SearchView
+        <android.support.v7.widget.SearchView
             android:id="@+id/search_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
