@@ -2,12 +2,13 @@ package com.chivorn.demojava;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Toast;
+
+import androidx.core.content.ContextCompat;
 
 import com.chivorn.resourcemodule.MainApp;
 import com.chivorn.smartmaterialspinner.SmartMaterialSpinner;

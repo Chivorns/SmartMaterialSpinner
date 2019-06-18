@@ -35,7 +35,7 @@ android {
         versionCode 14
         versionName "$PUBLISH_VERSION"
 
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
