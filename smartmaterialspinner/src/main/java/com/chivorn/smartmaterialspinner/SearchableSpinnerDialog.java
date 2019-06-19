@@ -29,6 +29,7 @@ import java.io.Serializable;
 import java.util.List;
 
 public class SearchableSpinnerDialog extends DialogFragment implements SearchView.OnQueryTextListener, SearchView.OnCloseListener {
+    private static final String TAG = SearchableSpinnerDialog.class.getSimpleName();
     private static final String INSTANCE_LIST_ITEMS = "ListItems";
     private static final String INSTANCE_LISTENER_KEY = "OnSearchDialogEventListener";
     private static final String INSTANCE_SPINNER_KEY = "SmartMaterialSpinner";
@@ -111,12 +112,6 @@ public class SearchableSpinnerDialog extends DialogFragment implements SearchVie
 
         AlertDialog dialog = builder.create();
         setGravity(dialog);
-        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
-            @Override
-            public void onShow(DialogInterface dialog) {
-                scrollToSelectedItem();
-            }
-        });
         return dialog;
     }
 
@@ -177,6 +172,18 @@ public class SearchableSpinnerDialog extends DialogFragment implements SearchVie
                 getDialog().dismiss();
             }
         });
+
+        searchListView.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+            @Override
+            public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
+                if (bottom < oldBottom) {
+                    scrollToSelectedItem();
+                } else if (bottom > oldBottom) {
+                    scrollToSelectedItem();
+                }
+            }
+        });
+
         initSearchHeader();
         initSearchBody();
     }
