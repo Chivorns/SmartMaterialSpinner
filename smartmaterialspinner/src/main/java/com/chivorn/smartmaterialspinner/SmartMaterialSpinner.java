@@ -52,7 +52,7 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAnimator.AnimatorUpdateListener, SearchableSpinnerDialog.OnSearchDialogEventListener, Serializable {
+public class SmartMaterialSpinner<T> extends AppCompatSpinner implements AdapterView.OnItemSelectedListener, ValueAnimator.AnimatorUpdateListener, SearchableSpinnerDialog.OnSearchDialogEventListener, Serializable {
     public static final int DEFAULT_ARROW_WIDTH_DP = 10;
     private static final String TAG = SmartMaterialSpinner.class.getSimpleName();
 
@@ -163,11 +163,13 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAn
     private Integer itemView;
     private Integer dropdownView;
 
+    private OnItemSelectedListener onItemSelectedListener;
     private OnEmptySpinnerClickListener onEmptySpinnerClickListener;
     private OnSpinnerEventListener spinnerEventsListener;
     private boolean isShowing = false;
     private boolean isErrorScrollPaddingInvoked = false;
     private boolean isReSelectable = false;
+    private boolean isOnItemSelectedListenerOverride;
 
     /*
      * **********************************************************************************
@@ -199,6 +201,7 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAn
      */
 
     private void init(Context context, AttributeSet attrs) {
+        setOnItemSelectedListener(this);
         removeDefaultSelector(getBackground());
         initSearchableDialogObject();
         initAttributes(context, attrs);
@@ -206,7 +209,6 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAn
         initPaintObjects();
         initPadding();
         initFloatingLabelAnimator();
-        initOnItemSelectedListener();
         configSearchableDialog();
         setMinimumHeight((int) (getPaddingTop() + getPaddingBottom() + minContentHeight + (itemSize > hintSize ? itemSize : hintSize)));
         setItem(new ArrayList<T>());
@@ -407,9 +409,6 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAn
         typedArray.recycle();
     }
 
-    private void initOnItemSelectedListener() {
-        setOnItemSelectedListener(null);
-    }
 
     /*
      * **********************************************************************************
@@ -835,44 +834,52 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAn
     }
 
     @Override
-    public void setOnItemSelectedListener(final OnItemSelectedListener listener) {
-        final OnItemSelectedListener onItemSelectedListener = new OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                lastPosition = position;
-                if (isSearchable) {
-                    SoftKeyboardUtil.hideSoftKeyboard(getContext());
-                }
-                if (hint != null || floatingLabelText != null) {
-                    if (!isFloatingLabelVisible && position != -1) {
-                        showFloatingLabel();
-                    } else if (isFloatingLabelVisible && (position == -1 && !alwaysShowFloatingLabel)) {
-                        hideFloatingLabel();
-                    }
-                }
-                if (listener != null) {
-                    listener.onItemSelected(parent, view, position, id);
-                    setSearchSelectedPosition(position);
-                }
-            }
+    public void onAnimationUpdate(ValueAnimator animation) {
+        invalidate();
+    }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                if (lastPosition != -1 && listener != null) {
-                    listener.onNothingSelected(parent);
-                    if (isFloatingLabelVisible && !alwaysShowFloatingLabel) {
-                        hideFloatingLabel();
-                    }
-                }
-            }
-        };
-        super.setOnItemSelectedListener(onItemSelectedListener);
+    @Override
+    public void setOnItemSelectedListener(OnItemSelectedListener listener) {
+        if (onItemSelectedListener == null) {
+            this.onItemSelectedListener = listener;
+            super.setOnItemSelectedListener(onItemSelectedListener);
+        } else {
+            this.onItemSelectedListener = listener;
+            isOnItemSelectedListenerOverride = true;
+        }
     }
 
 
     @Override
-    public void onAnimationUpdate(ValueAnimator animation) {
-        invalidate();
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        lastPosition = position;
+        if (isSearchable) {
+            SoftKeyboardUtil.hideSoftKeyboard(getContext());
+            setSearchSelectedPosition(position);
+        }
+        if (hint != null || floatingLabelText != null) {
+            if (!isFloatingLabelVisible && position != -1) {
+                showFloatingLabel();
+            } else if (isFloatingLabelVisible && (position == -1 && !alwaysShowFloatingLabel)) {
+                hideFloatingLabel();
+            }
+        }
+
+        if (isOnItemSelectedListenerOverride && onItemSelectedListener != null) {
+            onItemSelectedListener.onItemSelected(parent, view, position, id);
+        }
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+        if (lastPosition != -1) {
+            if (isFloatingLabelVisible && !alwaysShowFloatingLabel) {
+                hideFloatingLabel();
+            }
+            if (isOnItemSelectedListenerOverride && onItemSelectedListener != null) {
+                onItemSelectedListener.onNothingSelected(parent);
+            }
+        }
     }
 
     @Override
