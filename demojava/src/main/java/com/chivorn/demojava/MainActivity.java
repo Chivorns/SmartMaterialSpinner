@@ -32,7 +32,7 @@ public class MainActivity<T> extends MainApp<T> {
         spCustomColor.setItem(provinceList);
 
         spSearchable.setSearchDialogGravity(Gravity.TOP);
-        spSearchable.setErrorTextAlignment(SmartMaterialSpinner.ErrorTextAlignment.ALIGN_LEFT);
+        spSearchable.setErrorTextAlignment(SmartMaterialSpinner.TextAlignment.ALIGN_LEFT);
         spSearchable.setArrowPaddingRight(19);
         spCustomColor.setItemColor(ContextCompat.getColor(this, R.color.custom_item_color));
         spCustomColor.setSelectedItemListColor(ContextCompat.getColor(this, R.color.custom_selected_item_color));

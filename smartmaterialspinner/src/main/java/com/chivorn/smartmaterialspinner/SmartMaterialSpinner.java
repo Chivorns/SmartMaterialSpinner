@@ -112,7 +112,7 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements Adapter
     private int errorLabelPosX;
     private int minNbErrorLine;
     private float currentNbErrorLines;
-    private ErrorTextAlignment errorTextAlignment = ErrorTextAlignment.ALIGN_LEFT;
+    private TextAlignment errorTextAlignment = TextAlignment.ALIGN_LEFT;
 
 
     //Properties about Floating Label (
@@ -988,8 +988,8 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements Adapter
         invalidate();
     }
 
-    private Layout.Alignment getErrorTextLayoutAlignment(ErrorTextAlignment errorTextAlignment) {
-        switch (errorTextAlignment) {
+    private Layout.Alignment getErrorTextLayoutAlignment(TextAlignment textAlignment) {
+        switch (textAlignment) {
             case ALIGN_LEFT:
                 return Layout.Alignment.ALIGN_NORMAL;
             case ALIGN_CENTER:
@@ -1001,24 +1001,24 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements Adapter
         }
     }
 
-    private ErrorTextAlignment getErrorTextAlignment(int attrNum) {
+    private TextAlignment getErrorTextAlignment(int attrNum) {
         switch (attrNum) {
             case 0:
-                return ErrorTextAlignment.ALIGN_LEFT;
+                return TextAlignment.ALIGN_LEFT;
             case 1:
-                return ErrorTextAlignment.ALIGN_CENTER;
+                return TextAlignment.ALIGN_CENTER;
             case 2:
-                return ErrorTextAlignment.ALIGN_RIGHT;
+                return TextAlignment.ALIGN_RIGHT;
             default:
-                return ErrorTextAlignment.ALIGN_LEFT;
+                return TextAlignment.ALIGN_LEFT;
         }
     }
 
-    public ErrorTextAlignment getErrorTextAlignment() {
+    public TextAlignment getErrorTextAlignment() {
         return errorTextAlignment;
     }
 
-    public void setErrorTextAlignment(ErrorTextAlignment errorTextAlignment) {
+    public void setErrorTextAlignment(TextAlignment errorTextAlignment) {
         this.errorTextAlignment = errorTextAlignment;
         invalidate();
     }
@@ -1696,7 +1696,7 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements Adapter
         void onSpinnerClosed(SmartMaterialSpinner spinner);
     }
 
-    public enum ErrorTextAlignment {
+    public enum TextAlignment {
         ALIGN_LEFT,
         ALIGN_CENTER,
         ALIGN_RIGHT,
