@@ -716,6 +716,7 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements Adapter
                 if (spinnerEventsListener != null) {
                     spinnerEventsListener.onSpinnerOpened(SmartMaterialSpinner.this);
                 }
+                invalidate();
                 return true;
             }
         } else if (isSpinnerEmpty()) {
@@ -727,6 +728,7 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements Adapter
         if (spinnerEventsListener != null) {
             spinnerEventsListener.onSpinnerOpened(this);
         }
+        invalidate();
         return super.performClick();
     }
 
@@ -1497,8 +1499,8 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements Adapter
 
     public void setItem(@NonNull List<T> item) {
         this.item = item;
-        ArrayAdapter<T> adapter = new ArrayAdapter<>(getContext(), R.layout.smart_material_spinner_item_layout, item);
-        adapter.setDropDownViewResource(R.layout.smart_material_spinner_dropdown_item_layout);
+        ArrayAdapter<T> adapter = new ArrayAdapter<>(getContext(), itemView, item);
+        adapter.setDropDownViewResource(dropdownView);
         setAdapter(adapter);
         configDropdownWidthAfterDataReady();
         invalidate();
@@ -1657,6 +1659,7 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements Adapter
                 if (isDropDownView) {
                     textView.setTextColor(itemListHintColor);
                     textView.setBackgroundColor(itemListHintBackground);
+                    textView.setPadding(textView.getPaddingLeft(), dpToPx(12), textView.getPaddingRight(), dpToPx(12));
                 } else {
                     textView.setTextColor(SmartMaterialSpinner.this.isEnabled() ? hintColor : disabledColor);
                     measureItemText(textView.getText().toString());
