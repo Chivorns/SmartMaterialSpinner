@@ -326,7 +326,7 @@ public class SearchableSpinnerDialog extends DialogFragment implements SearchVie
 
     private void scrollToSelectedItem() {
         if (selectedPosition >= 0 && searchListView.isSmoothScrollbarEnabled()) {
-            searchListView.smoothScrollToPositionFromTop(selectedPosition, 0, 0);
+            searchListView.smoothScrollToPositionFromTop(selectedPosition, 0, 10);
         }
     }
 }

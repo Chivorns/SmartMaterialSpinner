@@ -749,6 +749,7 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements Adapter
         if (spinnerEventsListener != null) {
             spinnerEventsListener.onSpinnerClosed(this);
         }
+        invalidate();
     }
 
     public boolean isShowing() {

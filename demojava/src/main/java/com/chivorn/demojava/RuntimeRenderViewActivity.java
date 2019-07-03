@@ -2,8 +2,12 @@ package com.chivorn.demojava;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.SparseArray;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.chivorn.resourcemodule.MainApp;
 import com.chivorn.smartmaterialspinner.SmartMaterialSpinner;
@@ -43,11 +47,10 @@ public class RuntimeRenderViewActivity<T> extends MainApp<T> {
 
     private void renderView() {
         for (int i = 0; i < 6; i++) {
-            SmartMaterialSpinner<String> smsp = new SmartMaterialSpinner<>(this);
+            final SmartMaterialSpinner<String> smsp = new SmartMaterialSpinner<>(this);
+            smsp.setReSelectable(true);
             smsp.setHintColor(Color.GRAY);
             smsp.setUnderlineColor(Color.GRAY);
-            //   smsp.setErrorTextSize(13);
-            //    smsp.setMultilineError(true);
             smsp.setErrorText("This is error text. Hello Cambodia Kingdom of Wonder. This is error text. Hello Cambodia Kingdom of Wonder. This is error text. Hello Cambodia Kingdom of Wonder. This is error text. Hello Cambodia Kingdom of Wonder. ");
             smsp.setItem(itemListMap.get(i));
             smsp.setHint("Spinner " + (i + 1));
@@ -55,6 +58,18 @@ public class RuntimeRenderViewActivity<T> extends MainApp<T> {
             if (smsp.getCount() >= 100) {
                 smsp.setSearchable(true);
             }
+
+            smsp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    Toast.makeText(getApplicationContext(), "You selected on " + smsp.getSelectedItem(), Toast.LENGTH_SHORT).show();
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+                    Log.i("AAA", "onNothingSelected: ");
+                }
+            });
 
             layoutContainer.addView(smsp);
         }
