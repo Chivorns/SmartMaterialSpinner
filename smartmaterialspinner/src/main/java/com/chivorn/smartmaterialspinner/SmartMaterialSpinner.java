@@ -310,7 +310,7 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements Adapter
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                     SmartMaterialSpinner.this.getViewTreeObserver().removeOnGlobalLayoutListener(this);
                 }
-                if (getWidth() != 0 && getHeight() != 0 && getDropDownWidth() != 0) {
+                if (getWidth() != 0 && getHeight() != 0) {
                     SmartMaterialSpinner.this.setDropDownWidth(getWidth());
                     SmartMaterialSpinner.this.setDropDownVerticalOffset(getHeight());
                 }
@@ -791,14 +791,12 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements Adapter
         if (isShowing && !isSearchable && hint != null) {
             position -= 1;
         }
-        if (isReSelectable) {
-            ignoreOldSelectionByReflection();
-        }
         final int finalPosition = position;
         this.post(new Runnable() {
             @Override
             public void run() {
                 SmartMaterialSpinner.super.setSelection(hint != null ? finalPosition + 1 : finalPosition);
+                checkReSelectable(finalPosition);
             }
         });
     }
@@ -808,11 +806,9 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements Adapter
         if (isShowing && !isSearchable && hint != null) {
             position -= 1;
         }
-        if (isReSelectable) {
-            ignoreOldSelectionByReflection();
-        }
         final int finalPosition = position;
         super.setSelection(hint != null ? finalPosition + 1 : finalPosition, animate);
+        checkReSelectable(finalPosition);
     }
 
     public void clearSelection() {
@@ -824,7 +820,7 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements Adapter
         isSelected = selected;
     }
 
-    private boolean ignoreOldSelectionByReflection() {
+    private boolean clearOldSelectedPosition() {
         try {
             Class<?> c = this.getClass().getSuperclass().getSuperclass().getSuperclass().getSuperclass();
             Field reqField = c.getDeclaredField("mOldSelectedPosition");
@@ -834,6 +830,12 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements Adapter
         } catch (Exception ignored) {
         }
         return false;
+    }
+
+    private void checkReSelectable(int position) {
+        if (position == getSelectedItemPosition() && lastPosition != -1 && isReSelectable && onItemSelectedListener != null) {
+            onItemSelectedListener.onItemSelected(this, getSelectedView(), position, getSelectedItemId());
+        }
     }
 
     @Override

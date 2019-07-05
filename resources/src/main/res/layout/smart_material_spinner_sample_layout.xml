@@ -28,6 +28,17 @@
 
         <TextView
             style="@style/headerTextStyle"
+            android:text="Re-Selectable Spinner" />
+
+        <com.chivorn.smartmaterialspinner.SmartMaterialSpinner
+            android:id="@+id/sp_reselectable"
+            style="@style/spinnerStyle"
+            app:smsp_errorText="@string/sample_error_message"
+            app:smsp_hint="Re-Selectable Spinner"
+            app:smsp_isReSelectable="true" />
+
+        <TextView
+            style="@style/headerTextStyle"
             android:text="@string/dropdown_spinner" />
 
         <com.chivorn.smartmaterialspinner.SmartMaterialSpinner
@@ -35,7 +46,6 @@
             style="@style/spinnerStyle"
             app:smsp_errorText="@string/sample_error_message"
             app:smsp_hint="Province (Dropdown Mode)"
-            app:smsp_isReSelectable="true"
             app:smsp_multilineError="false" />
 
         <com.chivorn.smartmaterialspinner.SmartMaterialSpinner
@@ -84,6 +94,17 @@
             app:smsp_floatingLabelText="floating text"
             app:smsp_hint="Empty Item Spinner" />
 
+        <TextView
+            style="@style/headerTextStyle"
+            android:text="@string/test_visibility_changed" />
+
+        <com.chivorn.smartmaterialspinner.SmartMaterialSpinner
+            android:id="@+id/sp_visibility_changed"
+            style="@style/spinnerStyle"
+            android:visibility="gone"
+            app:smsp_hint="Test Visibility Changed and Re-Selectable"
+            app:smsp_isReSelectable="true" />
+
         <Button
             android:id="@+id/btn_show_error"
             android:layout_width="wrap_content"
@@ -95,6 +116,20 @@
             android:background="#6194EB"
             android:padding="10dp"
             android:text="@string/show_error"
+            android:textAllCaps="false"
+            android:textColor="@color/smsp_white_color" />
+
+        <Button
+            android:id="@+id/btn_visibility"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginRight="5dp"
+            android:background="#6194EB"
+            android:padding="10dp"
+            android:text="@string/show_spinner"
             android:textAllCaps="false"
             android:textColor="@color/smsp_white_color" />
 

@@ -26,6 +26,7 @@ public class MainActivity<T> extends MainApp<T> {
 
     private void initSpinnerInJava() {
         spSearchable.setItem(provinceList);
+        spReSelectable.setItem(provinceList);
         spProvince.setItem(provinceList);
         spProvinceNoHint.setItem(provinceList);
         spProvinceDialog.setItem(provinceList);
@@ -39,8 +40,8 @@ public class MainActivity<T> extends MainApp<T> {
         spCustomColor.setItemListColor(ContextCompat.getColor(this, R.color.custom_item_list_color));
 
         setOnEmptySpinnerClickListener(spEmptyItem);
-        setOnItemSelectedListener(spSearchable, spProvince, spProvinceNoHint, spProvinceDialog, spCustomColor, spEmptyItem);
-        setOnSpinnerEventListener(spSearchable, spProvince, spProvinceNoHint, spProvinceDialog, spCustomColor, spEmptyItem);
+        setOnItemSelectedListener(spSearchable, spReSelectable, spProvince, spProvinceNoHint, spProvinceDialog, spCustomColor, spEmptyItem, spVisibilityChanged);
+        setOnSpinnerEventListener(spSearchable, spReSelectable, spProvince, spProvinceNoHint, spProvinceDialog, spCustomColor, spEmptyItem);
         // setItemTextSize(90, spSearchable, spProvince, spProvinceNoHint, spProvinceDialog, spCustomColor, spEmptyItem);
         //  setErrorTextSize(90, spSearchable, spProvince, spProvinceNoHint, spProvinceDialog, spCustomColor, spEmptyItem);
         //  setSelection(3, spSearchable, spProvince, spProvinceNoHint, spProvinceDialog, spCustomColor);
@@ -54,6 +55,8 @@ public class MainActivity<T> extends MainApp<T> {
                 public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
                     if (spinner.getId() == R.id.sp_searchable) {
                         spinner.setErrorText("Your selected item is \"" + spinner.getItem().get(position) + "\" .");
+                    } else if (spinner.getId() == R.id.sp_reselectable || spinner.getId() == R.id.sp_visibility_changed) {
+                        Toast.makeText(MainActivity.this, "Selected item is: " + spinner.getSelectedItem(), Toast.LENGTH_SHORT).show();
                     } else {
                         spinner.setErrorText("You are selecting on spinner item -> \"" + spinner.getItem().get(position) + "\" . You can show it both in XML and programmatically and you can display as single line or multiple lines");
                     }
