@@ -121,6 +121,7 @@ public class MainApp<T> extends AppCompatActivity implements View.OnClickListene
             spProvinceNoHint.setErrorText(getResources().getString(R.string.sample_error_message));
             spProvinceDialog.setErrorText(getResources().getString(R.string.sample_error_message));
             spCustomColor.setErrorText(getResources().getString(R.string.sample_error_message));
+            spVisibilityChanged.setErrorText(getResources().getString(R.string.sample_error_message));
         } else if (v.getId() == R.id.btn_visibility) {
             if (spVisibilityChanged.getVisibility() == View.VISIBLE) {
                 spVisibilityChanged.setVisibility(View.GONE);

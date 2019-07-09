@@ -19,7 +19,6 @@ public class RuntimeRenderViewActivity<T> extends MainApp<T> {
     private LinearLayout layoutContainer;
     private SparseArray<List<String>> itemListMap;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,7 +69,29 @@ public class RuntimeRenderViewActivity<T> extends MainApp<T> {
                     Log.i("AAA", "onNothingSelected: ");
                 }
             });
+            layoutContainer.addView(smsp);
+        }
 
+        for (int i = 0; i < 6; i++) {
+            final SmartMaterialSpinner<String> smsp = new SmartMaterialSpinner<>(this);
+            smsp.setReSelectable(true);
+            smsp.setHintColor(Color.GRAY);
+            smsp.setUnderlineColor(Color.GRAY);
+            smsp.setErrorText("This is error text. Hello Cambodia Kingdom of Wonder. This is error text. Hello Cambodia Kingdom of Wonder. This is error text. Hello Cambodia Kingdom of Wonder. This is error text. Hello Cambodia Kingdom of Wonder. ");
+            smsp.setItem(itemListMap.get(i));
+            smsp.setHint("Normal Spinner " + (i + 1));
+            layoutContainer.addView(smsp);
+        }
+
+        for (int i = 0; i < 6; i++) {
+            final SmartMaterialSpinner<String> smsp = new SmartMaterialSpinner<>(this);
+            smsp.setReSelectable(true);
+            smsp.setHintColor(Color.GRAY);
+            smsp.setUnderlineColor(Color.GRAY);
+            smsp.setErrorText("This is error text. Hello Cambodia Kingdom of Wonder. This is error text. Hello Cambodia Kingdom of Wonder. This is error text. Hello Cambodia Kingdom of Wonder. This is error text. Hello Cambodia Kingdom of Wonder. ");
+            smsp.setMultilineError(false);
+            smsp.setItem(itemListMap.get(i));
+            smsp.setHint("Single Line Error Spinner " + (i + 1));
             layoutContainer.addView(smsp);
         }
     }

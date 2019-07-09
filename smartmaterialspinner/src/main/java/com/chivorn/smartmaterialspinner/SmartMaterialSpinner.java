@@ -312,7 +312,11 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements Adapter
                 }
                 if (getWidth() != 0 && getHeight() != 0) {
                     SmartMaterialSpinner.this.setDropDownWidth(getWidth());
-                    SmartMaterialSpinner.this.setDropDownVerticalOffset(getHeight());
+                    if (getDropDownVerticalOffset() <= 0) {
+                        int underlineHeight = dpToPx(underlineSize);
+                        int underlineStartY = getHeight() - getPaddingBottom() + underlineTopSpacing;
+                        SmartMaterialSpinner.this.setDropDownVerticalOffset(underlineStartY + underlineHeight);
+                    }
                 }
                 if (isSpinnerEmpty()) {
                     SmartMaterialSpinner.this.setDropDownWidth(0);

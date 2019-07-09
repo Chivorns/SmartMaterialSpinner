@@ -103,7 +103,8 @@
             style="@style/spinnerStyle"
             android:visibility="gone"
             app:smsp_hint="Test Visibility Changed and Re-Selectable"
-            app:smsp_isReSelectable="true" />
+            app:smsp_isReSelectable="true"
+            app:smsp_multilineError="false" />
 
         <Button
             android:id="@+id/btn_show_error"
