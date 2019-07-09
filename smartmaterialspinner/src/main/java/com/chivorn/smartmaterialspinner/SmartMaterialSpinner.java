@@ -836,7 +836,7 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements Adapter
     }
 
     private void checkReSelectable(int position) {
-        if (position == getSelectedItemPosition() && lastPosition != -1 && isReSelectable && onItemSelectedListener != null) {
+        if (position == lastPosition && position == getSelectedItemPosition() && lastPosition != -1 && isReSelectable && onItemSelectedListener != null) {
             onItemSelectedListener.onItemSelected(this, getSelectedView(), position, getSelectedItemId());
         }
     }
