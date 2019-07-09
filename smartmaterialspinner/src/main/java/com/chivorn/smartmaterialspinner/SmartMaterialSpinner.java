@@ -447,7 +447,7 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements Adapter
 
     private void startErrorScrollingAnimator() {
         int textWidth = Math.round(errorTextPaint.measureText(errorText.toString()));
-        if (errorLabelAnimator == null) {
+        if (errorLabelAnimator == null || errorLabelAnimator.getPropertyName() != null && !errorLabelAnimator.getPropertyName().equals("errorLabelPosX")) {
             errorLabelAnimator = ObjectAnimator.ofInt(this, "errorLabelPosX", 0, textWidth + getWidth() / 2);
             errorLabelAnimator.setStartDelay(1000);
             errorLabelAnimator.setInterpolator(new LinearInterpolator());
@@ -462,9 +462,8 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements Adapter
 
 
     private void startErrorMultilineAnimator(float destLines) {
-        if (errorLabelAnimator == null) {
+        if (errorLabelAnimator == null || errorLabelAnimator.getPropertyName() != null && !errorLabelAnimator.getPropertyName().equals("currentNbErrorLines")) {
             errorLabelAnimator = ObjectAnimator.ofFloat(this, "currentNbErrorLines", destLines);
-
         } else {
             errorLabelAnimator.setFloatValues(destLines);
         }
