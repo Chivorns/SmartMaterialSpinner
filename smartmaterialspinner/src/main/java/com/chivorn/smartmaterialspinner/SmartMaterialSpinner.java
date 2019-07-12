@@ -794,8 +794,14 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements Adapter
         if (isShowing && !isSearchable && hint != null) {
             position -= 1;
         }
-        SmartMaterialSpinner.super.setSelection(hint != null ? position + 1 : position);
-        checkReSelectable(position);
+        final int finalPosition = position;
+        this.post(new Runnable() {
+            @Override
+            public void run() {
+                SmartMaterialSpinner.super.setSelection(hint != null ? finalPosition + 1 : finalPosition, false);
+                checkReSelectable(finalPosition);
+            }
+        });
     }
 
     @Override
