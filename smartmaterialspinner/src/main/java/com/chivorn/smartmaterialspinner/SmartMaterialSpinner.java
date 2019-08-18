@@ -1618,7 +1618,10 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements Adapter
                 if (hint != null && !hint.toString().isEmpty()) {
                     return getItemView(convertView, parent, isDropDownView);
                 } else {
-                    return new View(getContext());
+                    TextView textView = (TextView) getItemView(convertView, parent, isDropDownView);
+                    textView.setHeight(0);
+                    textView.setText(getResources().getString(R.string.select_item));
+                    return textView;
                 }
             }
 

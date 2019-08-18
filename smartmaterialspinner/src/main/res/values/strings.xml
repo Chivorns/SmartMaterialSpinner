@@ -1,4 +1,5 @@
 <resources>
     <string name="lib_name">SmartMaterialSpinner</string>
     <string name="search_or_select_item">Search/Select Item</string>
+    <string name="select_item">Select Item</string>
 </resources>
