@@ -688,7 +688,7 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements Adapter
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        if (event.getAction() == MotionEvent.ACTION_UP) {
+        if (isEnabled() && event.getAction() == MotionEvent.ACTION_UP) {
             return performClick();
         }
         return true;
