@@ -20,6 +20,9 @@ The best Android spinner library for your android application with more customiz
   * smsp_searchHeaderTextColor: For changing header text color
   * smsp_searchHeaderBackgroundColor: For changing header background color
   * smsp_searchHint: To set query text hint
+  * smsp_searchHintColor: To set hint color to query search text
+  * smsp_searchTextColor: To set color to query search text
+  
 ### Spinner item
   * smsp_itemSize
   * smsp_itemColor
