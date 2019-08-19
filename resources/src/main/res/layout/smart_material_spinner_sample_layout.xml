@@ -24,7 +24,9 @@
             app:smsp_multilineError="true"
             app:smsp_searchHeaderBackgroundColor="@color/smsp_search_header_background"
             app:smsp_searchHeaderText="Search/Select Province"
-            app:smsp_searchHeaderTextColor="#ffff" />
+            app:smsp_searchHeaderTextColor="#ffff"
+            app:smsp_searchHintColor="@color/search_hint_color"
+            app:smsp_searchTextColor="@color/search_text_color" />
 
         <TextView
             style="@style/headerTextStyle"

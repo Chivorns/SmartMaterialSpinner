@@ -37,12 +37,19 @@ public class SearchableSpinnerDialog extends DialogFragment implements SearchVie
     private ViewGroup searchHeaderView;
     private AppCompatTextView tvSearchHeader;
     private SearchView searchView;
+    private TextView tvSearch;
     private ListView searchListView;
     private TextView tvListItem;
 
     private boolean isEnableSearchHeader = true;
     private int headerBackgroundColor;
     private Drawable headerBackgroundDrawable;
+
+    private int searchBackgroundColor;
+    private Drawable searchBackgroundDrawable;
+    private int searchHintColor;
+    private int searchTextColor;
+
     private int searchListItemColor;
     private int selectedSearchItemColor;
     private int selectedPosition = -1;
@@ -129,6 +136,7 @@ public class SearchableSpinnerDialog extends DialogFragment implements SearchVie
         searchHeaderView = rootView.findViewById(R.id.search_header_layout);
         tvSearchHeader = rootView.findViewById(R.id.tv_search_header);
         searchView = rootView.findViewById(R.id.search_view);
+        tvSearch = searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
         searchListView = rootView.findViewById(R.id.search_list_item);
 
         if (getActivity() != null) {
@@ -216,6 +224,21 @@ public class SearchableSpinnerDialog extends DialogFragment implements SearchVie
         if (searchHint != null) {
             searchView.setQueryHint(searchHint);
         }
+        if (searchBackgroundColor != 0) {
+            searchView.setBackgroundColor(searchBackgroundColor);
+        } else if (searchBackgroundDrawable != null) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                searchView.setBackground(searchBackgroundDrawable);
+            }
+        }
+        if (tvSearch != null) {
+            if (searchTextColor != 0) {
+                tvSearch.setTextColor(searchTextColor);
+            }
+            if (searchHintColor != 0) {
+                tvSearch.setHintTextColor(searchHintColor);
+            }
+        }
     }
 
     @Override
@@ -298,8 +321,27 @@ public class SearchableSpinnerDialog extends DialogFragment implements SearchVie
         headerBackgroundColor = 0;
     }
 
+    public void setSearchBackgroundColor(int color) {
+        searchBackgroundColor = color;
+        searchBackgroundDrawable = null;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
+    public void setSearchBackgroundColor(Drawable drawable) {
+        searchBackgroundDrawable = drawable;
+        searchBackgroundColor = 0;
+    }
+
     public void setSearchHint(String searchHint) {
         this.searchHint = searchHint;
+    }
+
+    public void setSearchTextColor(int color) {
+        searchTextColor = color;
+    }
+
+    public void setSearchHintColor(int color) {
+        searchHintColor = color;
     }
 
     public void setSearchListItemColor(int searchListItemColor) {

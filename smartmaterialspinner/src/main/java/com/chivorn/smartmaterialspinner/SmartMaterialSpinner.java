@@ -141,6 +141,8 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements Adapter
     private int itemColor;
     private int itemListColor;
     private int selectedItemListColor;
+    private int searchHintColor;
+    private int searchTextColor;
     private float hintSize;
     private CharSequence floatingLabelText;
     private float floatingLabelSize;
@@ -271,6 +273,9 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements Adapter
             setSearchHeaderBackgroundColor(typedArray.getColor(R.styleable.SmartMaterialSpinner_smsp_searchHeaderBackgroundColor, ContextCompat.getColor(context, R.color.smsp_search_header_background)));
         }
         searchHint = typedArray.getString(R.styleable.SmartMaterialSpinner_smsp_searchHint);
+        searchHintColor = typedArray.getColor(R.styleable.SmartMaterialSpinner_smsp_searchHintColor, 0);
+        searchTextColor = typedArray.getColor(R.styleable.SmartMaterialSpinner_smsp_searchTextColor, 0);
+
         //isEnableDefaultSelect = typedArray.getBoolean(R.styleable.SmartMaterialSpinner_smsp_enableDefaultSelect, true);
         isReSelectable = typedArray.getBoolean(R.styleable.SmartMaterialSpinner_smsp_isReSelectable, false);
 
@@ -292,6 +297,8 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements Adapter
         setSearchHint(searchHint);
         setSearchListItemColor(itemListColor);
         setSelectedSearchItemColor(selectedItemListColor);
+        setSearchHintColor(searchHintColor);
+        setSearchTextColor(searchTextColor);
     }
 
     private void removeDefaultSelector(Drawable drawable) {
@@ -1365,10 +1372,41 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements Adapter
         return searchHint;
     }
 
+    public void setSearchBackgroundColor(int color) {
+        if (searchableSpinnerDialog != null) {
+            searchableSpinnerDialog.setSearchBackgroundColor(color);
+        }
+        invalidate();
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
+    public void setSearchBackgroundColor(Drawable drawable) {
+        if (searchableSpinnerDialog != null) {
+            searchableSpinnerDialog.setSearchBackgroundColor(drawable);
+        }
+        invalidate();
+    }
+
     public void setSearchHint(String searchHint) {
         this.searchHint = searchHint;
         if (searchableSpinnerDialog != null) {
             searchableSpinnerDialog.setSearchHint(searchHint);
+        }
+        invalidate();
+    }
+
+    public void setSearchTextColor(int color) {
+        this.searchTextColor = color;
+        if (searchableSpinnerDialog != null) {
+            searchableSpinnerDialog.setSearchTextColor(color);
+        }
+        invalidate();
+    }
+
+    public void setSearchHintColor(int color) {
+        this.searchHintColor = color;
+        if (searchableSpinnerDialog != null) {
+            searchableSpinnerDialog.setSearchHintColor(color);
         }
         invalidate();
     }
