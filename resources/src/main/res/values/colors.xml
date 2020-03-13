@@ -13,4 +13,7 @@
     <color name="custom_item_list_color">#3F51B5</color>
     <color name="custom_selected_item_color">#E91E63</color>
     <color name="error_color">#9C27B0</color>
+
+    <color name="search_hint_color">#F00051</color>
+    <color name="search_text_color">#8300D6</color>
 </resources>

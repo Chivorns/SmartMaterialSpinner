@@ -15,6 +15,8 @@
         <attr name="smsp_searchHeaderTextColor" format="color|reference" />
         <attr name="smsp_searchHeaderBackgroundColor" format="color|reference" />
         <attr name="smsp_searchHint" format="string" />
+        <attr name="smsp_searchHintColor" format="color" />
+        <attr name="smsp_searchTextColor" format="color" />
 
         <attr name="smsp_itemSize" format="dimension" />
         <attr name="smsp_itemColor" format="color|reference" />

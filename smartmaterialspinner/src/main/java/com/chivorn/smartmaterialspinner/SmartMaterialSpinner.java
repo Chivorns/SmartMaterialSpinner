@@ -53,7 +53,7 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAnimator.AnimatorUpdateListener, SearchableSpinnerDialog.OnSearchDialogEventListener, Serializable {
+public class SmartMaterialSpinner<T> extends AppCompatSpinner implements AdapterView.OnItemSelectedListener, ValueAnimator.AnimatorUpdateListener, SearchableSpinnerDialog.OnSearchDialogEventListener, Serializable {
     public static final int DEFAULT_ARROW_WIDTH_DP = 10;
     private static final String TAG = SmartMaterialSpinner.class.getSimpleName();
 
@@ -113,7 +113,7 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAn
     private int errorLabelPosX;
     private int minNbErrorLine;
     private float currentNbErrorLines;
-    private ErrorTextAlignment errorTextAlignment = ErrorTextAlignment.ALIGN_LEFT;
+    private TextAlignment errorTextAlignment = TextAlignment.ALIGN_LEFT;
 
 
     //Properties about Floating Label (
@@ -142,6 +142,8 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAn
     private int itemColor;
     private int itemListColor;
     private int selectedItemListColor;
+    private int searchHintColor;
+    private int searchTextColor;
     private float hintSize;
     private CharSequence floatingLabelText;
     private float floatingLabelSize;
@@ -164,11 +166,13 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAn
     private Integer itemView;
     private Integer dropdownView;
 
+    private OnItemSelectedListener onItemSelectedListener;
     private OnEmptySpinnerClickListener onEmptySpinnerClickListener;
     private OnSpinnerEventListener spinnerEventsListener;
     private boolean isShowing = false;
     private boolean isErrorScrollPaddingInvoked = false;
     private boolean isReSelectable = false;
+    private boolean isOnItemSelectedListenerOverride;
 
     /*
      * **********************************************************************************
@@ -200,6 +204,7 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAn
      */
 
     private void init(Context context, AttributeSet attrs) {
+        setOnItemSelectedListener(this);
         removeDefaultSelector(getBackground());
         initSearchableDialogObject();
         initAttributes(context, attrs);
@@ -207,7 +212,6 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAn
         initPaintObjects();
         initPadding();
         initFloatingLabelAnimator();
-        initOnItemSelectedListener();
         configSearchableDialog();
         setMinimumHeight((int) (getPaddingTop() + getPaddingBottom() + minContentHeight + (itemSize > hintSize ? itemSize : hintSize)));
         setItem(new ArrayList<T>());
@@ -270,6 +274,9 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAn
             setSearchHeaderBackgroundColor(typedArray.getColor(R.styleable.SmartMaterialSpinner_smsp_searchHeaderBackgroundColor, ContextCompat.getColor(context, R.color.smsp_search_header_background)));
         }
         searchHint = typedArray.getString(R.styleable.SmartMaterialSpinner_smsp_searchHint);
+        searchHintColor = typedArray.getColor(R.styleable.SmartMaterialSpinner_smsp_searchHintColor, 0);
+        searchTextColor = typedArray.getColor(R.styleable.SmartMaterialSpinner_smsp_searchTextColor, 0);
+
         //isEnableDefaultSelect = typedArray.getBoolean(R.styleable.SmartMaterialSpinner_smsp_enableDefaultSelect, true);
         isReSelectable = typedArray.getBoolean(R.styleable.SmartMaterialSpinner_smsp_isReSelectable, false);
 
@@ -291,6 +298,8 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAn
         setSearchHint(searchHint);
         setSearchListItemColor(itemListColor);
         setSelectedSearchItemColor(selectedItemListColor);
+        setSearchHintColor(searchHintColor);
+        setSearchTextColor(searchTextColor);
     }
 
     private void removeDefaultSelector(Drawable drawable) {
@@ -309,9 +318,13 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAn
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                     SmartMaterialSpinner.this.getViewTreeObserver().removeOnGlobalLayoutListener(this);
                 }
-                if (getWidth() != 0 && getHeight() != 0 && getDropDownWidth() != 0) {
+                if (getWidth() != 0 && getHeight() != 0) {
                     SmartMaterialSpinner.this.setDropDownWidth(getWidth());
-                    SmartMaterialSpinner.this.setDropDownVerticalOffset(getHeight());
+                    if (getDropDownVerticalOffset() <= 0) {
+                        int underlineHeight = dpToPx(underlineSize);
+                        int underlineStartY = getHeight() - getPaddingBottom() + underlineTopSpacing;
+                        SmartMaterialSpinner.this.setDropDownVerticalOffset(underlineStartY + underlineHeight);
+                    }
                 }
                 if (isSpinnerEmpty()) {
                     SmartMaterialSpinner.this.setDropDownWidth(0);
@@ -408,9 +421,6 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAn
         typedArray.recycle();
     }
 
-    private void initOnItemSelectedListener() {
-        setOnItemSelectedListener(null);
-    }
 
     /*
      * **********************************************************************************
@@ -445,7 +455,7 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAn
 
     private void startErrorScrollingAnimator() {
         int textWidth = Math.round(errorTextPaint.measureText(errorText.toString()));
-        if (errorLabelAnimator == null) {
+        if (errorLabelAnimator == null || errorLabelAnimator.getPropertyName() != null && !errorLabelAnimator.getPropertyName().equals("errorLabelPosX")) {
             errorLabelAnimator = ObjectAnimator.ofInt(this, "errorLabelPosX", 0, textWidth + getWidth() / 2);
             errorLabelAnimator.setStartDelay(1000);
             errorLabelAnimator.setInterpolator(new LinearInterpolator());
@@ -460,9 +470,8 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAn
 
 
     private void startErrorMultilineAnimator(float destLines) {
-        if (errorLabelAnimator == null) {
+        if (errorLabelAnimator == null || errorLabelAnimator.getPropertyName() != null && !errorLabelAnimator.getPropertyName().equals("currentNbErrorLines")) {
             errorLabelAnimator = ObjectAnimator.ofFloat(this, "currentNbErrorLines", destLines);
-
         } else {
             errorLabelAnimator.setFloatValues(destLines);
         }
@@ -687,7 +696,7 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAn
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        if (event.getAction() == MotionEvent.ACTION_UP) {
+        if (isEnabled() && event.getAction() == MotionEvent.ACTION_UP) {
             return performClick();
         }
         return true;
@@ -718,6 +727,7 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAn
                 if (spinnerEventsListener != null) {
                     spinnerEventsListener.onSpinnerOpened(SmartMaterialSpinner.this);
                 }
+                invalidate();
                 return true;
             }
         } else if (isSpinnerEmpty()) {
@@ -729,6 +739,7 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAn
         if (spinnerEventsListener != null) {
             spinnerEventsListener.onSpinnerOpened(this);
         }
+        invalidate();
         return super.performClick();
     }
 
@@ -749,6 +760,7 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAn
         if (spinnerEventsListener != null) {
             spinnerEventsListener.onSpinnerClosed(this);
         }
+        invalidate();
     }
 
     public boolean isShowing() {
@@ -790,14 +802,12 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAn
         if (isShowing && !isSearchable && hint != null) {
             position -= 1;
         }
-        if (isReSelectable) {
-            ignoreOldSelectionByReflection();
-        }
         final int finalPosition = position;
         this.post(new Runnable() {
             @Override
             public void run() {
-                SmartMaterialSpinner.super.setSelection(hint != null ? finalPosition + 1 : finalPosition);
+                SmartMaterialSpinner.super.setSelection(hint != null ? finalPosition + 1 : finalPosition, false);
+                checkReSelectable(finalPosition);
             }
         });
     }
@@ -807,11 +817,8 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAn
         if (isShowing && !isSearchable && hint != null) {
             position -= 1;
         }
-        if (isReSelectable) {
-            ignoreOldSelectionByReflection();
-        }
-        final int finalPosition = position;
-        super.setSelection(hint != null ? finalPosition + 1 : finalPosition, animate);
+        super.setSelection(hint != null ? position + 1 : position, animate);
+        checkReSelectable(position);
     }
 
     public void clearSelection() {
@@ -823,7 +830,7 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAn
         isSelected = selected;
     }
 
-    private boolean ignoreOldSelectionByReflection() {
+    private boolean clearOldSelectedPosition() {
         try {
             Class<?> c = this.getClass().getSuperclass().getSuperclass().getSuperclass().getSuperclass();
             Field reqField = c.getDeclaredField("mOldSelectedPosition");
@@ -835,45 +842,59 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAn
         return false;
     }
 
-    @Override
-    public void setOnItemSelectedListener(final OnItemSelectedListener listener) {
-        final OnItemSelectedListener onItemSelectedListener = new OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                lastPosition = position;
-                if (isSearchable) {
-                    SoftKeyboardUtil.hideSoftKeyboard(getContext());
-                }
-                if (hint != null || floatingLabelText != null) {
-                    if (!isFloatingLabelVisible && position != -1) {
-                        showFloatingLabel();
-                    } else if (isFloatingLabelVisible && (position == -1 && !alwaysShowFloatingLabel)) {
-                        hideFloatingLabel();
-                    }
-                }
-                if (listener != null) {
-                    listener.onItemSelected(parent, view, position, id);
-                    setSearchSelectedPosition(position);
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                if (lastPosition != -1 && listener != null) {
-                    listener.onNothingSelected(parent);
-                    if (isFloatingLabelVisible && !alwaysShowFloatingLabel) {
-                        hideFloatingLabel();
-                    }
-                }
-            }
-        };
-        super.setOnItemSelectedListener(onItemSelectedListener);
+    private void checkReSelectable(int position) {
+        if (position == lastPosition && position == getSelectedItemPosition() && lastPosition != -1 && isReSelectable && onItemSelectedListener != null) {
+            onItemSelectedListener.onItemSelected(this, getSelectedView(), position, getSelectedItemId());
+        }
     }
-
 
     @Override
     public void onAnimationUpdate(ValueAnimator animation) {
         invalidate();
+    }
+
+    @Override
+    public void setOnItemSelectedListener(OnItemSelectedListener listener) {
+        if (onItemSelectedListener == null) {
+            this.onItemSelectedListener = listener;
+            super.setOnItemSelectedListener(onItemSelectedListener);
+        } else {
+            this.onItemSelectedListener = listener;
+            isOnItemSelectedListenerOverride = true;
+        }
+    }
+
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        lastPosition = position;
+        if (isSearchable) {
+            SoftKeyboardUtil.hideSoftKeyboard(getContext());
+            setSearchSelectedPosition(position);
+        }
+        if (hint != null || floatingLabelText != null) {
+            if (!isFloatingLabelVisible && position != -1) {
+                showFloatingLabel();
+            } else if (isFloatingLabelVisible && (position == -1 && !alwaysShowFloatingLabel)) {
+                hideFloatingLabel();
+            }
+        }
+
+        if (isOnItemSelectedListenerOverride && onItemSelectedListener != null) {
+            onItemSelectedListener.onItemSelected(parent, view, position, id);
+        }
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+        if (lastPosition != -1) {
+            if (isFloatingLabelVisible && !alwaysShowFloatingLabel) {
+                hideFloatingLabel();
+            }
+            if (isOnItemSelectedListenerOverride && onItemSelectedListener != null) {
+                onItemSelectedListener.onNothingSelected(parent);
+            }
+        }
     }
 
     @Override
@@ -982,8 +1003,8 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAn
         invalidate();
     }
 
-    private Layout.Alignment getErrorTextLayoutAlignment(ErrorTextAlignment errorTextAlignment) {
-        switch (errorTextAlignment) {
+    private Layout.Alignment getErrorTextLayoutAlignment(TextAlignment textAlignment) {
+        switch (textAlignment) {
             case ALIGN_LEFT:
                 return Layout.Alignment.ALIGN_NORMAL;
             case ALIGN_CENTER:
@@ -995,24 +1016,24 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAn
         }
     }
 
-    private ErrorTextAlignment getErrorTextAlignment(int attrNum) {
+    private TextAlignment getErrorTextAlignment(int attrNum) {
         switch (attrNum) {
             case 0:
-                return ErrorTextAlignment.ALIGN_LEFT;
+                return TextAlignment.ALIGN_LEFT;
             case 1:
-                return ErrorTextAlignment.ALIGN_CENTER;
+                return TextAlignment.ALIGN_CENTER;
             case 2:
-                return ErrorTextAlignment.ALIGN_RIGHT;
+                return TextAlignment.ALIGN_RIGHT;
             default:
-                return ErrorTextAlignment.ALIGN_LEFT;
+                return TextAlignment.ALIGN_LEFT;
         }
     }
 
-    public ErrorTextAlignment getErrorTextAlignment() {
+    public TextAlignment getErrorTextAlignment() {
         return errorTextAlignment;
     }
 
-    public void setErrorTextAlignment(ErrorTextAlignment errorTextAlignment) {
+    public void setErrorTextAlignment(TextAlignment errorTextAlignment) {
         this.errorTextAlignment = errorTextAlignment;
         invalidate();
     }
@@ -1352,10 +1373,41 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAn
         return searchHint;
     }
 
+    public void setSearchBackgroundColor(int color) {
+        if (searchableSpinnerDialog != null) {
+            searchableSpinnerDialog.setSearchBackgroundColor(color);
+        }
+        invalidate();
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
+    public void setSearchBackgroundColor(Drawable drawable) {
+        if (searchableSpinnerDialog != null) {
+            searchableSpinnerDialog.setSearchBackgroundColor(drawable);
+        }
+        invalidate();
+    }
+
     public void setSearchHint(String searchHint) {
         this.searchHint = searchHint;
         if (searchableSpinnerDialog != null) {
             searchableSpinnerDialog.setSearchHint(searchHint);
+        }
+        invalidate();
+    }
+
+    public void setSearchTextColor(int color) {
+        this.searchTextColor = color;
+        if (searchableSpinnerDialog != null) {
+            searchableSpinnerDialog.setSearchTextColor(color);
+        }
+        invalidate();
+    }
+
+    public void setSearchHintColor(int color) {
+        this.searchHintColor = color;
+        if (searchableSpinnerDialog != null) {
+            searchableSpinnerDialog.setSearchHintColor(color);
         }
         invalidate();
     }
@@ -1491,8 +1543,8 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAn
 
     public void setItem(@NonNull List<T> item) {
         this.item = item;
-        ArrayAdapter<T> adapter = new ArrayAdapter<>(getContext(), R.layout.smart_material_spinner_item_layout, item);
-        adapter.setDropDownViewResource(R.layout.smart_material_spinner_dropdown_item_layout);
+        ArrayAdapter<T> adapter = new ArrayAdapter<>(getContext(), itemView, item);
+        adapter.setDropDownViewResource(dropdownView);
         setAdapter(adapter);
         configDropdownWidthAfterDataReady();
         invalidate();
@@ -1605,7 +1657,10 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAn
                 if (hint != null && !hint.toString().isEmpty()) {
                     return getItemView(convertView, parent, isDropDownView);
                 } else {
-                    return new View(getContext());
+                    TextView textView = (TextView) getItemView(convertView, parent, isDropDownView);
+                    textView.setHeight(0);
+                    textView.setText(getResources().getString(R.string.select_item));
+                    return textView;
                 }
             }
 
@@ -1651,6 +1706,7 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAn
                 if (isDropDownView) {
                     textView.setTextColor(itemListHintColor);
                     textView.setBackgroundColor(itemListHintBackground);
+                    textView.setPadding(textView.getPaddingLeft(), dpToPx(12), textView.getPaddingRight(), dpToPx(12));
                 } else {
                     textView.setTextColor(SmartMaterialSpinner.this.isEnabled() ? hintColor : disabledColor);
                     measureItemText(textView.getText().toString());
@@ -1690,7 +1746,7 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements ValueAn
         void onSpinnerClosed(SmartMaterialSpinner spinner);
     }
 
-    public enum ErrorTextAlignment {
+    public enum TextAlignment {
         ALIGN_LEFT,
         ALIGN_CENTER,
         ALIGN_RIGHT,

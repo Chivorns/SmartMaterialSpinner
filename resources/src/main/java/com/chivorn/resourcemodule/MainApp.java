@@ -18,16 +18,19 @@ public class MainApp<T> extends AppCompatActivity implements View.OnClickListene
     private final String repoUrl = "https://github.com/Chivorns/SmartMaterialSpinner";
 
     protected SmartMaterialSpinner<String> spSearchable;
+    protected SmartMaterialSpinner<String> spReSelectable;
     protected SmartMaterialSpinner<String> spProvince;
     protected SmartMaterialSpinner<String> spProvinceNoHint;
     protected SmartMaterialSpinner<String> spProvinceDialog;
     protected SmartMaterialSpinner<String> spCustomColor;
     protected SmartMaterialSpinner<String> spEmptyItem;
+    protected SmartMaterialSpinner<String> spVisibilityChanged;
 
     private LinearLayout githubRepo;
     private Button btnShowError;
     private Button btnGotoRuntimeRender;
     private Button githubRepoBtn;
+    private Button visibilityBtn;
     protected Intent intent;
 
     protected List<String> provinceList;
@@ -35,15 +38,18 @@ public class MainApp<T> extends AppCompatActivity implements View.OnClickListene
 
     public void initBaseView() {
         spSearchable = findViewById(R.id.sp_searchable);
+        spReSelectable = findViewById(R.id.sp_reselectable);
         spProvince = findViewById(R.id.sp_provinces);
         spProvinceNoHint = findViewById(R.id.sp_provinces_no_hint);
         spProvinceDialog = findViewById(R.id.sp_provinces_dialog);
         spCustomColor = findViewById(R.id.sp_custom_color);
         spEmptyItem = findViewById(R.id.sp_empty_item);
+        spVisibilityChanged = findViewById(R.id.sp_visibility_changed);
         githubRepo = findViewById(R.id.git_repo_container);
         btnShowError = findViewById(R.id.btn_show_error);
         btnGotoRuntimeRender = findViewById(R.id.btn_goto_runtime_render);
         githubRepoBtn = findViewById(R.id.github_repo_btn);
+        visibilityBtn = findViewById(R.id.btn_visibility);
     }
 
     public void initItemList() {
@@ -99,6 +105,9 @@ public class MainApp<T> extends AppCompatActivity implements View.OnClickListene
         if (btnGotoRuntimeRender != null) {
             btnGotoRuntimeRender.setOnClickListener(this);
         }
+        if (visibilityBtn != null) {
+            visibilityBtn.setOnClickListener(this);
+        }
     }
 
     @Override
@@ -113,6 +122,16 @@ public class MainApp<T> extends AppCompatActivity implements View.OnClickListene
             spProvinceNoHint.setErrorText(getResources().getString(R.string.sample_error_message));
             spProvinceDialog.setErrorText(getResources().getString(R.string.sample_error_message));
             spCustomColor.setErrorText(getResources().getString(R.string.sample_error_message));
+            spVisibilityChanged.setErrorText(getResources().getString(R.string.sample_error_message));
+        } else if (v.getId() == R.id.btn_visibility) {
+            if (spVisibilityChanged.getVisibility() == View.VISIBLE) {
+                spVisibilityChanged.setVisibility(View.GONE);
+                visibilityBtn.setText(getResources().getString(R.string.show_spinner));
+            } else {
+                spVisibilityChanged.setVisibility(View.VISIBLE);
+                visibilityBtn.setText(getResources().getString(R.string.hide_spinner));
+                spVisibilityChanged.setItem(provinceList);
+            }
         }
     }
 }

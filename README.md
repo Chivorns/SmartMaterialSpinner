@@ -14,40 +14,59 @@ The best Android spinner library for your android application with more customiz
   * Dialog mode ( android:spinnerMode="dialog" )
   * Searchable mode ( app:smsp_isSearchable="true" )
 ### Searchable spinner
-  * smsp_isSearchable : Default is false. Set it to true to enable this feature.
-  * smsp_enableSearchHeader: Default is true. Set it to false to hide search header.
-  * smsp_searchHeaderText: Text display as header text
-  * smsp_searchHeaderTextColor: For changing header text color
-  * smsp_searchHeaderBackgroundColor: For changing header background color
-  * smsp_searchHint: To set query text hint
+  * `smsp_isSearchable` : Default is false. Set it to true to enable this feature.
+  * `smsp_enableSearchHeader`: Default is true. Set it to false to hide search header.
+  * `smsp_searchHeaderText`: Text display as header text
+  * `smsp_searchHeaderTextColor`: For changing header text color
+  * `smsp_searchHeaderBackgroundColor`: For changing header background color
+  * `smsp_searchHint`: To set query text hint
+  * `smsp_searchHintColor`: To set hint color to query search text
+  * `smsp_searchTextColor`: To set color to query search text
+  
+### Spinner item
+  * `smsp_itemSize`: To set spinner item size
+  * `smsp_itemColor`: To set spinner item color
+
 ### Hint Label
+  * `smsp_hint`: To set spinner hint text
+  * `smsp_hintSize`:  To set spinner hint text size
+  * `smsp_hintColor`:  To set spinner hint color
+  * `smsp_itemListHintColor`:  To set spinner hint text color (dropdown hint)
+  * `smsp_itemListHintBackgroundColor`: To set spinner hint background (dropdown hint)
 
 
 ### Floating Label
-  * smsp_enableFloatingLabel: Default is true. Set it to false to disable floating label.
-  * smsp_alwaysShowFloatingLabel: Default is false. Set it to true for always display.
-  * smsp_floatingLabelText: Update it to what text you want. If the value is not set, it get from hint. 
-  * smsp_floatingLabelSize: For changing floating label size
-  * smsp_floatingLabelColor: For changing floating label color
+  * `smsp_enableFloatingLabel`: Default is true. Set it to false to disable floating label.
+  * `smsp_alwaysShowFloatingLabel`: Default is false. Set it to true for always display.
+  * `smsp_floatingLabelText`: Update it to what text you want. If the value is not set, it get from hint. 
+  * `smsp_floatingLabelSize`: For changing floating label size
+  * `smsp_floatingLabelColor`: For changing floating label color
 ### Error Label
-  * smsp_enableErrorLabel: Default it is true.
-  * smsp_errorText: Your error message text.
-  * smsp_errorTextSize: For changing error text size
-  * smsp_errorTextColor: for changing error text color
-  * smsp_multilineError: Default is false. Update it to show as single line or multiple line
+  * `smsp_enableErrorLabel`: Default it is true.
+  * `smsp_errorText`: Your error message text.
+  * `smsp_errorTextSize`: For changing error text size
+  * `smsp_errorTextColor`: for changing error text color
+  * `smsp_multilineError`: Default is false. Update it to show as single line or multiple line
+  * `smsp_errorTextAlignment`: Align error text to left, center or right
 ### Color customization to:
-  * Item text color (smsp_itemColor)
-  * Hint color (smsp_hintColor)
-  * Floating Label color (smsp_floatingLabelColor)
-  * Error Text color (smsp_errorTextColor)
-  * List Item Hint color and background (smsp_itemListHintColor && smsp_itemListHintBackgroundColor)
-  * List Item color (smsp_itemListColor)
-  * Selected item color (smsp_selectedItemListColor)
-  * Arrow or selector color (smsp_arrowColor)
-  * Underline color (smsp_underlineColor)
+  * Item text color (`smsp_itemColor`)
+  * Hint color (`smsp_hintColor`)
+  * Floating Label color (`smsp_floatingLabelColor`)
+  * Error Text color (`smsp_errorTextColor`)
+  * List Item Hint color and background (`smsp_itemListHintColor` & `smsp_itemListHintBackgroundColor`)
+  * List Item color (`smsp_itemListColor`)
+  * Selected item color (`smsp_selectedItemListColor`)
+  * Arrow or selector color (`smsp_arrowColor`)
+  * Underline color (`smsp_underlineColor`)
 ### Empty dropdown clickable
-### Typeface (smsp_typeface)
-### Base color and highlight color
+  * In case if you want to design view with empty spinner and apply click event and here it is.
+### Underline
+  * `smsp_underlineSize`: To set underline size (The bottom line of spinner)
+  * `smsp_underlineColor`: To set underline color (The bottom line of spinner)
+### Re-selectable feature
+  * `smsp_isReSelectable`: Allow re-selectable for current selected item. By default it is false
+### RTL (Right To Left) feature
+  * `smsp_isRtl`: To change position of view from right to left or left to right. I will update more on it.
 
 ## Screenshot Demo
 
@@ -55,17 +74,17 @@ The best Android spinner library for your android application with more customiz
  <tr>
     <td> 
         <a target="_blank">
-            <img src="https://github.com/Chivorns/Resources/blob/master/smsp/search_home.JPEG" alt="Play Store" width="250" >
+            <img src="https://github.com/Chivorns/Resources/blob/master/smsp/smsp_home.jpg" alt="SmartMaterialSpinner" width="250" >
         </a>
     </td>
    <td>
         <a target="_blank">
-            <img src="https://github.com/Chivorns/Resources/blob/master/smsp/search_1.JPEG" alt="Play Store" width="250">
+            <img src="https://github.com/Chivorns/Resources/blob/master/smsp/search_1.jpg" alt="SmartMaterialSpinner" width="250">
         </a>
     </td>
     <td>
         <a target="_blank">
-            <img src="https://github.com/Chivorns/Resources/blob/master/smsp/search_2.JPEG" alt="Play Store" width="250">
+            <img src="https://github.com/Chivorns/Resources/blob/master/smsp/smsp_dropdown.jpg" alt="SmartMaterialSpinner" width="250">
         </a>
     </td>
  </tr>
@@ -76,37 +95,17 @@ The best Android spinner library for your android application with more customiz
  <tr>
     <td> 
          <a target="_blank">
-            <img src="https://github.com/Chivorns/Resources/blob/master/smsp/search_3.JPEG" alt="Play Store" width="250">
+            <img src="https://github.com/Chivorns/Resources/blob/master/smsp/smsp_dropdown_no_hint.JPEG" alt="SmartMaterialSpinner" width="250">
         </a>
     </td>
     <td> 
         <a target="_blank">
-            <img src="https://github.com/Chivorns/Resources/blob/master/smsp/search_4.JPEG" alt="Play Store" width="250">
+            <img src="https://github.com/Chivorns/Resources/blob/master/smsp/smsp_dialog.jpg" alt="SmartMaterialSpinner" width="250">
         </a>
     </td>
    <td>
         <a target="_blank">
-            <img src="https://github.com/Chivorns/Resources/blob/master/smsp/smsp_dropdown.JPEG" alt="Play Store" width="250">
-        </a>
-    </td>
- </tr>
-</table>
-
-<table border="0">
- <tr>
-    <td>
-        <a target="_blank">
-            <img src="https://github.com/Chivorns/Resources/blob/master/smsp/smsp_dropdown_no_hint.JPEG" alt="Play Store" width="250">
-        </a>
-    </td>
-    <td>
-        <a target="_blank">
-            <img src="https://github.com/Chivorns/Resources/blob/master/smsp/smsp_dialog.JPEG" alt="Play Store" width="250">
-        </a>
-    </td>
-      <td>
-        <a target="_blank">
-            <img src="https://github.com/Chivorns/Resources/blob/master/smsp/smsp_custom_color.JPEG" alt="Play Store" width="250">
+           <img src="https://github.com/Chivorns/Resources/blob/master/smsp/smsp_custom_color.jpg" alt="SmartMaterialSpinner" width="250">
         </a>
     </td>
  </tr>
@@ -117,7 +116,7 @@ The best Android spinner library for your android application with more customiz
 
 ```gradle
 dependencies {
-    implementation 'com.github.chivorns:smartmaterialspinner:1.0.14'
+    implementation 'com.github.chivorns:smartmaterialspinner:1.1.6'
 }
 ```
 
