@@ -3,12 +3,12 @@ apply plugin: 'com.android.library'
 ext {
     // Library
     LIBRARY_NAME = 'SmartMaterialSpinner'
-    PUBLISH_GROUP_ID = 'com.github.chivorns'
+    PUBLISH_GROUP_ID = 'com.github.chivorns.androidx'
     PUBLISH_ARTIFACT_ID = LIBRARY_NAME.toLowerCase()
-    PUBLISH_VERSION = '1.1.6'
+    PUBLISH_VERSION = '1.0.0'
 
     // Bintray
-    BINTRAY_REPO = 'maven'
+    BINTRAY_REPO = 'androidx'
     LIBRARY_DESC = 'Provide with more customization for your spinner.'
 
     // Github
@@ -28,11 +28,11 @@ ext {
 }
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 29
     defaultConfig {
         minSdkVersion 14
-        targetSdkVersion 28
-        versionCode 21
+        targetSdkVersion 29
+        versionCode 1
         versionName "$PUBLISH_VERSION"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -56,7 +56,7 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'androidx.appcompat:appcompat:1.0.2'
+    implementation 'androidx.appcompat:appcompat:1.1.0'
     testImplementation 'junit:junit:4.13'
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'

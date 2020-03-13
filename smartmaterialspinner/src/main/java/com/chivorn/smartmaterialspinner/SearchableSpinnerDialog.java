@@ -137,7 +137,7 @@ public class SearchableSpinnerDialog extends DialogFragment implements SearchVie
         searchHeaderView = rootView.findViewById(R.id.search_header_layout);
         tvSearchHeader = rootView.findViewById(R.id.tv_search_header);
         searchView = rootView.findViewById(R.id.search_view);
-        tvSearch = searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
+        tvSearch = searchView.findViewById(androidx.appcompat.R.id.search_src_text);
         searchListView = rootView.findViewById(R.id.search_list_item);
 
         if (getActivity() != null) {
