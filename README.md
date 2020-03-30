@@ -25,7 +25,9 @@ The best Android spinner library for your android application with more customiz
   * `smsp_searchHint`: To set query text hint
   * `smsp_searchHintColor`: To set hint color to query search text
   * `smsp_searchTextColor`: To set color to query search text
-  
+  * `smsp_searchBackgroundColor`: To set background color to searchview
+  * `smsp_itemListBackgroundColor`: To set background color to search item list
+
 ### Spinner item
   * `smsp_itemSize`: To set spinner item size
   * `smsp_itemColor`: To set spinner item color

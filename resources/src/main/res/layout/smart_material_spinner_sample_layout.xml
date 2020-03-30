@@ -82,10 +82,11 @@
             app:smsp_hint="Custom Color"
             app:smsp_hintSize="14sp"
             app:smsp_itemColor="@color/custom_item_color"
-            app:smsp_itemListColor="@color/custom_item_list_color"
-            app:smsp_itemListHintBackgroundColor="#7C4DFF"
-            app:smsp_itemListHintColor="#40C4FF"
-            app:smsp_selectedItemListColor="@color/custom_selected_item_color" />
+            app:smsp_itemListBackgroundColor="#C7E1EC"
+            app:smsp_itemListColor="@color/smsp_disabled_color"
+            app:smsp_itemListHintBackgroundColor="#40C4FF"
+            app:smsp_itemListHintColor="#1F2233"
+            app:smsp_selectedItemListColor="#FF6E40" />
 
         <TextView
             style="@style/headerTextStyle"

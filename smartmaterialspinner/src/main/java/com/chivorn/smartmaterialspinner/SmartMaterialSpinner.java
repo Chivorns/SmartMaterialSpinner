@@ -138,12 +138,15 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements Adapter
     private boolean isShowItemListHint = true;
     private int itemListHintColor;
     private int itemListHintBackground;
+    private int itemListBackground;
     private float itemSize;
     private int itemColor;
     private int itemListColor;
     private int selectedItemListColor;
     private int searchHintColor;
     private int searchTextColor;
+    private int searchBackgroundColor;
+    private Drawable searchBackgroundDrawable;
     private float hintSize;
     private CharSequence floatingLabelText;
     private float floatingLabelSize;
@@ -252,6 +255,7 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements Adapter
         //isShowItemListHint = typedArray.getBoolean(R.styleable.SmartMaterialSpinner_smsp_showItemListHint, true);
         itemListHintColor = typedArray.getColor(R.styleable.SmartMaterialSpinner_smsp_itemListHintColor, ContextCompat.getColor(context, R.color.smsp_item_list_hint_color));
         itemListHintBackground = typedArray.getColor(R.styleable.SmartMaterialSpinner_smsp_itemListHintBackgroundColor, ContextCompat.getColor(context, R.color.smsp_item_list_hint_background));
+        itemListBackground = typedArray.getColor(R.styleable.SmartMaterialSpinner_smsp_itemListBackgroundColor, ContextCompat.getColor(context, R.color.smsp_item_list_background));
         itemSize = typedArray.getDimension(R.styleable.SmartMaterialSpinner_smsp_itemSize, getResources().getDimension(R.dimen.smsp_default_text_and_hint_size));
         itemColor = typedArray.getColor(R.styleable.SmartMaterialSpinner_smsp_itemColor, Color.BLACK);
         itemListColor = typedArray.getColor(R.styleable.SmartMaterialSpinner_smsp_itemListColor, Color.BLACK);
@@ -286,6 +290,13 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements Adapter
         searchHintColor = typedArray.getColor(R.styleable.SmartMaterialSpinner_smsp_searchHintColor, 0);
         searchTextColor = typedArray.getColor(R.styleable.SmartMaterialSpinner_smsp_searchTextColor, 0);
 
+        int searchDrawableResId = typedArray.getResourceId(R.styleable.SmartMaterialSpinner_smsp_searchBackgroundColor, 0);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN && searchDrawableResId != 0) {
+            setSearchBackgroundColor(AppCompatResources.getDrawable(getContext(), searchDrawableResId));
+        } else {
+            setSearchBackgroundColor(typedArray.getColor(R.styleable.SmartMaterialSpinner_smsp_searchBackgroundColor, ContextCompat.getColor(context, R.color.smsp_search_background)));
+        }
+
         //isEnableDefaultSelect = typedArray.getBoolean(R.styleable.SmartMaterialSpinner_smsp_enableDefaultSelect, true);
         isReSelectable = typedArray.getBoolean(R.styleable.SmartMaterialSpinner_smsp_isReSelectable, false);
 
@@ -310,6 +321,12 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements Adapter
         setSearchHintColor(searchHintColor);
         setSearchTextColor(searchTextColor);
         setSearchTypeFace(typeface);
+        setSearchListItemBackgroundColor(itemListBackground);
+        if (searchBackgroundColor != 0)
+            setSearchBackgroundColor(searchBackgroundColor);
+        else if (searchBackgroundDrawable != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            setSearchBackgroundColor(searchBackgroundDrawable);
+        }
     }
 
     private void removeDefaultSelector(Drawable drawable) {
@@ -984,6 +1001,15 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements Adapter
         invalidate();
     }
 
+    public int getItemListBackground() {
+        return itemListBackground;
+    }
+
+    public void setItemListBackground(int itemListBackground) {
+        this.itemListBackground = itemListBackground;
+        invalidate();
+    }
+
     public float getHintSize() {
         return hintSize;
     }
@@ -1400,6 +1426,13 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements Adapter
         invalidate();
     }
 
+    public void setSearchListItemBackgroundColor(int color) {
+        if (searchableSpinnerDialog != null) {
+            searchableSpinnerDialog.setSearchListItemBackgroundColor(color);
+        }
+        invalidate();
+    }
+
     public void setSearchHint(String searchHint) {
         this.searchHint = searchHint;
         if (searchableSpinnerDialog != null) {
@@ -1724,6 +1757,8 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements Adapter
                 textView.setText(hint);
                 textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, hintSize);
                 if (isDropDownView) {
+                    if (itemListBackground != 0)
+                        parent.setBackgroundColor(itemListBackground);
                     textView.setTextColor(itemListHintColor);
                     textView.setBackgroundColor(itemListHintBackground);
                     textView.setPadding(textView.getPaddingLeft(), dpToPx(12), textView.getPaddingRight(), dpToPx(12));

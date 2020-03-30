@@ -23,6 +23,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -41,6 +42,7 @@ public class SearchableSpinnerDialog extends DialogFragment implements SearchVie
     private TextView tvSearch;
     private ListView searchListView;
     private TextView tvListItem;
+    private LinearLayout itemListContainer;
 
     private boolean isEnableSearchHeader = true;
     private int headerBackgroundColor;
@@ -51,6 +53,8 @@ public class SearchableSpinnerDialog extends DialogFragment implements SearchVie
     private int searchHintColor;
     private int searchTextColor;
 
+    private int searchListItemBackgroundColor;
+    private Drawable searchListItemBackgroundDrawable;
     private int searchListItemColor;
     private int selectedSearchItemColor;
     private int selectedPosition = -1;
@@ -141,6 +145,7 @@ public class SearchableSpinnerDialog extends DialogFragment implements SearchVie
         searchView = rootView.findViewById(R.id.search_view);
         tvSearch = searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
         searchListView = rootView.findViewById(R.id.search_list_item);
+        itemListContainer = rootView.findViewById(R.id.item_search_list_container);
 
         if (getActivity() != null) {
             SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
@@ -163,6 +168,13 @@ public class SearchableSpinnerDialog extends DialogFragment implements SearchVie
                     View listView = super.getView(position, convertView, parent);
                     tvListItem = listView.findViewById(R.id.tv_search_list_item);
                     tvListItem.setTypeface(typeface);
+                    if (searchListItemBackgroundColor != 0) {
+                        itemListContainer.setBackgroundColor(searchListItemBackgroundColor);
+                    } else if (searchListItemBackgroundDrawable != null) {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                            itemListContainer.setBackground(searchListItemBackgroundDrawable);
+                        }
+                    }
 
                     if (searchListItemColor != 0) {
                         tvListItem.setTextColor(searchListItemColor);
@@ -337,6 +349,18 @@ public class SearchableSpinnerDialog extends DialogFragment implements SearchVie
     public void setSearchBackgroundColor(Drawable drawable) {
         searchBackgroundDrawable = drawable;
         searchBackgroundColor = 0;
+    }
+
+
+    public void setSearchListItemBackgroundColor(int color) {
+        searchListItemBackgroundColor = color;
+        searchListItemBackgroundDrawable = null;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
+    public void setSearchListItemBackgroundDrawable(Drawable drawable) {
+        searchListItemBackgroundDrawable = drawable;
+        searchListItemBackgroundColor = 0;
     }
 
     public void setSearchHint(String searchHint) {
