@@ -70,6 +70,9 @@ The best Android spinner library for your android application with more customiz
   * `smsp_isReSelectable`: Allow re-selectable for current selected item. By default it is false
 ### RTL (Right To Left) feature
   * `smsp_isRtl`: To change position of view from right to left or left to right. I will update more on it.
+### Typeface (Custom font)
+  * `smsp_typeface`: Apply custom font to whole spinner view. You can use this attr without specify font extension
+  * `smsp_typeface_xxx`: Set typeface to specific part of spinner
 
 ## Screenshot Demo
 

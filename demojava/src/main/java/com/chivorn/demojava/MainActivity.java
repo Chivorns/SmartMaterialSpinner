@@ -1,8 +1,10 @@
 package com.chivorn.demojava;
 
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.res.ResourcesCompat;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -46,6 +48,15 @@ public class MainActivity<T> extends MainApp<T> {
         //  setErrorTextSize(90, spSearchable, spProvince, spProvinceNoHint, spProvinceDialog, spCustomColor, spEmptyItem);
         //  setSelection(3, spSearchable, spProvince, spProvinceNoHint, spProvinceDialog, spCustomColor);
         // clearSelection(spSearchable, spProvince, spProvinceNoHint, spProvinceDialog, spCustomColor);
+
+        // Get font from assets
+        Typeface celloSanLFont = Typeface.createFromAsset(this.getAssets(), "fonts/hinted_cello_sans_light.ttf");
+        Typeface celloSanLIFont = Typeface.createFromAsset(this.getAssets(), "fonts/hinted_cello_sans_light_italic.ttf");
+        // Get font from resource
+        Typeface celloSanMIFont = ResourcesCompat.getFont(this, R.font.hinted_cello_sans_medium_italic);
+        spSearchable.setTypeface(celloSanLFont);
+        spProvince.setTypeface(celloSanLIFont);
+        spReSelectable.setTypeface(celloSanMIFont);
     }
 
     private void setOnItemSelectedListener(SmartMaterialSpinner... spinners) {
