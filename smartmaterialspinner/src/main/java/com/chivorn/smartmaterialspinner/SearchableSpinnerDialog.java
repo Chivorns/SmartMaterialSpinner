@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -58,6 +59,8 @@ public class SearchableSpinnerDialog extends DialogFragment implements SearchVie
     private int searchHeaderTextColor;
     private String searchHint;
     private int searchDialogGravity = Gravity.TOP;
+
+    private Typeface typeface;
 
     private OnSearchDialogEventListener onSearchDialogEventListener;
     private OnSearchTextChanged onSearchTextChanged;
@@ -159,6 +162,8 @@ public class SearchableSpinnerDialog extends DialogFragment implements SearchVie
                 public View getView(int position, View convertView, @NonNull ViewGroup parent) {
                     View listView = super.getView(position, convertView, parent);
                     tvListItem = listView.findViewById(R.id.tv_search_list_item);
+                    tvListItem.setTypeface(typeface);
+
                     if (searchListItemColor != 0) {
                         tvListItem.setTextColor(searchListItemColor);
                     }
@@ -205,6 +210,7 @@ public class SearchableSpinnerDialog extends DialogFragment implements SearchVie
 
         if (searchHeaderText != null) {
             tvSearchHeader.setText(searchHeaderText);
+            tvSearchHeader.setTypeface(typeface);
         }
 
         if (searchHeaderTextColor != 0) {
@@ -232,6 +238,7 @@ public class SearchableSpinnerDialog extends DialogFragment implements SearchVie
             }
         }
         if (tvSearch != null) {
+            tvSearch.setTypeface(typeface);
             if (searchTextColor != 0) {
                 tvSearch.setTextColor(searchTextColor);
             }
@@ -370,5 +377,13 @@ public class SearchableSpinnerDialog extends DialogFragment implements SearchVie
         if (selectedPosition >= 0 && searchListView.isSmoothScrollbarEnabled()) {
             searchListView.smoothScrollToPositionFromTop(selectedPosition, 0, 10);
         }
+    }
+
+    public Typeface getTypeface() {
+        return typeface;
+    }
+
+    public void setTypeface(Typeface typeface) {
+        this.typeface = typeface;
     }
 }

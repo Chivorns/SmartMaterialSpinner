@@ -22,6 +22,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.content.res.AppCompatResources;
 import android.support.v7.widget.AppCompatSpinner;
@@ -59,7 +60,7 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements Adapter
     //Paint objects
     private Paint paint;
     private TextPaint errorTextPaint;
-    private TextPaint fltLabelTextPaint;
+    private TextPaint floatLabelTextPaint;
     private StaticLayout staticLayout;
     private Rect errorTextRect;
     private TextPaint itemTextPaint;
@@ -226,7 +227,16 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements Adapter
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.SmartMaterialSpinner);
         String typefacePath = typedArray.getString(R.styleable.SmartMaterialSpinner_smsp_typeface);
         if (typefacePath != null) {
-            typeface = Typeface.createFromAsset(getContext().getAssets(), typefacePath);
+            if (!typefacePath.contains("."))
+                typefacePath += ".ttf"; // Set default extension as .ttf
+            try {
+                String fontName = typefacePath.substring(typefacePath.lastIndexOf("/") + 1, typefacePath.lastIndexOf("."));
+                int fontId = this.getResources().getIdentifier(fontName, "font", getContext().getPackageName());
+                typeface = ResourcesCompat.getFont(getContext(), fontId);
+            } catch (Throwable ignored) {
+            }
+            if (typeface == null)
+                typeface = Typeface.createFromAsset(getContext().getAssets(), typefacePath);
         }
         baseColor = typedArray.getColor(R.styleable.SmartMaterialSpinner_smsp_baseColor, defaultBaseColor);
         highlightColor = typedArray.getColor(R.styleable.SmartMaterialSpinner_smsp_highlightColor, defaultHighlightColor);
@@ -299,6 +309,7 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements Adapter
         setSelectedSearchItemColor(selectedItemListColor);
         setSearchHintColor(searchHintColor);
         setSearchTextColor(searchTextColor);
+        setSearchTypeFace(typeface);
     }
 
     private void removeDefaultSelector(Drawable drawable) {
@@ -340,7 +351,7 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements Adapter
 
         paint = new Paint(Paint.ANTI_ALIAS_FLAG);
         errorTextPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
-        fltLabelTextPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
+        floatLabelTextPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
         itemTextPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
 
         errorTextRect = new Rect();
@@ -348,11 +359,11 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements Adapter
 
         //  itemTextPaint.setTextSize(itemSize);
         errorTextPaint.setTextSize(errorTextSize);
-        fltLabelTextPaint.setTextSize(floatingLabelSize);
+        floatLabelTextPaint.setTextSize(floatingLabelSize);
 
         if (typeface != null) {
             errorTextPaint.setTypeface(typeface);
-            fltLabelTextPaint.setTypeface(typeface);
+            floatLabelTextPaint.setTypeface(typeface);
             itemTextPaint.setTypeface(typeface);
         }
         errorTextPaint.setColor(baseColor);
@@ -618,19 +629,19 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements Adapter
         //Floating Label Drawing
         if ((hint != null || floatingLabelText != null) && enableFloatingLabel) {
             if (isSelected || hasFocus()) {
-                fltLabelTextPaint.setColor(floatingLabelColor); // highlightColor
+                floatLabelTextPaint.setColor(floatingLabelColor); // highlightColor
             } else {
-                fltLabelTextPaint.setColor(isEnabled() ? floatingLabelColor : disabledColor);
+                floatLabelTextPaint.setColor(isEnabled() ? floatingLabelColor : disabledColor);
             }
             if (floatingLabelAnimator.isRunning() || !isFloatingLabelVisible) {
-                fltLabelTextPaint.setAlpha((int) ((0.8 * floatingLabelPercent + 0.2) * baseAlpha * floatingLabelPercent));
+                floatLabelTextPaint.setAlpha((int) ((0.8 * floatingLabelPercent + 0.2) * baseAlpha * floatingLabelPercent));
             }
-            fltLabelTextPaint.setTextSize(floatingLabelSize);
+            floatLabelTextPaint.setTextSize(floatingLabelSize);
             String textToDraw = floatingLabelText != null ? floatingLabelText.toString() : hint.toString();
             if (isRtl) {
-                canvas.drawText(textToDraw, getWidth() - rightLeftSpinnerPadding - fltLabelTextPaint.measureText(textToDraw), startYFloatingLabel, fltLabelTextPaint);
+                canvas.drawText(textToDraw, getWidth() - rightLeftSpinnerPadding - floatLabelTextPaint.measureText(textToDraw), startYFloatingLabel, floatLabelTextPaint);
             } else {
-                canvas.drawText(textToDraw, startX + rightLeftSpinnerPadding, startYFloatingLabel, fltLabelTextPaint);
+                canvas.drawText(textToDraw, startX + rightLeftSpinnerPadding, startYFloatingLabel, floatLabelTextPaint);
             }
         }
         //  drawSelector(canvas, (getWidth() - rightLeftSpinnerPadding - arrowPaddingRight + arrowPaddingLeft), getPaddingTop() + dpToPx(6) - arrowPaddingBottom + arrowPaddingTop);
@@ -923,7 +934,7 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements Adapter
     public void setBaseColor(int baseColor) {
         this.baseColor = baseColor;
         errorTextPaint.setColor(baseColor);
-        fltLabelTextPaint.setColor(baseColor);
+        floatLabelTextPaint.setColor(baseColor);
         baseAlpha = errorTextPaint.getAlpha();
         invalidate();
     }
@@ -1124,7 +1135,9 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements Adapter
         this.typeface = typeface;
         if (typeface != null) {
             errorTextPaint.setTypeface(typeface);
-            fltLabelTextPaint.setTypeface(typeface);
+            floatLabelTextPaint.setTypeface(typeface);
+            itemTextPaint.setTypeface(typeface);
+            setSearchTypeFace(typeface);
         }
         invalidate();
     }
@@ -1439,6 +1452,13 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements Adapter
         invalidate();
     }
 
+    public void setSearchTypeFace(Typeface typeFace) {
+        if (searchableSpinnerDialog != null) {
+            searchableSpinnerDialog.setTypeface(typeFace);
+        }
+        invalidate();
+    }
+
   /*  public boolean isEnableDefaultSelect() {
         return isEnableDefaultSelect;
     }
@@ -1699,6 +1719,7 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements Adapter
         }
 
         private void updateSpinnerItemStyle(ViewGroup parent, TextView textView, boolean isDropDownView, boolean isHint, int position) {
+            textView.setTypeface(typeface);
             if (isHint) {
                 textView.setText(hint);
                 textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, hintSize);
