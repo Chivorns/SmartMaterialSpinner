@@ -10,6 +10,7 @@ import android.widget.AdapterView;
 import android.widget.Toast;
 
 import androidx.core.content.ContextCompat;
+import androidx.core.content.res.ResourcesCompat;
 
 import com.chivorn.resourcemodule.MainApp;
 import com.chivorn.smartmaterialspinner.SmartMaterialSpinner;
