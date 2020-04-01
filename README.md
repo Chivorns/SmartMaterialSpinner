@@ -25,7 +25,12 @@ The best Android spinner library for your android application with more customiz
   * `smsp_searchHint`: To set query text hint
   * `smsp_searchHintColor`: To set hint color to query search text
   * `smsp_searchTextColor`: To set color to query search text
-  
+  * `smsp_searchBackgroundColor`: To set background color to searchview
+  * `smsp_itemListBackgroundColor`: To set background color to search item list
+  * `smsp_enableDismissSearch`: To enable/disable dismiss button on search dialog
+  * `smsp_dismissSearchText`: To set dismiss button text for search dialog
+  * `smsp_dismissSearchColor`: To set dismiss button text color for search dialog
+
 ### Spinner item
   * `smsp_itemSize`: To set spinner item size
   * `smsp_itemColor`: To set spinner item color
@@ -61,6 +66,8 @@ The best Android spinner library for your android application with more customiz
   * Selected item color (`smsp_selectedItemListColor`)
   * Arrow or selector color (`smsp_arrowColor`)
   * Underline color (`smsp_underlineColor`)
+  * Dropdown list/Search ListView background (`smsp_itemListBackgroundColor`)
+  * Search dialog dismiss button color (`smsp_dismissSearchColor`)
 ### Empty dropdown clickable
   * In case if you want to design view with empty spinner and apply click event and here it is.
 ### Underline
@@ -70,6 +77,9 @@ The best Android spinner library for your android application with more customiz
   * `smsp_isReSelectable`: Allow re-selectable for current selected item. By default it is false
 ### RTL (Right To Left) feature
   * `smsp_isRtl`: To change position of view from right to left or left to right. I will update more on it.
+### Typeface (Custom font)
+  * `smsp_typeface`: Apply custom font to whole spinner view. You can use this attr without specify font extension
+  * `smsp_typeface_xxx`: Set typeface to specific part of spinner
 
 ## Screenshot Demo
 
@@ -120,13 +130,13 @@ The best Android spinner library for your android application with more customiz
 
 ```gradle
 dependencies {
-    implementation 'com.github.chivorns:smartmaterialspinner:1.1.6'
+    implementation 'com.github.chivorns:smartmaterialspinner:1.2.1'
 }
 ```
 #### <a name="AndroidXGradle"></a> AndroidX Project
 ```gradle
 dependencies {
-    implementation 'com.github.chivorns.androidx:smartmaterialspinner:1.0.0'
+    implementation 'com.github.chivorns.androidx:smartmaterialspinner:1.2.1'
 }
 ```
 
@@ -233,3 +243,15 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
+## Issue and new feature request
+### Note
+Each raised issue, should be provided with some information to be easy for me to replicate it like `Device Model`, `Android version` and `log message or file`
+### Where to report issue and new feature request
+- [Email](mailto:chivorn@live.com): chivorn@live.com
+- [Github](https://github.com/Chivorns/SmartMaterialSpinner/issues)
+- [Facebook Group](https://www.facebook.com/groups/837642023371127/)
+
+You can create issue on Github to record issue history then to make it fast alert to me, you can send me email or post to Facebook group for any discussion
+
+## Contribution
+If you want to contribute in this library, please `fork` this repository and [create pull request](https://github.com/Chivorns/SmartMaterialSpinner/pulls).

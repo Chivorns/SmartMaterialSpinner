@@ -26,7 +26,8 @@
             app:smsp_searchHeaderText="Search/Select Province"
             app:smsp_searchHeaderTextColor="#ffff"
             app:smsp_searchHintColor="@color/search_hint_color"
-            app:smsp_searchTextColor="@color/search_text_color" />
+            app:smsp_searchTextColor="@color/search_text_color"
+            app:smsp_typeface="fonts/hinted_cello_sans_light" />
 
         <TextView
             style="@style/headerTextStyle"
@@ -37,7 +38,8 @@
             style="@style/spinnerStyle"
             app:smsp_errorText="@string/sample_error_message"
             app:smsp_hint="Re-Selectable Spinner"
-            app:smsp_isReSelectable="true" />
+            app:smsp_isReSelectable="true"
+            app:smsp_typeface="@font/hinted_cello_sans_medium_italic" />
 
         <TextView
             style="@style/headerTextStyle"
@@ -80,10 +82,11 @@
             app:smsp_hint="Custom Color"
             app:smsp_hintSize="14sp"
             app:smsp_itemColor="@color/custom_item_color"
-            app:smsp_itemListColor="@color/custom_item_list_color"
-            app:smsp_itemListHintBackgroundColor="#7C4DFF"
-            app:smsp_itemListHintColor="#40C4FF"
-            app:smsp_selectedItemListColor="@color/custom_selected_item_color" />
+            app:smsp_itemListBackgroundColor="#C7E1EC"
+            app:smsp_itemListColor="@color/smsp_disabled_color"
+            app:smsp_itemListHintBackgroundColor="#40C4FF"
+            app:smsp_itemListHintColor="#1F2233"
+            app:smsp_selectedItemListColor="#FF6E40" />
 
         <TextView
             style="@style/headerTextStyle"
