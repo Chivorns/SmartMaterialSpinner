@@ -57,6 +57,11 @@ public class MainActivity<T> extends MainApp<T> {
         spSearchable.setTypeface(celloSanLFont);
         spProvince.setTypeface(celloSanLIFont);
         spReSelectable.setTypeface(celloSanMIFont);
+
+        // To custom dismiss button on search dialog
+    /*    spSearchable.setEnableDismissSearch(true);
+        spSearchable.setDismissSearchText("Hello");
+        spSearchable.setDismissSearchColor(Color.parseColor("#4E61CC"));*/
     }
 
     private void setOnItemSelectedListener(SmartMaterialSpinner... spinners) {

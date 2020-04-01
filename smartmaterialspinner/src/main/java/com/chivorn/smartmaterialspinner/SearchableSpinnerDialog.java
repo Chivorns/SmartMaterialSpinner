@@ -23,6 +23,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -43,6 +44,7 @@ public class SearchableSpinnerDialog extends DialogFragment implements SearchVie
     private ListView searchListView;
     private TextView tvListItem;
     private LinearLayout itemListContainer;
+    public Button btnDismiss;
 
     private boolean isEnableSearchHeader = true;
     private int headerBackgroundColor;
@@ -65,6 +67,10 @@ public class SearchableSpinnerDialog extends DialogFragment implements SearchVie
     private int searchDialogGravity = Gravity.TOP;
 
     private Typeface typeface;
+
+    private boolean enableDismissSearch = false;
+    private String dismissSearchText;
+    private int dismissSearchColor;
 
     private OnSearchDialogEventListener onSearchDialogEventListener;
     private OnSearchTextChanged onSearchTextChanged;
@@ -146,6 +152,7 @@ public class SearchableSpinnerDialog extends DialogFragment implements SearchVie
         tvSearch = searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
         searchListView = rootView.findViewById(R.id.search_list_item);
         itemListContainer = rootView.findViewById(R.id.item_search_list_container);
+        btnDismiss = rootView.findViewById(R.id.btn_dismiss);
 
         if (getActivity() != null) {
             SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
@@ -209,8 +216,16 @@ public class SearchableSpinnerDialog extends DialogFragment implements SearchVie
             }
         });
 
+        btnDismiss.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dismiss();
+            }
+        });
+
         initSearchHeader();
         initSearchBody();
+        initSearchFooter();
     }
 
     private void initSearchHeader() {
@@ -258,6 +273,15 @@ public class SearchableSpinnerDialog extends DialogFragment implements SearchVie
                 tvSearch.setHintTextColor(searchHintColor);
             }
         }
+    }
+
+    private void initSearchFooter() {
+        if (enableDismissSearch)
+            btnDismiss.setVisibility(View.VISIBLE);
+        if (dismissSearchText != null)
+            btnDismiss.setText(dismissSearchText);
+        if (dismissSearchColor != 0)
+            btnDismiss.setTextColor(dismissSearchColor);
     }
 
     @Override
@@ -409,5 +433,29 @@ public class SearchableSpinnerDialog extends DialogFragment implements SearchVie
 
     public void setTypeface(Typeface typeface) {
         this.typeface = typeface;
+    }
+
+    public boolean isEnableDismissSearch() {
+        return enableDismissSearch;
+    }
+
+    public void setEnableDismissSearch(boolean enableDismissSearch) {
+        this.enableDismissSearch = enableDismissSearch;
+    }
+
+    public String getDismissSearchText() {
+        return dismissSearchText;
+    }
+
+    public void setDismissSearchText(String dismissSearchText) {
+        this.dismissSearchText = dismissSearchText;
+    }
+
+    public int getDismissSearchColor() {
+        return dismissSearchColor;
+    }
+
+    public void setDismissSearchColor(int dismissSearchColor) {
+        this.dismissSearchColor = dismissSearchColor;
     }
 }

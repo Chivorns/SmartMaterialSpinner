@@ -27,6 +27,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_weight="90"
         android:orientation="vertical">
 
         <android.support.v7.widget.SearchView
@@ -51,5 +52,22 @@
                 android:dividerHeight="0dp"
                 android:paddingBottom="5dp" />
         </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/btn_dismiss"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:background="@color/smsp_transparent_color"
+            android:text="Done"
+            android:textColor="@color/smsp_dismiss_color"
+            android:visibility="gone" />
     </LinearLayout>
 </LinearLayout>

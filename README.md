@@ -27,6 +27,9 @@ The best Android spinner library for your android application with more customiz
   * `smsp_searchTextColor`: To set color to query search text
   * `smsp_searchBackgroundColor`: To set background color to searchview
   * `smsp_itemListBackgroundColor`: To set background color to search item list
+  * `smsp_enableDismissSearch`: To enable/disable dismiss button on search dialog
+  * `smsp_dismissSearchText`: To set dismiss button text for search dialog
+  * `smsp_dismissSearchColor`: To set dismiss button text color for search dialog
 
 ### Spinner item
   * `smsp_itemSize`: To set spinner item size
@@ -63,6 +66,8 @@ The best Android spinner library for your android application with more customiz
   * Selected item color (`smsp_selectedItemListColor`)
   * Arrow or selector color (`smsp_arrowColor`)
   * Underline color (`smsp_underlineColor`)
+  * Dropdown list/Search ListView background (`smsp_itemListBackgroundColor`)
+  * Search dialog dismiss button color (`smsp_dismissSearchColor`)
 ### Empty dropdown clickable
   * In case if you want to design view with empty spinner and apply click event and here it is.
 ### Underline

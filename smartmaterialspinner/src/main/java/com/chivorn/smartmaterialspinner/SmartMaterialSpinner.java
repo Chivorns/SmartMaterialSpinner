@@ -76,6 +76,10 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements Adapter
     private int searchHeaderTextColor;
     private String searchHint;
 
+    private boolean enableDismissSearch = false;
+    private String dismissSearchText;
+    private int dismissSearchColor;
+
     private Path selectorPath;
     private Point[] selectorPoints;
 
@@ -300,6 +304,10 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements Adapter
         //isEnableDefaultSelect = typedArray.getBoolean(R.styleable.SmartMaterialSpinner_smsp_enableDefaultSelect, true);
         isReSelectable = typedArray.getBoolean(R.styleable.SmartMaterialSpinner_smsp_isReSelectable, false);
 
+        enableDismissSearch = typedArray.getBoolean(R.styleable.SmartMaterialSpinner_smsp_enableDismissSearch, false);
+        dismissSearchText = typedArray.getString(R.styleable.SmartMaterialSpinner_smsp_dismissSearchText);
+        dismissSearchColor = typedArray.getColor(R.styleable.SmartMaterialSpinner_smsp_dismissSearchColor, ContextCompat.getColor(context, R.color.smsp_dismiss_color));
+
         typedArray.recycle();
         lastPosition = -1;
     }
@@ -327,6 +335,9 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements Adapter
         else if (searchBackgroundDrawable != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             setSearchBackgroundColor(searchBackgroundDrawable);
         }
+        enableDismissSearch(enableDismissSearch);
+        configDismissSearchText(dismissSearchText);
+        configDismissSearchColor(dismissSearchColor);
     }
 
     private void removeDefaultSelector(Drawable drawable) {
@@ -1494,7 +1505,52 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements Adapter
         invalidate();
     }
 
-  /*  public boolean isEnableDefaultSelect() {
+    public boolean isEnableDismissSearch() {
+        return enableDismissSearch;
+    }
+
+    public void setEnableDismissSearch(boolean enableDismissSearch) {
+        this.enableDismissSearch = enableDismissSearch;
+        enableDismissSearch(enableDismissSearch);
+        invalidate();
+    }
+
+    private void enableDismissSearch(boolean enableDismissSearch) {
+        if (searchableSpinnerDialog != null)
+            searchableSpinnerDialog.setEnableDismissSearch(enableDismissSearch);
+    }
+
+    public String getDismissSearchText() {
+        return dismissSearchText;
+    }
+
+    public void setDismissSearchText(String dismissSearchText) {
+        this.dismissSearchText = dismissSearchText;
+        configDismissSearchText(dismissSearchText);
+        invalidate();
+    }
+
+    private void configDismissSearchText(String dismissSearchText) {
+        if (searchableSpinnerDialog != null)
+            searchableSpinnerDialog.setDismissSearchText(dismissSearchText);
+    }
+
+    public int getDismissSearchColor() {
+        return dismissSearchColor;
+    }
+
+    public void setDismissSearchColor(int dismissSearchColor) {
+        this.dismissSearchColor = dismissSearchColor;
+        configDismissSearchColor(dismissSearchColor);
+        invalidate();
+    }
+
+    private void configDismissSearchColor(int dismissSearchColor) {
+        if (searchableSpinnerDialog != null)
+            searchableSpinnerDialog.setDismissSearchColor(dismissSearchColor);
+    }
+
+    /*  public boolean isEnableDefaultSelect() {
         return isEnableDefaultSelect;
     }
 
