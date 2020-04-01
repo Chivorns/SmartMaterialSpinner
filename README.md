@@ -130,13 +130,13 @@ The best Android spinner library for your android application with more customiz
 
 ```gradle
 dependencies {
-    implementation 'com.github.chivorns:smartmaterialspinner:1.1.6'
+    implementation 'com.github.chivorns:smartmaterialspinner:1.2.1'
 }
 ```
 #### <a name="AndroidXGradle"></a> AndroidX Project
 ```gradle
 dependencies {
-    implementation 'com.github.chivorns.androidx:smartmaterialspinner:1.0.0'
+    implementation 'com.github.chivorns.androidx:smartmaterialspinner:1.2.1'
 }
 ```
 
