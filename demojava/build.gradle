@@ -7,8 +7,8 @@ android {
         applicationId "com.chivorn.smsp.demojava"
         minSdkVersion 14
         targetSdkVersion 28
-        versionCode 4
-        versionName "1.1.0"
+        versionCode 5
+        versionName "1.2.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {

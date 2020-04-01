@@ -27,6 +27,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_weight="90"
         android:orientation="vertical">
 
         <android.support.v7.widget.SearchView
@@ -36,14 +37,37 @@
             app:iconifiedByDefault="false"
             app:queryHint="Search..." />
 
-        <ListView
-            android:id="@+id/search_list_item"
+        <LinearLayout
+            android:id="@+id/item_search_list_container"
             android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ListView
+                android:id="@+id/search_list_item"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="5dp"
+                android:divider="@null"
+                android:dividerHeight="0dp"
+                android:paddingBottom="5dp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/btn_dismiss"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
-            android:layout_marginEnd="5dp"
-            android:divider="@null"
-            android:dividerHeight="0dp"
-            android:paddingBottom="5dp" />
+            android:layout_gravity="end"
+            android:background="@color/smsp_transparent_color"
+            android:text="Done"
+            android:textColor="@color/smsp_dismiss_color"
+            android:visibility="gone" />
     </LinearLayout>
 </LinearLayout>

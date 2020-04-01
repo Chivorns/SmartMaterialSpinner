@@ -17,6 +17,10 @@
         <attr name="smsp_searchHint" format="string" />
         <attr name="smsp_searchHintColor" format="color" />
         <attr name="smsp_searchTextColor" format="color" />
+        <attr name="smsp_searchBackgroundColor" format="color|reference" />
+        <attr name="smsp_enableDismissSearch" format="boolean" />
+        <attr name="smsp_dismissSearchText" format="string" />
+        <attr name="smsp_dismissSearchColor" format="color" />
 
         <attr name="smsp_itemSize" format="dimension" />
         <attr name="smsp_itemColor" format="color|reference" />
@@ -31,6 +35,7 @@
         <!--<attr name="smsp_showItemListHint" format="boolean" />-->
         <attr name="smsp_itemListHintColor" format="color|reference" />
         <attr name="smsp_itemListHintBackgroundColor" format="color|reference" />
+        <attr name="smsp_itemListBackgroundColor" format="color|reference" />
 
         <attr name="smsp_enableFloatingLabel" format="boolean" />
         <attr name="smsp_alwaysShowFloatingLabel" format="boolean" />
