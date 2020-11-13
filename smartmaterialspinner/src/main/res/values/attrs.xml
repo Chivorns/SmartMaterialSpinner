@@ -8,6 +8,7 @@
 
         <attr name="smsp_itemView" format="reference" />
         <attr name="smsp_dropdownView" format="reference" />
+        <attr name="smsp_searchDropdownView" format="reference" />
 
         <attr name="smsp_isSearchable" format="boolean" />
         <attr name="smsp_enableSearchHeader" format="boolean" />
