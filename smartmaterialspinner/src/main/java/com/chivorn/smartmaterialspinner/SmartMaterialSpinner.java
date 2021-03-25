@@ -181,6 +181,7 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements Adapter
     private boolean isErrorScrollPaddingInvoked = false;
     private boolean isReSelectable = false;
     private boolean isOnItemSelectedListenerOverride;
+    private boolean dropdownHeightUpdated = false;
 
     /*
      * **********************************************************************************
@@ -221,7 +222,7 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements Adapter
         initPadding();
         initFloatingLabelAnimator();
         configSearchableDialog();
-        setMinimumHeight((int) (getPaddingTop() + getPaddingBottom() + minContentHeight + (itemSize > hintSize ? itemSize : hintSize)));
+        setMinimumHeight((int) (getPaddingTop() + getPaddingBottom() + minContentHeight + (Math.max(itemSize, hintSize))));
         setItem(new ArrayList<T>());
     }
 
@@ -363,6 +364,7 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements Adapter
                         int underlineHeight = dpToPx(underlineSize);
                         int underlineStartY = getHeight() - getPaddingBottom() + underlineTopSpacing;
                         SmartMaterialSpinner.this.setDropDownVerticalOffset(underlineStartY + underlineHeight);
+                        dropdownHeightUpdated = true;
                     }
                 }
                 if (isSpinnerEmpty()) {
@@ -423,7 +425,7 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements Adapter
         } else {
             extraPaddingBottom = underlineTopSpacing + errorTextPaddingBottom;
         }
-        if (enableErrorLabel) {
+        if (errorText != null && enableErrorLabel) {
             extraPaddingBottom += (int) ((textMetrics.descent - textMetrics.ascent) * currentNbErrorLines);
         }
         updatePadding();
@@ -436,7 +438,7 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements Adapter
         int right = innerPaddingRight;
         int bottom = innerPaddingBottom + extraPaddingBottom;
         super.setPadding(left, top, right, bottom);
-        setMinimumHeight((int) (top + bottom + minContentHeight + (itemSize > hintSize ? itemSize : hintSize)));
+        setMinimumHeight((int) (top + bottom + minContentHeight + (Math.max(itemSize, hintSize))));
     }
 
     private void initDimensions(Context context, AttributeSet attrs) {
@@ -611,6 +613,10 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements Adapter
         int startX = 0;
         int endX = getWidth();
         int lineHeight = dpToPx(underlineSize);
+
+        if (getHeight() != 0 && !dropdownHeightUpdated) {
+            configDropdownWidthAfterDataReady();
+        }
 
         int startYLine = getHeight() - getPaddingBottom() + underlineTopSpacing;
         int startYFloatingLabel = (int) (getPaddingTop() - floatingLabelPercent * floatingLabelBottomSpacing);
@@ -1769,7 +1775,7 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements Adapter
                     return getItemView(convertView, parent, isDropDownView);
                 } else {
                     TextView textView = (TextView) getItemView(convertView, parent, isDropDownView);
-                    textView.setHeight(0);
+                    //   textView.setHeight(0);
                     textView.setText(getResources().getString(R.string.select_item));
                     return textView;
                 }
