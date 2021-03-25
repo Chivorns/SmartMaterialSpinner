@@ -61,6 +61,7 @@ public class SearchableSpinnerDialog extends DialogFragment implements SearchVie
     private int searchListItemColor;
     private int selectedSearchItemColor;
     private int selectedPosition = -1;
+    private Object selectedItem;
 
     private String searchHeaderText;
     private int searchHeaderTextColor;
@@ -187,7 +188,8 @@ public class SearchableSpinnerDialog extends DialogFragment implements SearchVie
                     if (searchListItemColor != 0) {
                         tvListItem.setTextColor(searchListItemColor);
                     }
-                    if (selectedSearchItemColor != 0 && position >= 0 && position == selectedPosition) {
+
+                    if (selectedSearchItemColor != 0 && position >= 0 && searchArrayAdapter.getItem(position).equals(selectedItem)) {
                         tvListItem.setTextColor(selectedSearchItemColor);
                     }
                     return listView;
@@ -201,6 +203,7 @@ public class SearchableSpinnerDialog extends DialogFragment implements SearchVie
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (onSearchDialogEventListener != null) {
                     onSearchDialogEventListener.onSearchItemSelected(searchArrayAdapter.getItem(position), position);
+                    selectedItem = searchArrayAdapter.getItem(position);
                 }
                 getDialog().dismiss();
             }
