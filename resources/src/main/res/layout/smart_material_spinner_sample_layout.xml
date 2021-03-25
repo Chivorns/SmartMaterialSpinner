@@ -101,6 +101,19 @@
 
         <TextView
             style="@style/headerTextStyle"
+            android:text="@string/custom_search_item_layout" />
+
+        <com.chivorn.smartmaterialspinner.SmartMaterialSpinner
+            android:id="@+id/sp_custom_search_item_layout"
+            style="@style/spinnerStyle"
+            app:smsp_isSearchable="true"
+            app:smsp_searchDropdownView="@layout/search_list_item_custom_layout"
+            app:smsp_alwaysShowFloatingLabel="false"
+            app:smsp_floatingLabelText="floating text"
+            app:smsp_hint="Custom search item layout" />
+
+        <TextView
+            style="@style/headerTextStyle"
             android:text="@string/test_visibility_changed" />
 
         <com.chivorn.smartmaterialspinner.SmartMaterialSpinner

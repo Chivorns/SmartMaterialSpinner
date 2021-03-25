@@ -50,6 +50,7 @@ public class SearchableSpinnerDialog extends DialogFragment implements SearchVie
     private int headerBackgroundColor;
     private Drawable headerBackgroundDrawable;
 
+    private int searchDropdownView;
     private int searchBackgroundColor;
     private Drawable searchBackgroundDrawable;
     private int searchHintColor;
@@ -168,12 +169,12 @@ public class SearchableSpinnerDialog extends DialogFragment implements SearchVie
         searchView.requestFocusFromTouch();
         List items = savedInstanceState != null ? (List) savedInstanceState.getSerializable(INSTANCE_LIST_ITEMS) : null;
         if (items != null) {
-            searchArrayAdapter = new ArrayAdapter<Object>(getActivity(), R.layout.smart_material_spinner_search_list_item_layout, items) {
+            searchArrayAdapter = new ArrayAdapter<Object>(getActivity(), searchDropdownView, items) {
                 @NonNull
                 @Override
                 public View getView(int position, View convertView, @NonNull ViewGroup parent) {
                     View listView = super.getView(position, convertView, parent);
-                    tvListItem = listView.findViewById(R.id.tv_search_list_item);
+                    tvListItem = (TextView)listView;
                     tvListItem.setTypeface(typeface);
                     if (searchListItemBackgroundColor != 0) {
                         itemListContainer.setBackgroundColor(searchListItemBackgroundColor);
@@ -362,6 +363,14 @@ public class SearchableSpinnerDialog extends DialogFragment implements SearchVie
     public void setSearchHeaderBackgroundColor(Drawable drawable) {
         headerBackgroundDrawable = drawable;
         headerBackgroundColor = 0;
+    }
+
+    public int getSearchDropdownView() {
+        return searchDropdownView;
+    }
+
+    public void setSearchDropdownView(int searchDropdownView) {
+        this.searchDropdownView = searchDropdownView;
     }
 
     public void setSearchBackgroundColor(int color) {

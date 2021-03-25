@@ -151,6 +151,7 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements Adapter
     private int searchTextColor;
     private int searchBackgroundColor;
     private Drawable searchBackgroundDrawable;
+    private int searchDropdownView;
     private float hintSize;
     private CharSequence floatingLabelText;
     private float floatingLabelSize;
@@ -301,6 +302,8 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements Adapter
             setSearchBackgroundColor(typedArray.getColor(R.styleable.SmartMaterialSpinner_smsp_searchBackgroundColor, ContextCompat.getColor(context, R.color.smsp_search_background)));
         }
 
+        searchDropdownView = typedArray.getResourceId(R.styleable.SmartMaterialSpinner_smsp_searchDropdownView, R.layout.smart_material_spinner_search_list_item_layout);
+
         //isEnableDefaultSelect = typedArray.getBoolean(R.styleable.SmartMaterialSpinner_smsp_enableDefaultSelect, true);
         isReSelectable = typedArray.getBoolean(R.styleable.SmartMaterialSpinner_smsp_isReSelectable, false);
 
@@ -328,6 +331,7 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements Adapter
         setSelectedSearchItemColor(selectedItemListColor);
         setSearchHintColor(searchHintColor);
         setSearchTextColor(searchTextColor);
+        setSearchDropdownView(searchDropdownView);
         setSearchTypeFace(typeface);
         setSearchListItemBackgroundColor(itemListBackground);
         if (searchBackgroundColor != 0)
@@ -1422,6 +1426,13 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements Adapter
 
     public String getSearchHint() {
         return searchHint;
+    }
+
+    public void setSearchDropdownView(int viewId) {
+        if (searchableSpinnerDialog != null) {
+            searchableSpinnerDialog.setSearchDropdownView(viewId);
+        }
+        invalidate();
     }
 
     public void setSearchBackgroundColor(int color) {

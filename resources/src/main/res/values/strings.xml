@@ -11,6 +11,7 @@
     <string name="dialog_spinner">Dialog Spinner</string>
     <string name="custom_color">Custom Color</string>
     <string name="clickable_spinner">Clickable Spinner</string>
+    <string name="custom_search_item_layout">Custom search item layout</string>
     <string name="goto_runtime_render">Goto Runtime Render</string>
     <string name="test_visibility_changed">Test Visibility Changed</string>
     <string name="show_spinner">Show Spinner</string>

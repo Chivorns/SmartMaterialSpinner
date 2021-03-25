@@ -23,6 +23,7 @@ public class MainApp<T> extends AppCompatActivity implements View.OnClickListene
     protected SmartMaterialSpinner<String> spProvinceDialog;
     protected SmartMaterialSpinner<String> spCustomColor;
     protected SmartMaterialSpinner<String> spEmptyItem;
+    protected SmartMaterialSpinner<String> spCustomView;
     protected SmartMaterialSpinner<String> spVisibilityChanged;
 
     private LinearLayout githubRepo;
@@ -43,6 +44,7 @@ public class MainApp<T> extends AppCompatActivity implements View.OnClickListene
         spProvinceDialog = findViewById(R.id.sp_provinces_dialog);
         spCustomColor = findViewById(R.id.sp_custom_color);
         spEmptyItem = findViewById(R.id.sp_empty_item);
+        spCustomView = findViewById(R.id.sp_custom_search_item_layout);
         spVisibilityChanged = findViewById(R.id.sp_visibility_changed);
         githubRepo = findViewById(R.id.git_repo_container);
         btnShowError = findViewById(R.id.btn_show_error);
@@ -66,6 +68,7 @@ public class MainApp<T> extends AppCompatActivity implements View.OnClickListene
         provinceList.add("Kep");
         provinceList.add("Koh Kong");
         provinceList.add("Kratie");
+        provinceList.add("Some very very very very very very very very very very very very big province");
         provinceList.add("Mondulkiri");
         provinceList.add("Oddar Meanchey");
         provinceList.add("Pailin");
