@@ -49,6 +49,7 @@
         <attr name="smsp_arrowPaddingTop" format="dimension" />
         <attr name="smsp_arrowPaddingRight" format="dimension" />
         <attr name="smsp_arrowPaddingBottom" format="dimension" />
+        <attr name="smsp_paddingLeftRight" format="dimension" />
 
         <attr name="smsp_underlineSize" format="dimension" />
         <attr name="smsp_underlineColor" format="color|reference" />

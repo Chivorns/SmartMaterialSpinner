@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="smsp_base_color">#000000</color>
-    <color name="smsp_underline_color">#4851504e</color>
+    <color name="smsp_underline_color">#5C131212</color>
     <color name="smsp_highlight_color">#4E61CC</color>
     <color name="smsp_default_text_color">#4e4b4b</color>
     <color name="smsp_disabled_color">#808080</color>

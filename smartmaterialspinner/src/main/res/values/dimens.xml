@@ -4,10 +4,11 @@
     <dimen name="smsp_floating_label_top_spacing">6dp</dimen>
     <dimen name="smsp_floating_label_bottom_spacing">5dp</dimen>
 
-    <dimen name="smsp_right_left_spinner_padding">0dp</dimen>
+    <dimen name="smsp_left_right_spinner_padding">4dp</dimen>
     <dimen name="smsp_min_content_height">6dp</dimen>
 
     <dimen name="smsp_underline_top_spacing">8dp</dimen>
+    <dimen name="smsp_underline_size">0.5dp</dimen>
     <dimen name="smsp_error_text_padding_top">5dp</dimen>
     <dimen name="smsp_error_text_padding_bottom">5dp</dimen>
     <dimen name="smsp_error_text_padding_top_bottom">0dp</dimen>
@@ -17,6 +18,7 @@
     <dimen name="smsp_default_hint_size">14sp</dimen>
     <dimen name="smsp_default_floating_label_size">12sp</dimen>
     <dimen name="smsp_default_error_text_size">13sp</dimen>
+    <dimen name="smsp_default_arrow_padding_left">14dp</dimen>
     <dimen name="smsp_default_arrow_padding_right">19dp</dimen>
 
 </resources>
