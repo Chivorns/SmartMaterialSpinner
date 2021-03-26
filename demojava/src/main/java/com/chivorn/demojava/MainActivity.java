@@ -34,6 +34,7 @@ public class MainActivity<T> extends MainApp<T> {
         spProvinceNoHint.setItem(provinceList);
         spProvinceDialog.setItem(provinceList);
         spCustomColor.setItem(provinceList);
+        spCustomView.setItem(provinceList);
 
         spSearchable.setSearchDialogGravity(Gravity.TOP);
         spSearchable.setErrorTextAlignment(SmartMaterialSpinner.TextAlignment.ALIGN_LEFT);
