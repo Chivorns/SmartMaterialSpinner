@@ -69,7 +69,6 @@ public class MainApp<T> extends AppCompatActivity implements View.OnClickListene
         provinceList.add("Kep");
         provinceList.add("Koh Kong");
         provinceList.add("Kratie");
-        provinceList.add("Some very very very very very very very very very very very very big province");
         provinceList.add("Mondulkiri");
         provinceList.add("Oddar Meanchey");
         provinceList.add("Pailin");

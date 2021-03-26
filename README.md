@@ -30,6 +30,7 @@ The best Android spinner library for your android application with more customiz
   * `smsp_enableDismissSearch`: To enable/disable dismiss button on search dialog
   * `smsp_dismissSearchText`: To set dismiss button text for search dialog
   * `smsp_dismissSearchColor`: To set dismiss button text color for search dialog
+  * `smsp_searchDropdownView`: To custom search view item
 
 ### Spinner item
   * `smsp_itemSize`: To set spinner item size
@@ -126,17 +127,10 @@ The best Android spinner library for your android application with more customiz
                                                                                                                 
 ## Usage
 ### Add the dependencies to your gradle file:
-#### <a name="LegacyGradle"></a> Legacy Project
 
 ```gradle
 dependencies {
-    implementation 'com.github.chivorns:smartmaterialspinner:1.2.1'
-}
-```
-#### <a name="AndroidXGradle"></a> AndroidX Project
-```gradle
-dependencies {
-    implementation 'com.github.chivorns.androidx:smartmaterialspinner:1.2.1'
+    implementation 'com.github.chivorns:smartmaterialspinner:1.3.0'
 }
 ```
 
