@@ -370,13 +370,13 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements Adapter
                         SmartMaterialSpinner.this.setDropDownVerticalOffset(underlineStartY + underlineHeight);
                         SmartMaterialSpinner.this.setDropDownHorizontalOffset(SmartMaterialSpinner.this.getDropDownHorizontalOffset() + leftRightSpinnerPadding - getPaddingLeft());
                         dropdownHeightUpdated = true;
+                        setErrorText(errorText);
                     }
                 }
                 if (isSpinnerEmpty()) {
                     SmartMaterialSpinner.this.setDropDownWidth(0);
                     SmartMaterialSpinner.this.setDropDownVerticalOffset(0);
                 }
-                setErrorText(errorText);
             }
         });
     }
@@ -568,7 +568,7 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements Adapter
     private int prepareBottomPadding() {
         final int[] targetNbLines = {minNbErrorLine};
         if (errorText != null) {
-            final int[] mWidth = {getWidth() - getPaddingRight() - getPaddingLeft()};
+            final int[] mWidth = {getWidth() - getPaddingRight() - getPaddingLeft() - leftRightSpinnerPadding * 2};
             if (mWidth[0] <= 0) {
                 getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
                     @Override
@@ -576,7 +576,7 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements Adapter
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                             getViewTreeObserver().removeOnGlobalLayoutListener(this);
                         }
-                        mWidth[0] = getWidth() - getPaddingRight() - getPaddingLeft();
+                        mWidth[0] = getWidth() - getPaddingRight() - getPaddingLeft() - leftRightSpinnerPadding * 2;
                         configStaticLayout(errorText, errorTextPaint, mWidth[0]);
                         int nbErrorLines = staticLayout.getLineCount();
                         targetNbLines[0] = Math.max(minNbErrorLine, nbErrorLines);
@@ -686,7 +686,8 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements Adapter
             }
         }
         //  drawSelector(canvas, (getWidth() - leftRightSpinnerPadding - arrowPaddingRight + arrowPaddingLeft), getPaddingTop() + dpToPx(6) - arrowPaddingBottom + arrowPaddingTop);
-        drawSelector(canvas, (getWidth() - leftRightSpinnerPadding - arrowPaddingRight + arrowPaddingLeft), (int) (getPaddingTop() - arrowPaddingBottom + arrowPaddingTop + minContentHeight / 2F + itemSize / 2 - floatingLabelTopSpacing));
+        //  drawSelector(canvas, (getWidth() - leftRightSpinnerPadding - arrowPaddingRight + arrowPaddingLeft), (int) (getPaddingTop() - arrowPaddingBottom + arrowPaddingTop + minContentHeight / 2F + itemSize / 2 - floatingLabelTopSpacing));
+        drawSelector(canvas, (getWidth() - leftRightSpinnerPadding - arrowPaddingRight + arrowPaddingLeft), (startYLine + dpToPx(4)) / 2 - arrowPaddingBottom + arrowPaddingTop);
     }
 
     private void drawSelector(Canvas canvas, int posX, int posY) {
