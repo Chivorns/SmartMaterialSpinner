@@ -18,6 +18,7 @@
         <attr name="smsp_searchHint" format="string" />
         <attr name="smsp_searchHintColor" format="color" />
         <attr name="smsp_searchTextColor" format="color" />
+        <attr name="smsp_searchFilterColor" format="color" />
         <attr name="smsp_searchBackgroundColor" format="color|reference" />
         <attr name="smsp_enableDismissSearch" format="boolean" />
         <attr name="smsp_dismissSearchText" format="string" />

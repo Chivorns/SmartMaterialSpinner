@@ -9,7 +9,9 @@ import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.SpannableString;
 import android.text.TextUtils;
+import android.text.style.ForegroundColorSpan;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,15 +31,17 @@ import androidx.appcompat.widget.AppCompatTextView;
 import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.DialogFragment;
 
+import com.chivorn.smartmaterialspinner.adapter.SearchAdapter;
+
 import java.io.Serializable;
 import java.util.List;
 
-public class SearchableSpinnerDialog extends DialogFragment implements SearchView.OnQueryTextListener, SearchView.OnCloseListener {
+public class SearchableSpinnerDialog<T> extends DialogFragment implements SearchView.OnQueryTextListener, SearchView.OnCloseListener {
     private static final String TAG = SearchableSpinnerDialog.class.getSimpleName();
     private static final String INSTANCE_LIST_ITEMS = "ListItems";
     private static final String INSTANCE_LISTENER_KEY = "OnSearchDialogEventListener";
     private static final String INSTANCE_SPINNER_KEY = "SmartMaterialSpinner";
-    private ArrayAdapter searchArrayAdapter;
+    private ArrayAdapter<T> searchArrayAdapter;
     private ViewGroup searchHeaderView;
     private AppCompatTextView tvSearchHeader;
     private SearchView searchView;
@@ -56,6 +60,7 @@ public class SearchableSpinnerDialog extends DialogFragment implements SearchVie
     private Drawable searchBackgroundDrawable;
     private int searchHintColor;
     private int searchTextColor;
+    private int searchFilterColor;
 
     private int searchListItemBackgroundColor;
     private Drawable searchListItemBackgroundDrawable;
@@ -78,7 +83,7 @@ public class SearchableSpinnerDialog extends DialogFragment implements SearchVie
     private OnSearchDialogEventListener onSearchDialogEventListener;
     private OnSearchTextChanged onSearchTextChanged;
     private DialogInterface.OnClickListener dialogListener;
-    private SmartMaterialSpinner smartMaterialSpinner;
+    private SmartMaterialSpinner<T> smartMaterialSpinner;
     private boolean isDismissOnSelected = true;
 
     public SearchableSpinnerDialog() {
@@ -171,13 +176,14 @@ public class SearchableSpinnerDialog extends DialogFragment implements SearchVie
         searchView.requestFocusFromTouch();
         List items = savedInstanceState != null ? (List) savedInstanceState.getSerializable(INSTANCE_LIST_ITEMS) : null;
         if (items != null) {
-            searchArrayAdapter = new ArrayAdapter<Object>(getActivity(), searchDropdownView, items) {
+            searchArrayAdapter = new SearchAdapter<T>(getActivity(), searchDropdownView, items) {
                 @NonNull
                 @Override
                 public View getView(int position, View convertView, @NonNull ViewGroup parent) {
                     View listView = super.getView(position, convertView, parent);
-                    tvListItem = (TextView)listView;
+                    tvListItem = (TextView) listView;
                     tvListItem.setTypeface(typeface);
+                    SpannableString spannableString = new SpannableString(tvListItem.getText());
                     if (searchListItemBackgroundColor != 0) {
                         itemListContainer.setBackgroundColor(searchListItemBackgroundColor);
                     } else if (searchListItemBackgroundDrawable != null) {
@@ -188,9 +194,18 @@ public class SearchableSpinnerDialog extends DialogFragment implements SearchVie
 
                     if (searchListItemColor != 0) {
                         tvListItem.setTextColor(searchListItemColor);
+                        if (searchFilterColor != 0 && searchView.getQuery() != null && !searchView.getQuery().toString().isEmpty()) {
+                            String query = searchView.getQuery().toString().toLowerCase();
+                            String fullText = tvListItem.getText().toString().toLowerCase();
+                            int start = fullText.indexOf(query);
+                            int end = start + query.length();
+                            spannableString.setSpan(new ForegroundColorSpan(searchFilterColor), start, end, 0);
+                            tvListItem.setText(spannableString, TextView.BufferType.SPANNABLE);
+                        }
                     }
 
-                    if (selectedSearchItemColor != 0 && position >= 0 && searchArrayAdapter.getItem(position).equals(selectedItem)) {
+                    Object item = searchArrayAdapter.getItem(position);
+                    if (selectedSearchItemColor != 0 && position >= 0 && item != null && item.equals(selectedItem)) {
                         tvListItem.setTextColor(selectedSearchItemColor);
                     }
                     return listView;
@@ -406,6 +421,10 @@ public class SearchableSpinnerDialog extends DialogFragment implements SearchVie
 
     public void setSearchTextColor(int color) {
         searchTextColor = color;
+    }
+
+    public void setSearchFilterColor(int searchFilterColor) {
+        this.searchFilterColor = searchFilterColor;
     }
 
     public void setSearchHintColor(int color) {

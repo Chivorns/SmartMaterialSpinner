@@ -9,6 +9,7 @@
     <color name="smsp_search_header_text_color">#FFFFFF</color>
     <color name="smsp_search_header_background">#4E61CC</color>
     <color name="smsp_search_background">#FFFFFF</color>
+    <color name="smsp_search_filter_color">#cc2a36</color>
     <color name="smsp_transparent_color">#00000000</color>
     <color name="smsp_white_color">#FFFFFF</color>
     <color name="smsp_hint_color">#999898</color>
