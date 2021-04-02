@@ -51,6 +51,7 @@ public class SearchableSpinnerDialog<T> extends DialogFragment implements Search
     private LinearLayout itemListContainer;
     public Button btnDismiss;
 
+    private boolean isShowKeyboardOnStart;
     private boolean isEnableSearchHeader = true;
     private int headerBackgroundColor;
     private Drawable headerBackgroundDrawable;
@@ -174,6 +175,12 @@ public class SearchableSpinnerDialog<T> extends DialogFragment implements Search
         searchView.setFocusable(true);
         searchView.setIconified(false);
         searchView.requestFocusFromTouch();
+        if (isShowKeyboardOnStart) {
+            searchView.requestFocus();
+        } else {
+            searchView.clearFocus();
+        }
+
         List items = savedInstanceState != null ? (List) savedInstanceState.getSerializable(INSTANCE_LIST_ITEMS) : null;
         if (items != null) {
             searchArrayAdapter = new SearchAdapter<T>(getActivity(), searchDropdownView, items) {
@@ -363,6 +370,10 @@ public class SearchableSpinnerDialog<T> extends DialogFragment implements Search
 
     public void setEnableSearchHeader(boolean enableSearchHeader) {
         isEnableSearchHeader = enableSearchHeader;
+    }
+
+    public void setShowKeyboardOnStart(boolean showKeyboardOnStart) {
+        isShowKeyboardOnStart = showKeyboardOnStart;
     }
 
     public void setSearchHeaderText(String header) {

@@ -191,6 +191,7 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements Adapter
     private boolean alwaysShowFloatingLabel;
     private boolean isRtl;
     private boolean isEnableDefaultSelect = true;
+    private boolean isShowKeyboardOnStart = false;
 
     private HintAdapter hintAdapter;
     private TextView tvSpinnerItem;
@@ -308,6 +309,7 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements Adapter
         itemView = typedArray.getResourceId(R.styleable.SmartMaterialSpinner_smsp_itemView, R.layout.smart_material_spinner_item_layout);
         dropdownView = typedArray.getResourceId(R.styleable.SmartMaterialSpinner_smsp_dropdownView, R.layout.smart_material_spinner_dropdown_item_layout);
         isSearchable = typedArray.getBoolean(R.styleable.SmartMaterialSpinner_smsp_isSearchable, false);
+        isShowKeyboardOnStart = typedArray.getBoolean(R.styleable.SmartMaterialSpinner_smsp_showKeyboardOnStart, false);
         isEnableSearchHeader = typedArray.getBoolean(R.styleable.SmartMaterialSpinner_smsp_enableSearchHeader, true);
         searchHeaderText = typedArray.getString(R.styleable.SmartMaterialSpinner_smsp_searchHeaderText);
         searchHeaderTextColor = typedArray.getColor(R.styleable.SmartMaterialSpinner_smsp_searchHeaderTextColor, ContextCompat.getColor(context, R.color.smsp_search_header_text_color));
@@ -352,6 +354,7 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements Adapter
 
     private void configSearchableDialog() {
         setSearchable(isSearchable);
+        setShowKeyboardOnStart(isShowKeyboardOnStart);
         setEnableSearchHeader(isEnableSearchHeader);
         setSearchHeaderText(searchHeaderText);
         setSearchHeaderTextColor(searchHeaderTextColor);
@@ -1490,6 +1493,18 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements Adapter
 
     public void setSearchable(boolean searchable) {
         this.isSearchable = searchable;
+        invalidate();
+    }
+
+    public boolean isShowKeyboardOnStart() {
+        return isShowKeyboardOnStart;
+    }
+
+    public void setShowKeyboardOnStart(boolean showKeyboardOnStart) {
+        this.isShowKeyboardOnStart = showKeyboardOnStart;
+        if (searchableSpinnerDialog != null) {
+            searchableSpinnerDialog.setShowKeyboardOnStart(showKeyboardOnStart);
+        }
         invalidate();
     }
 
