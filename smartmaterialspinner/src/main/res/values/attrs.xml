@@ -72,5 +72,12 @@
         <attr name="smsp_isRtl" format="boolean" />
         <!--<attr name="smsp_enableDefaultSelect" format="boolean" />-->
         <attr name="smsp_isReSelectable" format="boolean" />
+
+        <attr name="smsp_isOutlined" format="boolean" />
+        <attr name="smsp_outlinedBoxRadius" format="dimension" />
+        <attr name="smsp_outlinedHintStartX" format="dimension" />
+        <attr name="smsp_outlinedHintPadding" format="dimension" />
+        <attr name="smsp_outlinedStrokeWidth" format="dimension" />
+        <attr name="smsp_outlinedBoxColor" format="color|reference" />
     </declare-styleable>
 </resources>

@@ -5,7 +5,7 @@
     <dimen name="smsp_floating_label_bottom_spacing">5dp</dimen>
 
     <dimen name="smsp_left_right_spinner_padding">4dp</dimen>
-    <dimen name="smsp_min_content_height">6dp</dimen>
+    <dimen name="smsp_min_content_height">18dp</dimen>
 
     <dimen name="smsp_underline_top_spacing">8dp</dimen>
     <dimen name="smsp_underline_size">0.5dp</dimen>
@@ -21,4 +21,9 @@
     <dimen name="smsp_default_arrow_padding_left">14dp</dimen>
     <dimen name="smsp_default_arrow_padding_right">19dp</dimen>
 
+    <dimen name="smsp_outlined_box_radius">8dp</dimen>
+    <dimen name="smsp_outlined_extra_height">10dp</dimen>
+    <dimen name="smsp_outlined_hint_start_x">10dp</dimen>
+    <dimen name="smsp_outlined_hint_padding">4dp</dimen>
+    <dimen name="smsp_outlined_stroke_width">1dp</dimen>
 </resources>

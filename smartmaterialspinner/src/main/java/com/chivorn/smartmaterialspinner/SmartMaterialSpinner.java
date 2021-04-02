@@ -12,6 +12,7 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Point;
 import android.graphics.Rect;
+import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
@@ -35,6 +36,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 
@@ -67,11 +69,32 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements Adapter
     private TextPaint itemTextPaint;
     private Rect itemTextRect;
 
+    private Paint outlinedPaint;
+    private RectF outlinedRectF;
+    private Path outlinedPath;
+    private LinearLayout outlinedHintContainer;
+    private TextView outlinedHint;
+    private boolean isOutlinedHintAdded = false;
+
+    private final int maxRadius = 70;
+    private final int outlinedMarginTop = 8;
+    private int topLefRadius;
+    private int topRightRadius;
+    private int bottomLeftRadius;
+    private int bottomRightRadius;
+
+    private int outlinedExtraHeight;
+    private int outlinedHintStartX;
+    private int outlinedHintPadding;
+    private int outlinedBoxColor;
+    private int outlinedStrokeWidth;
+
     private SearchableSpinnerDialog searchableSpinnerDialog;
     private List<T> item;
     private List<Object> searchDialogItem;
 
     private boolean isSearchable = false;
+    private boolean isOutlined = false;
     private boolean isEnableSearchHeader = true;
     private String searchHeaderText;
     private int searchHeaderTextColor;
@@ -150,6 +173,7 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements Adapter
     private int selectedItemListColor;
     private int searchHintColor;
     private int searchTextColor;
+    private int searchFilterColor;
     private int searchBackgroundColor;
     private Drawable searchBackgroundDrawable;
     private int searchDropdownView;
@@ -219,7 +243,7 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements Adapter
         initSearchableDialogObject();
         initAttributes(context, attrs);
         initDimensions(context, attrs);
-        initPaintObjects();
+        initPaintObjects(context);
         initPadding();
         initFloatingLabelAnimator();
         configSearchableDialog();
@@ -250,7 +274,7 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements Adapter
         }
         baseColor = typedArray.getColor(R.styleable.SmartMaterialSpinner_smsp_baseColor, defaultBaseColor);
         highlightColor = typedArray.getColor(R.styleable.SmartMaterialSpinner_smsp_highlightColor, defaultHighlightColor);
-        errorTextSize = typedArray.getDimension(R.styleable.SmartMaterialSpinner_smsp_errorTextSize, getResources().getDimensionPixelSize(R.dimen.smsp_default_error_text_size));
+        errorTextSize = typedArray.getDimensionPixelSize(R.styleable.SmartMaterialSpinner_smsp_errorTextSize, getResources().getDimensionPixelSize(R.dimen.smsp_default_error_text_size));
         errorTextColor = typedArray.getColor(R.styleable.SmartMaterialSpinner_smsp_errorTextColor, defaultErrorColor);
         disabledColor = ContextCompat.getColor(context, R.color.smsp_disabled_color);
         underlineColor = typedArray.getColor(R.styleable.SmartMaterialSpinner_smsp_underlineColor, ContextCompat.getColor(context, R.color.smsp_underline_color));
@@ -263,20 +287,20 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements Adapter
         itemListHintColor = typedArray.getColor(R.styleable.SmartMaterialSpinner_smsp_itemListHintColor, ContextCompat.getColor(context, R.color.smsp_item_list_hint_color));
         itemListHintBackground = typedArray.getColor(R.styleable.SmartMaterialSpinner_smsp_itemListHintBackgroundColor, ContextCompat.getColor(context, R.color.smsp_item_list_hint_background));
         itemListBackground = typedArray.getColor(R.styleable.SmartMaterialSpinner_smsp_itemListBackgroundColor, ContextCompat.getColor(context, R.color.smsp_item_list_background));
-        itemSize = typedArray.getDimension(R.styleable.SmartMaterialSpinner_smsp_itemSize, getResources().getDimension(R.dimen.smsp_default_text_and_hint_size));
+        itemSize = typedArray.getDimensionPixelSize(R.styleable.SmartMaterialSpinner_smsp_itemSize, getResources().getDimensionPixelSize(R.dimen.smsp_default_text_and_hint_size));
         itemColor = typedArray.getColor(R.styleable.SmartMaterialSpinner_smsp_itemColor, Color.BLACK);
         itemListColor = typedArray.getColor(R.styleable.SmartMaterialSpinner_smsp_itemListColor, Color.BLACK);
         selectedItemListColor = typedArray.getColor(R.styleable.SmartMaterialSpinner_smsp_selectedItemListColor, ContextCompat.getColor(context, R.color.smsp_selected_color));
-        hintSize = typedArray.getDimension(R.styleable.SmartMaterialSpinner_smsp_hintSize, getResources().getDimension(R.dimen.smsp_default_hint_size));
-        floatingLabelSize = typedArray.getDimension(R.styleable.SmartMaterialSpinner_smsp_floatingLabelSize, getResources().getDimension(R.dimen.smsp_default_floating_label_size));
+        hintSize = typedArray.getDimensionPixelSize(R.styleable.SmartMaterialSpinner_smsp_hintSize, getResources().getDimensionPixelSize(R.dimen.smsp_default_hint_size));
+        floatingLabelSize = typedArray.getDimensionPixelSize(R.styleable.SmartMaterialSpinner_smsp_floatingLabelSize, getResources().getDimensionPixelSize(R.dimen.smsp_default_floating_label_size));
         floatingLabelColor = typedArray.getColor(R.styleable.SmartMaterialSpinner_smsp_floatingLabelColor, ContextCompat.getColor(context, R.color.smsp_floating_label_color));
         isMultilineError = typedArray.getBoolean(R.styleable.SmartMaterialSpinner_smsp_multilineError, true);
         minNbErrorLine = typedArray.getInt(R.styleable.SmartMaterialSpinner_smsp_nbErrorLine, 1);
         currentNbErrorLines = minNbErrorLine;
         alignLabel = typedArray.getBoolean(R.styleable.SmartMaterialSpinner_smsp_alignLabel, true);
-        underlineSize = typedArray.getDimension(R.styleable.SmartMaterialSpinner_smsp_underlineSize, getResources().getDimensionPixelSize(R.dimen.smsp_underline_size));
+        underlineSize = typedArray.getDimensionPixelSize(R.styleable.SmartMaterialSpinner_smsp_underlineSize, getResources().getDimensionPixelSize(R.dimen.smsp_underline_size));
         arrowColor = typedArray.getColor(R.styleable.SmartMaterialSpinner_smsp_arrowColor, baseColor);
-        arrowSize = typedArray.getDimension(R.styleable.SmartMaterialSpinner_smsp_arrowSize, dpToPx(DEFAULT_ARROW_WIDTH_DP));
+        arrowSize = typedArray.getDimensionPixelSize(R.styleable.SmartMaterialSpinner_smsp_arrowSize, dpToPx(DEFAULT_ARROW_WIDTH_DP));
         enableErrorLabel = typedArray.getBoolean(R.styleable.SmartMaterialSpinner_smsp_enableErrorLabel, true);
         enableFloatingLabel = typedArray.getBoolean(R.styleable.SmartMaterialSpinner_smsp_enableFloatingLabel, true);
         alwaysShowFloatingLabel = typedArray.getBoolean(R.styleable.SmartMaterialSpinner_smsp_alwaysShowFloatingLabel, false);
@@ -296,6 +320,7 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements Adapter
         searchHint = typedArray.getString(R.styleable.SmartMaterialSpinner_smsp_searchHint);
         searchHintColor = typedArray.getColor(R.styleable.SmartMaterialSpinner_smsp_searchHintColor, 0);
         searchTextColor = typedArray.getColor(R.styleable.SmartMaterialSpinner_smsp_searchTextColor, 0);
+        searchFilterColor = typedArray.getColor(R.styleable.SmartMaterialSpinner_smsp_searchFilterColor, ContextCompat.getColor(context, R.color.smsp_search_filter_color));
 
         int searchDrawableResId = typedArray.getResourceId(R.styleable.SmartMaterialSpinner_smsp_searchBackgroundColor, 0);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN && searchDrawableResId != 0) {
@@ -313,6 +338,8 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements Adapter
         dismissSearchText = typedArray.getString(R.styleable.SmartMaterialSpinner_smsp_dismissSearchText);
         dismissSearchColor = typedArray.getColor(R.styleable.SmartMaterialSpinner_smsp_dismissSearchColor, ContextCompat.getColor(context, R.color.smsp_dismiss_color));
 
+        isOutlined = typedArray.getBoolean(R.styleable.SmartMaterialSpinner_smsp_isOutlined, false);
+        outlinedBoxColor = typedArray.getColor(R.styleable.SmartMaterialSpinner_smsp_outlinedBoxColor, ContextCompat.getColor(context, R.color.smsp_outlined_box_color));
         typedArray.recycle();
         lastPosition = -1;
     }
@@ -333,6 +360,7 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements Adapter
         setSelectedSearchItemColor(selectedItemListColor);
         setSearchHintColor(searchHintColor);
         setSearchTextColor(searchTextColor);
+        setSearchFilterColor(searchFilterColor);
         setSearchDropdownView(searchDropdownView);
         setSearchTypeFace(typeface);
         setSearchListItemBackgroundColor(itemListBackground);
@@ -363,12 +391,12 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements Adapter
                     SmartMaterialSpinner.this.getViewTreeObserver().removeOnGlobalLayoutListener(this);
                 }
                 if (getWidth() != 0 && getHeight() != 0) {
-                    SmartMaterialSpinner.this.setDropDownWidth(getWidth() - leftRightSpinnerPadding * 2);
+                    SmartMaterialSpinner.this.setDropDownWidth(getWidth() - (isOutlined ? 0 : leftRightSpinnerPadding * 2));
                     if (getDropDownVerticalOffset() <= 0) {
                         int underlineHeight = dpToPx(underlineSize);
                         int underlineStartY = getHeight() - getPaddingBottom() + underlineTopSpacing;
                         SmartMaterialSpinner.this.setDropDownVerticalOffset(underlineStartY + underlineHeight);
-                        SmartMaterialSpinner.this.setDropDownHorizontalOffset(SmartMaterialSpinner.this.getDropDownHorizontalOffset() + leftRightSpinnerPadding - getPaddingLeft());
+                        SmartMaterialSpinner.this.setDropDownHorizontalOffset((isOutlined ? 0 : leftRightSpinnerPadding) - getPaddingLeft());
                         dropdownHeightUpdated = true;
                         setErrorText(errorText);
                     }
@@ -381,7 +409,7 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements Adapter
         });
     }
 
-    private void initPaintObjects() {
+    private void initPaintObjects(Context mContext) {
         int errorTextSize = getResources().getDimensionPixelSize(R.dimen.smsp_default_error_text_size);
         int floatingLabelSize = getResources().getDimensionPixelSize(R.dimen.smsp_default_floating_label_size);
 
@@ -412,6 +440,18 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements Adapter
         for (int i = 0; i < 3; i++) {
             selectorPoints[i] = new Point();
         }
+
+        outlinedPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        outlinedRectF = new RectF();
+        outlinedPath = new Path();
+        outlinedHintContainer = new LinearLayout(mContext);
+        outlinedHint = new TextView(mContext);
+
+        outlinedPaint.setColor(Color.LTGRAY);
+        outlinedPaint.setStrokeWidth(outlinedStrokeWidth);
+        outlinedPaint.setStyle(Paint.Style.STROKE);
+        outlinedPaint.setStrokeCap(Paint.Cap.ROUND);
+        outlinedPaint.setStrokeJoin(Paint.Join.ROUND);
     }
 
     private void initPadding() {
@@ -458,13 +498,25 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements Adapter
         floatingLabelInsideSpacing = getResources().getDimensionPixelSize(R.dimen.smsp_floating_label_inside_spacing);
         errorTextPaddingTop = getResources().getDimensionPixelSize(R.dimen.smsp_error_text_padding_top);
         errorTextPaddingTopBottom = getResources().getDimensionPixelSize(R.dimen.smsp_error_text_padding_top_bottom);
-        minContentHeight = getResources().getDimensionPixelSize(R.dimen.smsp_min_content_height);
+        outlinedExtraHeight = getResources().getDimensionPixelSize(R.dimen.smsp_outlined_extra_height);
+        minContentHeight = getResources().getDimensionPixelSize(R.dimen.smsp_min_content_height) + (isOutlined ? outlinedExtraHeight : 0);
 
         arrowPaddingLeft = typedArray.getDimensionPixelSize(R.styleable.SmartMaterialSpinner_smsp_arrowPaddingLeft, getResources().getDimensionPixelSize(R.dimen.smsp_default_arrow_padding_left));
         arrowPaddingTop = typedArray.getDimensionPixelSize(R.styleable.SmartMaterialSpinner_smsp_arrowPaddingTop, 0);
         arrowPaddingRight = typedArray.getDimensionPixelSize(R.styleable.SmartMaterialSpinner_smsp_arrowPaddingRight, getResources().getDimensionPixelSize(R.dimen.smsp_default_arrow_padding_right));
         arrowPaddingBottom = typedArray.getDimensionPixelSize(R.styleable.SmartMaterialSpinner_smsp_arrowPaddingBottom, 0);
 
+        int boxRadius = typedArray.getDimensionPixelSize(R.styleable.SmartMaterialSpinner_smsp_outlinedBoxRadius, getResources().getDimensionPixelSize(R.dimen.smsp_outlined_box_radius));
+        if (boxRadius > maxRadius) {
+            boxRadius = maxRadius;
+        } else if (boxRadius < 0) {
+            boxRadius = 0;
+        }
+        topLefRadius = topRightRadius = bottomLeftRadius = bottomRightRadius = boxRadius;
+        outlinedHintStartX = typedArray.getDimensionPixelSize(R.styleable.SmartMaterialSpinner_smsp_outlinedHintStartX, getResources().getDimensionPixelSize(R.dimen.smsp_outlined_hint_start_x));
+        outlinedHintPadding = typedArray.getDimensionPixelSize(R.styleable.SmartMaterialSpinner_smsp_outlinedHintPadding, getResources().getDimensionPixelSize(R.dimen.smsp_outlined_hint_padding));
+        outlinedStrokeWidth = typedArray.getDimensionPixelSize(R.styleable.SmartMaterialSpinner_smsp_outlinedStrokeWidth, getResources().getDimensionPixelSize(R.dimen.smsp_outlined_stroke_width));
+        checkHintStartX();
         typedArray.recycle();
     }
 
@@ -664,11 +716,31 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements Adapter
             }
         }
 
-        // Underline Drawing
-        canvas.drawRect(startX, startYLine, endX, startYLine + lineHeight, paint);
+        if (isOutlined) {
+            // Draw Outlined
+            drawOutline(canvas, outlinedStrokeWidth / 2, outlinedHint.getHeight() / 2 - outlinedMarginTop, getWidth() - outlinedStrokeWidth / 2, startYLine);
+        } else {
+            // Draw Underline
+            canvas.drawRect(startX, startYLine, endX, startYLine + lineHeight, paint);
+        }
 
         //Floating Label Drawing
-        if ((hint != null || floatingLabelText != null) && enableFloatingLabel) {
+        if (isOutlined) {
+            if (!isOutlinedHintAdded) {
+                isOutlinedHintAdded = true;
+                outlinedHintContainer.addView(outlinedHint);
+            }
+            outlinedHint.setVisibility(View.VISIBLE);
+            outlinedHint.setText(hint);
+            outlinedHint.setTextColor(hintColor);
+            outlinedHint.setTextSize(TypedValue.COMPLEX_UNIT_PX, hintSize);
+            outlinedHintContainer.measure(getWidth(), getHeight());
+            outlinedHintContainer.layout(0, 0, getWidth(), getHeight());
+            canvas.save();
+            canvas.translate(outlinedHintStartX + outlinedHintPadding, -outlinedMarginTop);
+            outlinedHintContainer.draw(canvas);
+            canvas.restore();
+        } else if ((hint != null || floatingLabelText != null) && enableFloatingLabel) {
             if (isSelected || hasFocus()) {
                 floatLabelTextPaint.setColor(floatingLabelColor); // highlightColor
             } else {
@@ -690,8 +762,44 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements Adapter
         drawSelector(canvas, (getWidth() - leftRightSpinnerPadding - arrowPaddingRight + arrowPaddingLeft), (startYLine + dpToPx(4)) / 2 - arrowPaddingBottom + arrowPaddingTop);
     }
 
+    private void drawOutline(Canvas canvas, int left, int top, int right, int bottom) {
+        canvas.save();
+        outlinedRectF.set(left, top, right, bottom);
+        outlinedPaint.setColor(outlinedBoxColor);
+        outlinedPath.reset();
+        if (topLefRadius < outlinedHintStartX) {
+            outlinedPath.moveTo(outlinedRectF.left + topLefRadius, outlinedRectF.top);
+            outlinedPath.lineTo(outlinedHintStartX, outlinedRectF.top);
+        }
+        outlinedPath.moveTo(outlinedHint.getWidth() + outlinedHintStartX + outlinedHintPadding * 2, outlinedRectF.top);
+        outlinedPath.lineTo(outlinedRectF.right - topRightRadius, outlinedRectF.top);
+        outlinedPath.quadTo(outlinedRectF.right, outlinedRectF.top, outlinedRectF.right, outlinedRectF.top + topRightRadius);
+        outlinedPath.moveTo(outlinedRectF.right, outlinedRectF.bottom - bottomRightRadius);
+
+        //   path.lineTo(rect.right, rect.bottom - bottomRightRadius );
+        canvas.drawLine(outlinedRectF.right, outlinedRectF.top + topRightRadius, outlinedRectF.right, outlinedRectF.bottom - bottomRightRadius, outlinedPaint);
+
+        outlinedPath.quadTo(outlinedRectF.right, outlinedRectF.bottom, outlinedRectF.right - bottomRightRadius, outlinedRectF.bottom);
+        outlinedPath.moveTo(outlinedRectF.left + bottomLeftRadius, outlinedRectF.bottom);
+
+        canvas.drawLine(outlinedRectF.right - bottomRightRadius, outlinedRectF.bottom, outlinedRectF.left + bottomLeftRadius, outlinedRectF.bottom, outlinedPaint);
+        //    path.lineTo(rect.left + bottomLeftRadius , rect.bottom);
+        outlinedPath.quadTo(outlinedRectF.left, outlinedRectF.bottom, outlinedRectF.left, outlinedRectF.bottom - bottomLeftRadius);
+
+        outlinedPath.moveTo(outlinedRectF.left, outlinedRectF.top + topLefRadius);
+        //  path.lineTo(rect.left, rect.top + topLeftRadius );
+        canvas.drawLine(outlinedRectF.left, outlinedRectF.bottom - bottomLeftRadius, outlinedRectF.left, outlinedRectF.top + topLefRadius, outlinedPaint);
+        outlinedPath.quadTo(outlinedRectF.left, outlinedRectF.top, outlinedRectF.left + topLefRadius, outlinedRectF.top);
+        //   path.moveTo(rect.left, rect.top + topLeftRadius );
+        outlinedPath.moveTo(outlinedRectF.left + topLefRadius, outlinedRectF.top);
+        outlinedPath.close();
+        canvas.drawPath(outlinedPath, outlinedPaint);
+        canvas.restore();
+    }
+
     private void drawSelector(Canvas canvas, int posX, int posY) {
         paint.setColor(isEnabled() ? arrowColor : disabledColor);
+        paint.setStyle(Paint.Style.FILL);
         Point point1 = selectorPoints[0];
         Point point2 = selectorPoints[1];
         Point point3 = selectorPoints[2];
@@ -711,7 +819,9 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements Adapter
         selectorPath.lineTo(point2.x, point2.y); // Bottom left
         selectorPath.lineTo(point3.x, point3.y); // Bottom right
         selectorPath.close();
+        canvas.save();
         canvas.drawPath(selectorPath, paint);
+        canvas.restore();
     }
 
     /*
@@ -1383,6 +1493,81 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements Adapter
         invalidate();
     }
 
+    public boolean isOutlined() {
+        return isOutlined;
+    }
+
+    public void setOutlined(boolean outlined) {
+        this.isOutlined = outlined;
+        invalidate();
+    }
+
+    public void setOutlinedRadius(int topLefRadius, int topRightRadius, int bottomRightRadius, int bottomLeftRadius) {
+        this.topLefRadius = getFinalRadius(topLefRadius);
+        this.topRightRadius = getFinalRadius(topRightRadius);
+        this.bottomRightRadius = getFinalRadius(bottomRightRadius);
+        this.bottomLeftRadius = getFinalRadius(bottomLeftRadius);
+        checkHintStartX();
+        invalidate();
+    }
+
+    public void setOutlinedRadius(int radius) {
+        topLefRadius = topRightRadius = bottomLeftRadius = bottomRightRadius = getFinalRadius(radius);
+        checkHintStartX();
+        invalidate();
+    }
+
+    private int getFinalRadius(int radius) {
+        int maxRadiusDP = maxRadius / 2;
+        if (radius > maxRadiusDP) {
+            radius = maxRadiusDP;
+        } else if (radius < 0) {
+            radius = 0;
+        }
+        return dpToPx(radius);
+    }
+
+    @SuppressWarnings("SuspiciousNameCombination")
+    private void checkHintStartX() {
+        if (topLefRadius > outlinedHintStartX) outlinedHintStartX = topLefRadius;
+    }
+
+    public int getOutlinedBoxColor() {
+        return outlinedBoxColor;
+    }
+
+    public void setOutlinedBoxColor(int outlinedBoxColor) {
+        this.outlinedBoxColor = outlinedBoxColor;
+        invalidate();
+    }
+
+    public int getOutlinedHintPadding() {
+        return outlinedHintPadding;
+    }
+
+    public void setOutlinedHintPadding(int outlinedHintPadding) {
+        this.outlinedHintPadding = dpToPx(outlinedHintPadding);
+        invalidate();
+    }
+
+    public int getOutlinedHintStartX() {
+        return outlinedHintStartX;
+    }
+
+    public void setOutlinedHintStartX(int outlinedHintStartX) {
+        this.outlinedHintStartX = dpToPx(outlinedHintStartX);
+        invalidate();
+    }
+
+    public int getOutlinedStrokeWidth() {
+        return outlinedStrokeWidth;
+    }
+
+    public void setOutlinedStrokeWidth(int outlinedStrokeWidth) {
+        this.outlinedStrokeWidth = dpToPx(outlinedStrokeWidth);
+        invalidate();
+    }
+
     public boolean isEnableSearchHeader() {
         return isEnableSearchHeader;
     }
@@ -1479,6 +1664,14 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements Adapter
         this.searchTextColor = color;
         if (searchableSpinnerDialog != null) {
             searchableSpinnerDialog.setSearchTextColor(color);
+        }
+        invalidate();
+    }
+
+    public void setSearchFilterColor(int color) {
+        this.searchFilterColor = color;
+        if (searchableSpinnerDialog != null) {
+            searchableSpinnerDialog.setSearchFilterColor(color);
         }
         invalidate();
     }
@@ -1672,13 +1865,15 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements Adapter
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec + (isOutlined ? outlinedExtraHeight : 0));
     }
 
     @Override
     public void setAdapter(SpinnerAdapter adapter) {
         hintAdapter = new HintAdapter(adapter, getContext());
         super.setAdapter(hintAdapter);
+        configDropdownWidthAfterDataReady();
+        invalidate();
     }
 
     public void setItem(@NonNull List<T> item) {
@@ -1686,8 +1881,6 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements Adapter
         ArrayAdapter<T> adapter = new ArrayAdapter<>(getContext(), itemView, item);
         adapter.setDropDownViewResource(dropdownView);
         setAdapter(adapter);
-        configDropdownWidthAfterDataReady();
-        invalidate();
     }
 
     public List<T> getItem() {
@@ -1739,7 +1932,7 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements Adapter
      * **********************************************************************************
      */
 
-    private class HintAdapter<T> extends BaseAdapter {
+    private class HintAdapter extends BaseAdapter {
         private static final int HINT_TYPE = -1;
         private SpinnerAdapter mSpinnerAdapter;
         private Context mContext;
@@ -1799,7 +1992,13 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements Adapter
                 } else {
                     TextView textView = (TextView) getItemView(convertView, parent, isDropDownView);
                     //textView.setHeight(0);
-                    textView.setText(getResources().getString(R.string.select_item));
+                    String tmpHint = getResources().getString(R.string.select_item);
+                    if (isOutlined) {
+                        textView.setText(null);
+                        hint = tmpHint;
+                    } else {
+                        textView.setText(tmpHint);
+                    }
                     return textView;
                 }
             }
@@ -1851,6 +2050,10 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements Adapter
                     textView.setBackgroundColor(itemListHintBackground);
                     textView.setPadding(textView.getPaddingLeft(), dpToPx(12), textView.getPaddingRight(), dpToPx(12));
                 } else {
+                    if (isOutlined) {
+                        textView.setText(null);
+                        return;
+                    }
                     textView.setTextColor(SmartMaterialSpinner.this.isEnabled() ? hintColor : disabledColor);
                     measureItemText(textView.getText().toString());
                     textView.setPadding(textView.getPaddingLeft() + leftRightSpinnerPadding, textView.getPaddingTop(), (int) (arrowPaddingRight + itemTextHeight), textView.getPaddingBottom());
@@ -1864,10 +2067,14 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements Adapter
                         textView.setTextColor(selectedItemListColor);
                     }
                 } else {
+                    int outlinedPaddingStart = 0;
+                    if (isOutlined) {
+                        outlinedPaddingStart = outlinedHintStartX + outlinedHintPadding - leftRightSpinnerPadding;
+                    }
                     textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, itemSize);
                     textView.setTextColor(itemColor);
                     measureItemText(textView.getText().toString());
-                    textView.setPadding(textView.getPaddingLeft() + leftRightSpinnerPadding, textView.getPaddingTop(), (int) (arrowPaddingRight + itemTextHeight), textView.getPaddingBottom());
+                    textView.setPadding(textView.getPaddingLeft() + leftRightSpinnerPadding + outlinedPaddingStart, textView.getPaddingTop(), (int) (arrowPaddingRight + itemTextHeight), textView.getPaddingBottom());
                 }
             }
         }

@@ -31,7 +31,7 @@ public class MainActivity<T> extends MainApp<T> {
         spSearchable.setItem(provinceList);
         spReSelectable.setItem(provinceList);
         spProvince.setItem(provinceList);
-        spProvinceNoHint.setItem(provinceList);
+        spProvinceOutlinedStyle.setItem(provinceList);
         spProvinceDialog.setItem(provinceList);
         spCustomColor.setItem(provinceList);
         spCustomView.setItem(provinceList);
@@ -44,8 +44,8 @@ public class MainActivity<T> extends MainApp<T> {
         spCustomColor.setItemListColor(ContextCompat.getColor(this, R.color.custom_item_list_color));
 
         setOnEmptySpinnerClickListener(spEmptyItem);
-        setOnItemSelectedListener(spSearchable, spReSelectable, spProvince, spProvinceNoHint, spProvinceDialog, spCustomColor, spEmptyItem, spVisibilityChanged);
-        setOnSpinnerEventListener(spSearchable, spReSelectable, spProvince, spProvinceNoHint, spProvinceDialog, spCustomColor, spEmptyItem);
+        setOnItemSelectedListener(spSearchable, spReSelectable, spProvince, spProvinceOutlinedStyle, spProvinceDialog, spCustomColor, spEmptyItem, spVisibilityChanged);
+        setOnSpinnerEventListener(spSearchable, spReSelectable, spProvince, spProvinceOutlinedStyle, spProvinceDialog, spCustomColor, spEmptyItem);
         // setItemTextSize(90, spSearchable, spProvince, spProvinceNoHint, spProvinceDialog, spCustomColor, spEmptyItem);
         //  setErrorTextSize(90, spSearchable, spProvince, spProvinceNoHint, spProvinceDialog, spCustomColor, spEmptyItem);
         //  setSelection(3, spSearchable, spProvince, spProvinceNoHint, spProvinceDialog, spCustomColor);

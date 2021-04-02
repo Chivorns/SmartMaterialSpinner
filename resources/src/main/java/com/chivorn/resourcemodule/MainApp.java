@@ -20,7 +20,7 @@ public class MainApp<T> extends AppCompatActivity implements View.OnClickListene
     protected SmartMaterialSpinner<String> spSearchable;
     protected SmartMaterialSpinner<String> spReSelectable;
     protected SmartMaterialSpinner<String> spProvince;
-    protected SmartMaterialSpinner<String> spProvinceNoHint;
+    protected SmartMaterialSpinner<String> spProvinceOutlinedStyle;
     protected SmartMaterialSpinner<String> spProvinceDialog;
     protected SmartMaterialSpinner<String> spCustomColor;
     protected SmartMaterialSpinner<String> spEmptyItem;
@@ -41,7 +41,7 @@ public class MainApp<T> extends AppCompatActivity implements View.OnClickListene
         spSearchable = findViewById(R.id.sp_searchable);
         spReSelectable = findViewById(R.id.sp_reselectable);
         spProvince = findViewById(R.id.sp_provinces);
-        spProvinceNoHint = findViewById(R.id.sp_provinces_no_hint);
+        spProvinceOutlinedStyle = findViewById(R.id.sp_provinces_outlined_style);
         spProvinceDialog = findViewById(R.id.sp_provinces_dialog);
         spCustomColor = findViewById(R.id.sp_custom_color);
         spEmptyItem = findViewById(R.id.sp_empty_item);
@@ -121,7 +121,7 @@ public class MainApp<T> extends AppCompatActivity implements View.OnClickListene
         } else if (v.getId() == R.id.btn_show_error) {
             spSearchable.setErrorText(getResources().getString(R.string.sample_error_message));
             spProvince.setErrorText(getResources().getString(R.string.sample_error_message));
-            spProvinceNoHint.setErrorText(getResources().getString(R.string.sample_error_message));
+            spProvinceOutlinedStyle.setErrorText(getResources().getString(R.string.sample_error_message));
             spProvinceDialog.setErrorText(getResources().getString(R.string.sample_error_message));
             spCustomColor.setErrorText(getResources().getString(R.string.sample_error_message));
             spVisibilityChanged.setErrorText(getResources().getString(R.string.sample_error_message));

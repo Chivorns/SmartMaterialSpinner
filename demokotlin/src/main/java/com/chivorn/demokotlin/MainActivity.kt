@@ -22,13 +22,13 @@ class MainActivity<T> : MainApp<T>() {
     private fun initSpinnerInKotlin() {
         spSearchable!!.item = provinceList
         spProvince!!.item = provinceList
-        spProvinceNoHint!!.item = provinceList
+        spProvinceOutlinedStyle!!.item = provinceList
         spProvinceDialog!!.item = provinceList
         spCustomColor!!.item = provinceList
 
         setOnEmptySpinnerClickListener(spEmptyItem)
-        setOnItemSelectedListener(spSearchable, spProvince, spProvinceNoHint, spProvinceDialog, spCustomColor, spEmptyItem)
-        setOnSpinnerEventListener(spSearchable, spProvince, spProvinceNoHint, spProvinceDialog, spCustomColor, spEmptyItem)
+        setOnItemSelectedListener(spSearchable, spProvince, spProvinceOutlinedStyle, spProvinceDialog, spCustomColor, spEmptyItem)
+        setOnSpinnerEventListener(spSearchable, spProvince, spProvinceOutlinedStyle, spProvinceDialog, spCustomColor, spEmptyItem)
     }
 
     private fun setOnItemSelectedListener(vararg spinners: SmartMaterialSpinner<*>) {

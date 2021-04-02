@@ -19,4 +19,5 @@
     <color name="smsp_item_list_background">#FFFFFF</color>
     <color name="smsp_selected_color">#E66363</color>
     <color name="smsp_dismiss_color">#E14040</color>
+    <color name="smsp_outlined_box_color">#FFCCCCCC</color>
 </resources>
