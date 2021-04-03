@@ -35,6 +35,7 @@ public class MainActivity<T> extends MainApp<T> {
         spProvinceDialog.setItem(provinceList);
         spCustomColor.setItem(provinceList);
         spCustomView.setItem(provinceList);
+        spNoHint.setItem(provinceList);
 
         spSearchable.setSearchDialogGravity(Gravity.TOP);
         spSearchable.setErrorTextAlignment(SmartMaterialSpinner.TextAlignment.ALIGN_LEFT);
@@ -44,7 +45,7 @@ public class MainActivity<T> extends MainApp<T> {
         spCustomColor.setItemListColor(ContextCompat.getColor(this, R.color.custom_item_list_color));
 
         setOnEmptySpinnerClickListener(spEmptyItem);
-        setOnItemSelectedListener(spSearchable, spReSelectable, spProvince, spProvinceOutlinedStyle, spProvinceDialog, spCustomColor, spEmptyItem, spVisibilityChanged);
+        setOnItemSelectedListener(spSearchable, spReSelectable, spProvince, spProvinceOutlinedStyle, spProvinceDialog, spCustomColor, spEmptyItem, spVisibilityChanged, spCustomView, spNoHint);
         setOnSpinnerEventListener(spSearchable, spReSelectable, spProvince, spProvinceOutlinedStyle, spProvinceDialog, spCustomColor, spEmptyItem);
         // setItemTextSize(90, spSearchable, spProvince, spProvinceNoHint, spProvinceDialog, spCustomColor, spEmptyItem);
         //  setErrorTextSize(90, spSearchable, spProvince, spProvinceNoHint, spProvinceDialog, spCustomColor, spEmptyItem);

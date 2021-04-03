@@ -162,8 +162,11 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements Adapter
     private int underlineColor;
     private CharSequence errorText;
     private CharSequence hint;
+    private String defaultHint;
     private int hintColor;
-    private boolean isShowItemListHint = true;
+    private boolean isAutoSelectable;
+    private boolean isShowDropdownHint;
+    private boolean isShowKeyboardOnStart;
     private int itemListHintColor;
     private int itemListHintBackground;
     private int itemListBackground;
@@ -190,8 +193,6 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements Adapter
     private boolean enableFloatingLabel;
     private boolean alwaysShowFloatingLabel;
     private boolean isRtl;
-    private boolean isEnableDefaultSelect = true;
-    private boolean isShowKeyboardOnStart = false;
 
     private HintAdapter hintAdapter;
     private TextView tvSpinnerItem;
@@ -203,7 +204,7 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements Adapter
     private OnItemSelectedListener onItemSelectedListener;
     private OnEmptySpinnerClickListener onEmptySpinnerClickListener;
     private OnSpinnerEventListener spinnerEventsListener;
-    private boolean isShowing = false;
+    private boolean isDropdownShowing = false;
     private boolean isErrorScrollPaddingInvoked = false;
     private boolean isReSelectable = false;
     private boolean isOnItemSelectedListenerOverride;
@@ -281,7 +282,10 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements Adapter
         underlineColor = typedArray.getColor(R.styleable.SmartMaterialSpinner_smsp_underlineColor, ContextCompat.getColor(context, R.color.smsp_underline_color));
         errorText = typedArray.getString(R.styleable.SmartMaterialSpinner_smsp_errorText);
         errorTextAlignment = getErrorTextAlignment(typedArray.getInt(R.styleable.SmartMaterialSpinner_smsp_errorTextAlignment, 0));
-        hint = typedArray.getString(R.styleable.SmartMaterialSpinner_smsp_hint) == null ? "" : typedArray.getString(R.styleable.SmartMaterialSpinner_smsp_hint);
+        hint = typedArray.getString(R.styleable.SmartMaterialSpinner_smsp_hint);
+        defaultHint = getResources().getString(R.string.select_item);
+        if (!isAutoSelectable && hint == null)
+            hint = defaultHint;
         floatingLabelText = typedArray.getString(R.styleable.SmartMaterialSpinner_smsp_floatingLabelText);
         hintColor = typedArray.getColor(R.styleable.SmartMaterialSpinner_smsp_hintColor, ContextCompat.getColor(context, R.color.smsp_hint_color));
         //isShowItemListHint = typedArray.getBoolean(R.styleable.SmartMaterialSpinner_smsp_showItemListHint, true);
@@ -310,6 +314,8 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements Adapter
         dropdownView = typedArray.getResourceId(R.styleable.SmartMaterialSpinner_smsp_dropdownView, R.layout.smart_material_spinner_dropdown_item_layout);
         isSearchable = typedArray.getBoolean(R.styleable.SmartMaterialSpinner_smsp_isSearchable, false);
         isShowKeyboardOnStart = typedArray.getBoolean(R.styleable.SmartMaterialSpinner_smsp_showKeyboardOnStart, false);
+        isAutoSelectable = typedArray.getBoolean(R.styleable.SmartMaterialSpinner_smsp_autoSelectable, false);
+        isShowDropdownHint = typedArray.getBoolean(R.styleable.SmartMaterialSpinner_smsp_showDropdownHint, false);
         isEnableSearchHeader = typedArray.getBoolean(R.styleable.SmartMaterialSpinner_smsp_enableSearchHeader, true);
         searchHeaderText = typedArray.getString(R.styleable.SmartMaterialSpinner_smsp_searchHeaderText);
         searchHeaderTextColor = typedArray.getColor(R.styleable.SmartMaterialSpinner_smsp_searchHeaderTextColor, ContextCompat.getColor(context, R.color.smsp_search_header_text_color));
@@ -649,7 +655,11 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements Adapter
     }
 
     private boolean isSpinnerEmpty() {
-        return (hintAdapter != null && hintAdapter.getCount() == 0 && hint == null) || (hintAdapter != null && hintAdapter.getCount() == 1 && getCount() == 0 && hint != null) || (item != null && item.size() == 0 && getCount() == 1 && hint != null);
+        return (hintAdapter != null && hintAdapter.getCount() == 0 && hint == null) ||
+                (hintAdapter != null && hintAdapter.getCount() == 1 && getCount() == 0 && hint != null) ||
+                (item != null && item.size() == 0 && getCount() == 1 && hintAdapter.getItemViewType(0) == HintAdapter.HINT_TYPE) ||
+                (isAutoSelectable && item != null && item.size() == 0 && getCount() == 0 && hintAdapter.getItemViewType(-1) == HintAdapter.HINT_TYPE)
+                ;
     }
 
     private AppCompatActivity scanForActivity(Context context) {
@@ -808,7 +818,7 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements Adapter
         Point point3 = selectorPoints[2];
         int arrowHalfSizeInt = (int) arrowSize / 2;
 
-        if (isShowing) {
+        if (isDropdownShowing) {
             point1.set(posX - arrowHalfSizeInt, posY);
             point2.set(posX - arrowHalfSizeInt * 2, posY + arrowHalfSizeInt);
             point3.set(posX, posY + arrowHalfSizeInt);
@@ -870,13 +880,13 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements Adapter
     @Override
     public boolean performClick() {
         if (isSpinnerClickable()) {
-            isShowing = false;
+            isDropdownShowing = false;
             onEmptySpinnerClickListener.onEmptySpinnerClicked();
             return true;
         } else if (isSearchable && hintAdapter != null) {
             searchDialogItem.clear();
             int itemStart = 0;
-            if (hint != null) {
+            if (isHintApplicable()) {
                 itemStart = 1;
             }
             for (int i = itemStart; i < hintAdapter.getCount(); i++) {
@@ -885,8 +895,8 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements Adapter
             AppCompatActivity appCompatActivity = scanForActivity(getContext());
             if (appCompatActivity != null) {
                 FragmentManager fragmentManager = appCompatActivity.getSupportFragmentManager();
-                if (!isShowing()) {
-                    isShowing = true;
+                if (!isDropdownShowing()) {
+                    isDropdownShowing = true;
                     searchableSpinnerDialog.show(fragmentManager, "TAG");
                 }
                 if (spinnerEventsListener != null) {
@@ -896,11 +906,11 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements Adapter
                 return true;
             }
         } else if (isSpinnerEmpty()) {
-            isShowing = false;
+            isDropdownShowing = false;
             return true;
         }
 
-        isShowing = true;
+        isDropdownShowing = true;
         if (spinnerEventsListener != null) {
             spinnerEventsListener.onSpinnerOpened(this);
         }
@@ -910,7 +920,7 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements Adapter
 
     @Override
     public void onWindowFocusChanged(boolean hasWindowFocus) {
-        if (isShowing() && hasWindowFocus) {
+        if (isDropdownShowing() && hasWindowFocus) {
             dismiss();
         }
         super.onWindowFocusChanged(hasWindowFocus);
@@ -921,21 +931,21 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements Adapter
     }
 
     public void dismiss() {
-        isShowing = false;
+        isDropdownShowing = false;
         if (spinnerEventsListener != null) {
             spinnerEventsListener.onSpinnerClosed(this);
         }
         invalidate();
     }
 
-    public boolean isShowing() {
-        return isShowing;
+    public boolean isDropdownShowing() {
+        return isDropdownShowing;
     }
 
     @Override
     public int getSelectedItemPosition() {
         int selectedIndex = super.getSelectedItemPosition();
-        if (hint != null)
+        if (isHintApplicable())
             selectedIndex -= 1;
         return selectedIndex;
     }
@@ -943,12 +953,12 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements Adapter
     @Override
     public long getSelectedItemId() {
         long itemId = super.getSelectedItemId();
-        return hint != null ? itemId - 1 : itemId;
+        return isHintApplicable() ? itemId - 1 : itemId;
     }
 
     @Override
     public Object getItemAtPosition(int position) {
-        if (hint != null) {
+        if (isHintApplicable()) {
             position++;
         }
         return (hintAdapter == null || position < 0) ? null : hintAdapter.getItem(position);
@@ -956,7 +966,7 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements Adapter
 
     @Override
     public long getItemIdAtPosition(int position) {
-        if (hint != null) {
+        if (isHintApplicable()) {
             position++;
         }
         return (hintAdapter == null || position < 0) ? INVALID_ROW_ID : hintAdapter.getItemId(position);
@@ -964,14 +974,14 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements Adapter
 
     @Override
     public void setSelection(int position) {
-        if (isShowing && !isSearchable && hint != null) {
+        if (isDropdownShowing && !isSearchable && isHintApplicable()) {
             position -= 1;
         }
         final int finalPosition = position;
         this.post(new Runnable() {
             @Override
             public void run() {
-                SmartMaterialSpinner.super.setSelection(hint != null ? finalPosition + 1 : finalPosition, false);
+                SmartMaterialSpinner.super.setSelection(isHintApplicable() ? finalPosition + 1 : finalPosition, false);
                 searchableSpinnerDialog.setSelectedPosition(finalPosition);
                 checkReSelectable(finalPosition);
             }
@@ -980,10 +990,10 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements Adapter
 
     @Override
     public void setSelection(int position, boolean animate) {
-        if (isShowing && !isSearchable && hint != null) {
+        if (isDropdownShowing && !isSearchable && isHintApplicable()) {
             position -= 1;
         }
-        super.setSelection(hint != null ? position + 1 : position, animate);
+        super.setSelection(isHintApplicable() ? position + 1 : position, animate);
         searchableSpinnerDialog.setSelectedPosition(position);
         checkReSelectable(position);
     }
@@ -1229,8 +1239,8 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements Adapter
 
     public void setHint(CharSequence hint) {
         this.hint = hint;
-        if (hint == null)
-            this.hint = "";
+        if (!isAutoSelectable && this.hint == null)
+            this.hint = defaultHint;
         if (isSpinnerEmpty()) {
             setAdapter(getAdapter());
         }
@@ -1240,6 +1250,30 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements Adapter
     public void setHint(int resId) {
         CharSequence hint = getResources().getString(resId);
         setHint(hint);
+    }
+
+    private boolean isHintApplicable() {
+        return !isAutoSelectable && hint != null;
+    }
+
+    public boolean isAutoSelectable() {
+        return isAutoSelectable;
+    }
+
+    public void setAutoSelectable(boolean autoSelectable) {
+        this.isAutoSelectable = autoSelectable;
+        invalidate();
+    }
+
+    public boolean isShowDropdownHint() {
+        return isShowDropdownHint;
+    }
+
+    public void setShowDropdownHint(boolean showDropdownHint) {
+        this.isShowDropdownHint = showDropdownHint;
+        if (isAutoSelectable)
+            this.isShowDropdownHint = false;
+        invalidate();
     }
 
     public void setItemView(Integer resId) {
@@ -1968,25 +2002,25 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements Adapter
 
         @Override
         public int getItemViewType(int position) {
-            position = hint != null ? position - 1 : position;
+            position = isHintApplicable() ? position - 1 : position;
             return (position == -1) ? HINT_TYPE : mSpinnerAdapter.getItemViewType(position);
         }
 
         @Override
         public int getCount() {
             int count = mSpinnerAdapter.getCount();
-            return hint != null ? count + 1 : count;
+            return isHintApplicable() ? count + 1 : count;
         }
 
         @Override
         public Object getItem(int position) {
-            position = hint != null ? position - 1 : position;
+            position = isHintApplicable() ? position - 1 : position;
             return (position == -1) ? hint : mSpinnerAdapter.getItem(position);
         }
 
         @Override
         public long getItemId(int position) {
-            position = hint != null ? position - 1 : position;
+            position = isHintApplicable() ? position - 1 : position;
             return (position == -1) ? 0 : mSpinnerAdapter.getItemId(position);
         }
 
@@ -2002,20 +2036,7 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements Adapter
 
         private View buildView(int position, View convertView, ViewGroup parent, boolean isDropDownView) {
             if (getItemViewType(position) == HINT_TYPE) {
-                if (hint != null && !hint.toString().isEmpty()) {
-                    return getItemView(convertView, parent, isDropDownView);
-                } else {
-                    TextView textView = (TextView) getItemView(convertView, parent, isDropDownView);
-                    //textView.setHeight(0);
-                    String tmpHint = getResources().getString(R.string.select_item);
-                    if (isOutlined) {
-                        textView.setText(null);
-                        hint = tmpHint;
-                    } else {
-                        textView.setText(tmpHint);
-                    }
-                    return textView;
-                }
+                return getHintView(convertView, parent, isDropDownView);
             }
 
             //workaround to have multiple types in spinner
@@ -2023,7 +2044,7 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements Adapter
                 convertView = (convertView.getTag() != null && convertView.getTag() instanceof Integer && (Integer) convertView.getTag() != HINT_TYPE) ? convertView : null;
             }
 
-            position = hint != null ? position - 1 : position;
+            position = isHintApplicable() ? position - 1 : position;
             View dropdownItemView = (isDropDownView ? mSpinnerAdapter.getDropDownView(position, convertView, parent) : mSpinnerAdapter.getView(position, convertView, parent));
             if (dropdownItemView instanceof TextView) {
                 TextView textView = (TextView) dropdownItemView;
@@ -2032,14 +2053,14 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements Adapter
             return dropdownItemView;
         }
 
-        private View getItemView(final View convertView, final ViewGroup parent, final boolean isDropDownView) {
+        private View getHintView(final View convertView, final ViewGroup parent, final boolean isDropDownView) {
             final LayoutInflater inflater = LayoutInflater.from(mContext);
             final int resId = isDropDownView ? dropdownView : itemView;
             final TextView textView = (TextView) inflater.inflate(resId, parent, false);
             textView.setTag(HINT_TYPE);
             updateSpinnerItemStyle(parent, textView, isDropDownView, true, -1);
 
-            if (isShowing()) {
+            if (isDropdownShowing()) {
                 textView.setOnClickListener(new OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -2059,11 +2080,17 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements Adapter
                 textView.setText(hint);
                 textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, hintSize);
                 if (isDropDownView) {
-                    if (itemListBackground != 0)
-                        parent.setBackgroundColor(itemListBackground);
-                    textView.setTextColor(itemListHintColor);
-                    textView.setBackgroundColor(itemListHintBackground);
-                    textView.setPadding(textView.getPaddingLeft(), dpToPx(12), textView.getPaddingRight(), dpToPx(12));
+                    if (isShowDropdownHint) {
+                        if (itemListBackground != 0)
+                            parent.setBackgroundColor(itemListBackground);
+                        textView.setTextColor(itemListHintColor);
+                        textView.setBackgroundColor(itemListHintBackground);
+                        textView.setPadding(textView.getPaddingLeft(), dpToPx(12), textView.getPaddingRight(), dpToPx(12));
+                    } else {
+                        textView.setHeight(0);
+                        textView.setMinHeight(0);
+                        textView.setMinimumHeight(0);
+                    }
                 } else {
                     if (isOutlined) {
                         textView.setText(null);

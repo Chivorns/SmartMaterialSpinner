@@ -26,6 +26,7 @@ public class MainApp<T> extends AppCompatActivity implements View.OnClickListene
     protected SmartMaterialSpinner<String> spEmptyItem;
     protected SmartMaterialSpinner<String> spCustomView;
     protected SmartMaterialSpinner<String> spVisibilityChanged;
+    protected SmartMaterialSpinner<String> spNoHint;
 
     private LinearLayout githubRepo;
     private Button btnShowError;
@@ -47,6 +48,8 @@ public class MainApp<T> extends AppCompatActivity implements View.OnClickListene
         spEmptyItem = findViewById(R.id.sp_empty_item);
         spCustomView = findViewById(R.id.sp_custom_search_item_layout);
         spVisibilityChanged = findViewById(R.id.sp_visibility_changed);
+        spNoHint = findViewById(R.id.sp_provinces_no_hint);
+
         githubRepo = findViewById(R.id.git_repo_container);
         btnShowError = findViewById(R.id.btn_show_error);
         btnGotoRuntimeRender = findViewById(R.id.btn_goto_runtime_render);

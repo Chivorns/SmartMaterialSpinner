@@ -25,6 +25,7 @@ class MainActivity<T> : MainApp<T>() {
         spProvinceOutlinedStyle!!.item = provinceList
         spProvinceDialog!!.item = provinceList
         spCustomColor!!.item = provinceList
+        spNoHint!!.item = provinceList
 
         setOnEmptySpinnerClickListener(spEmptyItem)
         setOnItemSelectedListener(spSearchable, spProvince, spProvinceOutlinedStyle, spProvinceDialog, spCustomColor, spEmptyItem)
