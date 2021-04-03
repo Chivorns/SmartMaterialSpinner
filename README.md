@@ -1,10 +1,8 @@
 # SmartMaterialSpinner 
 The best Android spinner library for your android application with more customization
 ## Current version
-### Legacy ([See usage](#LegacyGradle))
-![Android Legacy](https://api.bintray.com/packages/chivorn/maven/smartmaterialspinner/images/download.svg) 
-### AndroidX ([See usage](#AndroidXGradle))
-![AndroidX](https://api.bintray.com/packages/chivorn/androidx/smartmaterialspinner/images/download.svg)
+![current](https://api.bintray.com/packages/chivorn/maven/smartmaterialspinner/images/download.svg) 
+
 
 ## Available on Play Store
 <a href="https://play.google.com/store/apps/details?id=com.chivorn.smsp.demojava" target="_blank">
@@ -130,7 +128,7 @@ The best Android spinner library for your android application with more customiz
 
 ```gradle
 dependencies {
-    implementation 'com.github.chivorns:smartmaterialspinner:1.3.0'
+    implementation 'com.github.chivorns:smartmaterialspinner:1.4.0'
 }
 ```
 
