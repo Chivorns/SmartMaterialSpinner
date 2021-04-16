@@ -56,7 +56,7 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SmartMaterialSpinner<T> extends AppCompatSpinner implements AdapterView.OnItemSelectedListener, ValueAnimator.AnimatorUpdateListener, SearchableSpinnerDialog.OnSearchDialogEventListener, Serializable {
+public class SmartMaterialSpinner<T> extends AppCompatSpinner implements AdapterView.OnItemSelectedListener, ValueAnimator.AnimatorUpdateListener, SearchableSpinnerDialog.OnSearchDialogEventListener<T>, Serializable {
     public static final int DEFAULT_ARROW_WIDTH_DP = 10;
     private static final String TAG = SmartMaterialSpinner.class.getSimpleName();
 
@@ -91,7 +91,7 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements Adapter
 
     private SearchableSpinnerDialog searchableSpinnerDialog;
     private List<T> item;
-    private List<Object> searchDialogItem;
+    private List<T> searchDialogItem;
 
     private boolean isSearchable = false;
     private boolean isOutlined = false;
@@ -957,7 +957,12 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements Adapter
     }
 
     @Override
-    public Object getItemAtPosition(int position) {
+    public T getSelectedItem() {
+        return (T) super.getSelectedItem();
+    }
+
+    @Override
+    public T getItemAtPosition(int position) {
         if (isHintApplicable()) {
             position++;
         }
@@ -1075,7 +1080,7 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements Adapter
     }
 
     @Override
-    public void onSearchItemSelected(Object item, int position) {
+    public void onSearchItemSelected(T item, int position) {
         int selectedIndex = searchDialogItem.indexOf(item);
         if (position >= 0) {
             setSelection(selectedIndex);
@@ -2013,9 +2018,9 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements Adapter
         }
 
         @Override
-        public Object getItem(int position) {
+        public T getItem(int position) {
             position = isHintApplicable() ? position - 1 : position;
-            return (position == -1) ? hint : mSpinnerAdapter.getItem(position);
+            return (T) ((position == -1) ? hint : mSpinnerAdapter.getItem(position));
         }
 
         @Override
