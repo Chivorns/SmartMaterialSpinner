@@ -68,7 +68,7 @@ public class SearchableSpinnerDialog<T> extends DialogFragment implements Search
     private int searchListItemColor;
     private int selectedSearchItemColor;
     private int selectedPosition = -1;
-    private Object selectedItem;
+    private T selectedItem;
 
     private String searchHeaderText;
     private int searchHeaderTextColor;
@@ -211,7 +211,7 @@ public class SearchableSpinnerDialog<T> extends DialogFragment implements Search
                         }
                     }
 
-                    Object item = searchArrayAdapter.getItem(position);
+                    T item = searchArrayAdapter.getItem(position);
                     if (selectedSearchItemColor != 0 && position >= 0 && item != null && item.equals(selectedItem)) {
                         tvListItem.setTextColor(selectedSearchItemColor);
                     }
@@ -350,8 +350,8 @@ public class SearchableSpinnerDialog<T> extends DialogFragment implements Search
         return false;
     }
 
-    public interface OnSearchDialogEventListener extends Serializable {
-        void onSearchItemSelected(Object item, int position);
+    public interface OnSearchDialogEventListener<T> extends Serializable {
+        void onSearchItemSelected(T item, int position);
 
         void onSearchableSpinnerDismiss();
     }
