@@ -209,6 +209,7 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements Adapter
     private boolean isReSelectable = false;
     private boolean isOnItemSelectedListenerOverride;
     private boolean dropdownHeightUpdated = false;
+    private int hiddenItemPosition = -1;
 
     /*
      * **********************************************************************************
@@ -1005,6 +1006,11 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements Adapter
 
     public void clearSelection() {
         setSelection(-1);
+    }
+
+    public void setHiddenItemPosition(int hiddenItemPosition) {
+        this.hiddenItemPosition = hiddenItemPosition;
+        invalidate();
     }
 
     @Override
@@ -2092,9 +2098,7 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements Adapter
                         textView.setBackgroundColor(itemListHintBackground);
                         textView.setPadding(textView.getPaddingLeft(), dpToPx(12), textView.getPaddingRight(), dpToPx(12));
                     } else {
-                        textView.setHeight(0);
-                        textView.setMinHeight(0);
-                        textView.setMinimumHeight(0);
+                        hideTextView(textView);
                     }
                 } else {
                     if (isOutlined) {
@@ -2113,6 +2117,9 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements Adapter
                     if (position >= 0 && position == getSelectedItemPosition()) {
                         textView.setTextColor(selectedItemListColor);
                     }
+                    if (hiddenItemPosition != -1 && position == hiddenItemPosition) {
+                        hideTextView(textView);
+                    }
                 } else {
                     int outlinedPaddingStart = 0;
                     if (isOutlined) {
@@ -2124,6 +2131,12 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements Adapter
                     textView.setPadding(textView.getPaddingLeft() + leftRightSpinnerPadding + outlinedPaddingStart, textView.getPaddingTop(), (int) (arrowPaddingRight + itemTextHeight), textView.getPaddingBottom());
                 }
             }
+        }
+
+        private void hideTextView(TextView textView) {
+            textView.setHeight(0);
+            textView.setMinHeight(0);
+            textView.setMinimumHeight(0);
         }
     }
 

@@ -5,7 +5,7 @@ ext {
     LIBRARY_NAME = 'SmartMaterialSpinner'
     PUBLISH_GROUP_ID = 'com.github.chivorns'
     PUBLISH_ARTIFACT_ID = LIBRARY_NAME.toLowerCase()
-    PUBLISH_VERSION = '1.4.0'
+    PUBLISH_VERSION = '1.5.0'
 
     // Bintray
     BINTRAY_REPO = 'maven'
@@ -32,7 +32,7 @@ android {
     defaultConfig {
         minSdkVersion 14
         targetSdkVersion 29
-        versionCode 24
+        versionCode 25
         versionName "$PUBLISH_VERSION"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
