@@ -1,18 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="smsp_base_color">#000000</color>
-    <color name="smsp_underline_color">#4851504e</color>
+    <color name="smsp_underline_color">#5C131212</color>
     <color name="smsp_highlight_color">#4E61CC</color>
     <color name="smsp_default_text_color">#4e4b4b</color>
     <color name="smsp_disabled_color">#808080</color>
     <color name="smsp_error_color">#E42F6D</color>
     <color name="smsp_search_header_text_color">#FFFFFF</color>
     <color name="smsp_search_header_background">#4E61CC</color>
+    <color name="smsp_search_background">#FFFFFF</color>
+    <color name="smsp_search_filter_color">#cc2a36</color>
     <color name="smsp_transparent_color">#00000000</color>
     <color name="smsp_white_color">#FFFFFF</color>
     <color name="smsp_hint_color">#999898</color>
     <color name="smsp_floating_label_color">#777474</color>
     <color name="smsp_item_list_hint_color">#FFFFFF</color>
     <color name="smsp_item_list_hint_background">#808080</color>
+    <color name="smsp_item_list_background">#FFFFFF</color>
     <color name="smsp_selected_color">#E66363</color>
+    <color name="smsp_dismiss_color">#E14040</color>
+    <color name="smsp_outlined_box_color">#FFCCCCCC</color>
 </resources>

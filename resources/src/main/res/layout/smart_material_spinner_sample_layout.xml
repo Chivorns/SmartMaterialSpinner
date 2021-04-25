@@ -13,6 +13,25 @@
 
         <TextView
             style="@style/headerTextStyle"
+            android:text="@string/outlined_style" />
+
+        <com.chivorn.smartmaterialspinner.SmartMaterialSpinner
+            android:id="@+id/sp_provinces_outlined_style"
+            style="@style/spinnerStyle"
+            app:smsp_arrowColor="#3da4ab"
+            app:smsp_errorText="@string/sample_error_message"
+            app:smsp_hint="Outlined Style"
+            app:smsp_hintColor="#fe8a71"
+            app:smsp_isOutlined="true"
+            app:smsp_multilineError="false"
+            app:smsp_outlinedBoxColor="#0e9aa7"
+            app:smsp_outlinedBoxRadius="12dp"
+            app:smsp_outlinedHintPadding="4dp"
+            app:smsp_outlinedHintStartX="10dp"
+            app:smsp_outlinedStrokeWidth="1dp" />
+
+        <TextView
+            style="@style/headerTextStyle"
             android:text="@string/searchable_spinner" />
 
         <com.chivorn.smartmaterialspinner.SmartMaterialSpinner
@@ -24,18 +43,10 @@
             app:smsp_multilineError="true"
             app:smsp_searchHeaderBackgroundColor="@color/smsp_search_header_background"
             app:smsp_searchHeaderText="Search/Select Province"
-            app:smsp_searchHeaderTextColor="#ffff" />
-
-        <TextView
-            style="@style/headerTextStyle"
-            android:text="Re-Selectable Spinner" />
-
-        <com.chivorn.smartmaterialspinner.SmartMaterialSpinner
-            android:id="@+id/sp_reselectable"
-            style="@style/spinnerStyle"
-            app:smsp_errorText="@string/sample_error_message"
-            app:smsp_hint="Re-Selectable Spinner"
-            app:smsp_isReSelectable="true" />
+            app:smsp_searchHeaderTextColor="#ffff"
+            app:smsp_searchHintColor="@color/search_hint_color"
+            app:smsp_searchTextColor="@color/search_text_color"
+            app:smsp_typeface="fonts/hinted_cello_sans_light" />
 
         <TextView
             style="@style/headerTextStyle"
@@ -46,12 +57,6 @@
             style="@style/spinnerStyle"
             app:smsp_errorText="@string/sample_error_message"
             app:smsp_hint="Province (Dropdown Mode)"
-            app:smsp_multilineError="false" />
-
-        <com.chivorn.smartmaterialspinner.SmartMaterialSpinner
-            android:id="@+id/sp_provinces_no_hint"
-            style="@style/spinnerStyle"
-            app:smsp_errorText="@string/sample_error_message"
             app:smsp_multilineError="false" />
 
         <TextView
@@ -67,6 +72,26 @@
 
         <TextView
             style="@style/headerTextStyle"
+            android:text="@string/spinner_no_hint" />
+
+        <com.chivorn.smartmaterialspinner.SmartMaterialSpinner
+            android:id="@+id/sp_provinces_no_hint"
+            style="@style/spinnerStyle" />
+
+        <TextView
+            style="@style/headerTextStyle"
+            android:text="@string/re_selectable_spinner" />
+
+        <com.chivorn.smartmaterialspinner.SmartMaterialSpinner
+            android:id="@+id/sp_reselectable"
+            style="@style/spinnerStyle"
+            app:smsp_errorText="@string/sample_error_message"
+            app:smsp_hint="Re-Selectable Spinner"
+            app:smsp_isReSelectable="true"
+            app:smsp_typeface="@font/hinted_cello_sans_medium_italic" />
+
+        <TextView
+            style="@style/headerTextStyle"
             android:text="@string/custom_color" />
 
         <com.chivorn.smartmaterialspinner.SmartMaterialSpinner
@@ -78,10 +103,11 @@
             app:smsp_hint="Custom Color"
             app:smsp_hintSize="14sp"
             app:smsp_itemColor="@color/custom_item_color"
-            app:smsp_itemListColor="@color/custom_item_list_color"
-            app:smsp_itemListHintBackgroundColor="#7C4DFF"
-            app:smsp_itemListHintColor="#40C4FF"
-            app:smsp_selectedItemListColor="@color/custom_selected_item_color" />
+            app:smsp_itemListBackgroundColor="#C7E1EC"
+            app:smsp_itemListColor="@color/smsp_disabled_color"
+            app:smsp_itemListHintBackgroundColor="#40C4FF"
+            app:smsp_itemListHintColor="#1F2233"
+            app:smsp_selectedItemListColor="#FF6E40" />
 
         <TextView
             style="@style/headerTextStyle"
@@ -93,6 +119,19 @@
             app:smsp_alwaysShowFloatingLabel="false"
             app:smsp_floatingLabelText="floating text"
             app:smsp_hint="Empty Item Spinner" />
+
+        <TextView
+            style="@style/headerTextStyle"
+            android:text="@string/custom_search_item_layout" />
+
+        <com.chivorn.smartmaterialspinner.SmartMaterialSpinner
+            android:id="@+id/sp_custom_search_item_layout"
+            style="@style/spinnerStyle"
+            app:smsp_alwaysShowFloatingLabel="false"
+            app:smsp_floatingLabelText="floating text"
+            app:smsp_hint="Custom search item layout"
+            app:smsp_isSearchable="true"
+            app:smsp_searchDropdownView="@layout/search_list_item_custom_layout" />
 
         <TextView
             style="@style/headerTextStyle"

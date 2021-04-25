@@ -8,17 +8,28 @@
 
         <attr name="smsp_itemView" format="reference" />
         <attr name="smsp_dropdownView" format="reference" />
+        <attr name="smsp_searchDropdownView" format="reference" />
 
         <attr name="smsp_isSearchable" format="boolean" />
+        <attr name="smsp_showKeyboardOnStart" format="boolean" />
         <attr name="smsp_enableSearchHeader" format="boolean" />
         <attr name="smsp_searchHeaderText" format="string" />
         <attr name="smsp_searchHeaderTextColor" format="color|reference" />
         <attr name="smsp_searchHeaderBackgroundColor" format="color|reference" />
         <attr name="smsp_searchHint" format="string" />
+        <attr name="smsp_searchHintColor" format="color" />
+        <attr name="smsp_searchTextColor" format="color" />
+        <attr name="smsp_searchFilterColor" format="color" />
+        <attr name="smsp_searchBackgroundColor" format="color|reference" />
+        <attr name="smsp_enableDismissSearch" format="boolean" />
+        <attr name="smsp_dismissSearchText" format="string" />
+        <attr name="smsp_dismissSearchColor" format="color" />
 
         <attr name="smsp_itemSize" format="dimension" />
         <attr name="smsp_itemColor" format="color|reference" />
 
+        <attr name="smsp_autoSelectable" format="boolean" />
+        <attr name="smsp_showDropdownHint" format="boolean" />
         <attr name="smsp_hint" format="string" />
         <attr name="smsp_hintSize" format="dimension" />
         <attr name="smsp_hintColor" format="color|reference" />
@@ -29,6 +40,7 @@
         <!--<attr name="smsp_showItemListHint" format="boolean" />-->
         <attr name="smsp_itemListHintColor" format="color|reference" />
         <attr name="smsp_itemListHintBackgroundColor" format="color|reference" />
+        <attr name="smsp_itemListBackgroundColor" format="color|reference" />
 
         <attr name="smsp_enableFloatingLabel" format="boolean" />
         <attr name="smsp_alwaysShowFloatingLabel" format="boolean" />
@@ -42,6 +54,7 @@
         <attr name="smsp_arrowPaddingTop" format="dimension" />
         <attr name="smsp_arrowPaddingRight" format="dimension" />
         <attr name="smsp_arrowPaddingBottom" format="dimension" />
+        <attr name="smsp_paddingLeftRight" format="dimension" />
 
         <attr name="smsp_underlineSize" format="dimension" />
         <attr name="smsp_underlineColor" format="color|reference" />
@@ -62,5 +75,12 @@
         <attr name="smsp_isRtl" format="boolean" />
         <!--<attr name="smsp_enableDefaultSelect" format="boolean" />-->
         <attr name="smsp_isReSelectable" format="boolean" />
+
+        <attr name="smsp_isOutlined" format="boolean" />
+        <attr name="smsp_outlinedBoxRadius" format="dimension" />
+        <attr name="smsp_outlinedHintStartX" format="dimension" />
+        <attr name="smsp_outlinedHintPadding" format="dimension" />
+        <attr name="smsp_outlinedStrokeWidth" format="dimension" />
+        <attr name="smsp_outlinedBoxColor" format="color|reference" />
     </declare-styleable>
 </resources>

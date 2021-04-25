@@ -1,8 +1,10 @@
 package com.chivorn.demojava;
 
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.res.ResourcesCompat;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -28,9 +30,11 @@ public class MainActivity<T> extends MainApp<T> {
         spSearchable.setItem(provinceList);
         spReSelectable.setItem(provinceList);
         spProvince.setItem(provinceList);
-        spProvinceNoHint.setItem(provinceList);
+        spProvinceOutlinedStyle.setItem(provinceList);
         spProvinceDialog.setItem(provinceList);
         spCustomColor.setItem(provinceList);
+        spCustomView.setItem(provinceList);
+        spNoHint.setItem(provinceList);
 
         spSearchable.setSearchDialogGravity(Gravity.TOP);
         spSearchable.setErrorTextAlignment(SmartMaterialSpinner.TextAlignment.ALIGN_LEFT);
@@ -40,12 +44,26 @@ public class MainActivity<T> extends MainApp<T> {
         spCustomColor.setItemListColor(ContextCompat.getColor(this, R.color.custom_item_list_color));
 
         setOnEmptySpinnerClickListener(spEmptyItem);
-        setOnItemSelectedListener(spSearchable, spReSelectable, spProvince, spProvinceNoHint, spProvinceDialog, spCustomColor, spEmptyItem, spVisibilityChanged);
-        setOnSpinnerEventListener(spSearchable, spReSelectable, spProvince, spProvinceNoHint, spProvinceDialog, spCustomColor, spEmptyItem);
+        setOnItemSelectedListener(spSearchable, spReSelectable, spProvince, spProvinceOutlinedStyle, spProvinceDialog, spCustomColor, spEmptyItem, spVisibilityChanged, spCustomView, spNoHint);
+        setOnSpinnerEventListener(spSearchable, spReSelectable, spProvince, spProvinceOutlinedStyle, spProvinceDialog, spCustomColor, spEmptyItem);
         // setItemTextSize(90, spSearchable, spProvince, spProvinceNoHint, spProvinceDialog, spCustomColor, spEmptyItem);
         //  setErrorTextSize(90, spSearchable, spProvince, spProvinceNoHint, spProvinceDialog, spCustomColor, spEmptyItem);
         //  setSelection(3, spSearchable, spProvince, spProvinceNoHint, spProvinceDialog, spCustomColor);
         // clearSelection(spSearchable, spProvince, spProvinceNoHint, spProvinceDialog, spCustomColor);
+
+        // Get font from assets
+        Typeface celloSanLFont = Typeface.createFromAsset(this.getAssets(), "fonts/hinted_cello_sans_light.ttf");
+        Typeface celloSanLIFont = Typeface.createFromAsset(this.getAssets(), "fonts/hinted_cello_sans_light_italic.ttf");
+        // Get font from resource
+        Typeface celloSanMIFont = ResourcesCompat.getFont(this, R.font.hinted_cello_sans_medium_italic);
+        spSearchable.setTypeface(celloSanLFont);
+        spProvince.setTypeface(celloSanLIFont);
+        spReSelectable.setTypeface(celloSanMIFont);
+
+        // To custom dismiss button on search dialog
+    /*    spSearchable.setEnableDismissSearch(true);
+        spSearchable.setDismissSearchText("Hello");
+        spSearchable.setDismissSearchColor(Color.parseColor("#4E61CC"));*/
     }
 
     private void setOnItemSelectedListener(SmartMaterialSpinner... spinners) {
