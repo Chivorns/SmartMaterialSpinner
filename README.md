@@ -14,12 +14,17 @@ The best Android spinner library for your android application with more customiz
 ### Spinner mode
 |Dropdown Mode   |Dialog Mode                    |Searchable Mode              |
 |----------------|-------------------------------|-----------------------------|
-| <img src="https://github.com/Chivorns/Resources/blob/master/smsp/smsp_dropdown.jpg" width="250" >| <img src="https://github.com/Chivorns/Resources/blob/master/smsp/smsp_dialog.jpg" width="250" > |<img src="https://github.com/Chivorns/Resources/blob/master/smsp/search_1.jpg" width="250" >   |
+| <img src="https://github.com/Chivorns/Resources/blob/master/smsp/smsp_dropdown.gif" width="250" >| <img src="https://github.com/Chivorns/Resources/blob/master/smsp/smsp_dialog.gif" width="250" > |<img src="https://github.com/Chivorns/Resources/blob/master/smsp/smsp_searchable.gif" width="250" >   |
 
 
   * Dropdown mode ( android:spinnerMode="dropdown" ). By default it is dropdown mode
   * Dialog mode ( android:spinnerMode="dialog" )
   * Searchable mode ( app:smsp_isSearchable="true" )
+
+### Outlined Style
+
+<img src="https://github.com/Chivorns/Resources/blob/master/smsp/smsp_outlined.gif" width="250" > 
+
 ### Searchable spinner
   * `smsp_isSearchable` : Default is false. Set it to true to enable this feature.
   * `smsp_enableSearchHeader`: Default is true. Set it to false to hide search header.
