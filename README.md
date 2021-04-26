@@ -12,6 +12,11 @@ The best Android spinner library for your android application with more customiz
                                                                                                                    
 ## Available features
 ### Spinner mode
+|Dropdown Mode   |Dialog Mode                    |Searchable Mode              |
+|----------------|-------------------------------|-----------------------------|
+| <img src="https://github.com/Chivorns/Resources/blob/master/smsp/smsp_dropdown.jpg" width="250" >| <img src="https://github.com/Chivorns/Resources/blob/master/smsp/smsp_dialog.jpg" width="250" > |<img src="https://github.com/Chivorns/Resources/blob/master/smsp/search_1.jpg" width="250" >   |
+
+
   * Dropdown mode ( android:spinnerMode="dropdown" ). By default it is dropdown mode
   * Dialog mode ( android:spinnerMode="dialog" )
   * Searchable mode ( app:smsp_isSearchable="true" )
@@ -90,38 +95,6 @@ The best Android spinner library for your android application with more customiz
             <img src="https://github.com/Chivorns/Resources/blob/master/smsp/smsp_home.jpg" alt="SmartMaterialSpinner" width="250" >
         </a>
     </td>
-   <td>
-        <a target="_blank">
-            <img src="https://github.com/Chivorns/Resources/blob/master/smsp/search_1.jpg" alt="SmartMaterialSpinner" width="250">
-        </a>
-    </td>
-    <td>
-        <a target="_blank">
-            <img src="https://github.com/Chivorns/Resources/blob/master/smsp/smsp_dropdown.jpg" alt="SmartMaterialSpinner" width="250">
-        </a>
-    </td>
- </tr>
-</table>
-
-<table border="0">
-
- <tr>
-    <td> 
-         <a target="_blank">
-            <img src="https://github.com/Chivorns/Resources/blob/master/smsp/smsp_dropdown_no_hint.JPEG" alt="SmartMaterialSpinner" width="250">
-        </a>
-    </td>
-    <td> 
-        <a target="_blank">
-            <img src="https://github.com/Chivorns/Resources/blob/master/smsp/smsp_dialog.jpg" alt="SmartMaterialSpinner" width="250">
-        </a>
-    </td>
-   <td>
-        <a target="_blank">
-           <img src="https://github.com/Chivorns/Resources/blob/master/smsp/smsp_custom_color.jpg" alt="SmartMaterialSpinner" width="250">
-        </a>
-    </td>
- </tr>
 </table>
                                                                                                                 
 ## Usage
