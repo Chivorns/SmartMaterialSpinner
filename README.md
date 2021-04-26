@@ -220,12 +220,18 @@ Each raised issue, should be provided with some information to be easy for me to
 ### Where to report issue and new feature request
 - [Email](mailto:chivorn@live.com): chivorn@live.com
 - [Github](https://github.com/Chivorns/SmartMaterialSpinner/issues)
-- [Facebook Group](https://www.facebook.com/groups/837642023371127/)
 
 You can create issue on Github to record issue history then to make it fast alert to me, you can send me email or post to Facebook group for any discussion
 
 ## Contribution
 If you want to contribute in this library, please `fork` this repository and [create pull request](https://github.com/Chivorns/SmartMaterialSpinner/pulls).
+
+## Contributors
+<a href="https://github.com/Chivorns/SmartMaterialSpinner/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=Chivorns/SmartMaterialSpinner" />
+</a>
+
+Made with [contributors-img](https://contrib.rocks).
 
 License
 -------
