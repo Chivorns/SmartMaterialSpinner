@@ -3,14 +3,14 @@ package com.chivorn.demokotlin
 import android.content.Intent
 import android.graphics.Typeface
 import android.os.Bundle
-import android.support.v4.content.ContextCompat
-import android.support.v4.content.res.ResourcesCompat
 import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.widget.AdapterView
 import android.widget.AdapterView.OnItemSelectedListener
 import android.widget.Toast
+import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
 import com.chivorn.resourcemodule.MainApp
 import com.chivorn.resourcemodule.R
 import com.chivorn.smartmaterialspinner.SmartMaterialSpinner

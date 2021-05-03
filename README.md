@@ -133,10 +133,22 @@ dependencies {
 
 ## In Java class
 ```java
+import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.chivorn.smartmaterialspinner.SmartMaterialSpinner;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
 
-    private SmartMaterialSpinner spProvince;
-    private SmartMaterialSpinner spEmptyItem;
+    private SmartMaterialSpinner<String> spProvince;
+    private SmartMaterialSpinner<String> spEmptyItem;
     private List<String> provinceList;
 
     @Override
@@ -177,9 +189,18 @@ public class MainActivity extends AppCompatActivity {
 
 ## In Kotlin class
 ```kotlin
+import android.os.Bundle
+import android.view.View
+import android.widget.AdapterView
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import com.chivorn.resourcemodule.R
+import com.chivorn.smartmaterialspinner.SmartMaterialSpinner
+
+
 class MainActivity : AppCompatActivity() {
-    private var spProvince: SmartMaterialSpinner? = null
-    private var spEmptyItem: SmartMaterialSpinner? = null
+    private var spProvince: SmartMaterialSpinner<String>? = null
+    private var spEmptyItem: SmartMaterialSpinner<String>? = null
     private var provinceList: MutableList<String>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -194,16 +215,16 @@ class MainActivity : AppCompatActivity() {
         spEmptyItem = findViewById(R.id.sp_empty_item)
         provinceList = ArrayList()
 
-        provinceList!!.add("Kampong Thom")
-        provinceList!!.add("Kampong Cham")
-        provinceList!!.add("Kampong Chhnang")
-        provinceList!!.add("Phnom Penh")
-        provinceList!!.add("Kandal")
-        provinceList!!.add("Kampot")
+        provinceList?.add("Kampong Thom")
+        provinceList?.add("Kampong Cham")
+        provinceList?.add("Kampong Chhnang")
+        provinceList?.add("Phnom Penh")
+        provinceList?.add("Kandal")
+        provinceList?.add("Kampot")
 
-        spProvince!!.setItem<Any>(provinceList!!)
+        spProvince?.item = provinceList
 
-        spProvince!!.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+        spProvince?.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(adapterView: AdapterView<*>, view: View, position: Int, id: Long) {
                 Toast.makeText(this@MainActivity, provinceList!![position], Toast.LENGTH_SHORT).show()
             }
