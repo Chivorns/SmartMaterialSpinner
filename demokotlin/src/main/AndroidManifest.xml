@@ -9,7 +9,8 @@
         android:roundIcon="@drawable/smsp_logo"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="com.chivorn.demokotlin.MainActivity">
+        <activity android:name=".RuntimeRenderViewActivity" />
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

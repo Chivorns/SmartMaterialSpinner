@@ -23,11 +23,11 @@ public class MainActivity<T> extends MainApp<T> {
 
         initBaseView();
         initItemList();
-        initSpinnerInJava();
+        initSpinner();
         onClickListener();
     }
 
-    private void initSpinnerInJava() {
+    private void initSpinner() {
         spSearchable.setItem(provinceList);
         spReSelectable.setItem(provinceList);
         spProvince.setItem(provinceList);
