@@ -31,6 +31,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.chivorn.smartmaterialspinner.adapter.SearchAdapter;
+import com.chivorn.smartmaterialspinner.util.StringUtils;
 
 import java.io.Serializable;
 import java.util.List;
@@ -201,8 +202,8 @@ public class SearchableSpinnerDialog<T> extends DialogFragment implements Search
                     if (searchListItemColor != 0) {
                         tvListItem.setTextColor(searchListItemColor);
                         if (searchFilterColor != 0 && searchView.getQuery() != null && !searchView.getQuery().toString().isEmpty()) {
-                            String query = searchView.getQuery().toString().toLowerCase();
-                            String fullText = tvListItem.getText().toString().toLowerCase();
+                            String query = StringUtils.removeDiacriticalMarks(searchView.getQuery().toString()).toLowerCase();
+                            String fullText = StringUtils.removeDiacriticalMarks(tvListItem.getText().toString()).toLowerCase();
                             int start = fullText.indexOf(query);
                             int end = start + query.length();
                             spannableString.setSpan(new ForegroundColorSpan(searchFilterColor), start, end, 0);
