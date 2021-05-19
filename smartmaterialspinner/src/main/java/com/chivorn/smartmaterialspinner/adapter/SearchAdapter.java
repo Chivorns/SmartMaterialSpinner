@@ -8,6 +8,8 @@ import android.widget.Filterable;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.chivorn.smartmaterialspinner.util.StringUtils;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,8 +47,10 @@ public class SearchAdapter<T> extends ArrayAdapter<T> implements Filterable {
                     itemListFiltered = itemList;
                 } else {
                     List<T> filteredList = new ArrayList<>();
+                    String searchText = StringUtils.removeDiacriticalMarks(charString).toLowerCase();
                     for (T row : itemList) {
-                        if (row.toString().toLowerCase().contains(charString.toLowerCase())) {
+                        String item = StringUtils.removeDiacriticalMarks(row.toString()).toLowerCase();
+                        if (item.contains(searchText)) {
                             filteredList.add(row);
                         }
                     }

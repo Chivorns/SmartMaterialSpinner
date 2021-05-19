@@ -87,6 +87,8 @@ public class MainApp<T> extends AppCompatActivity implements View.OnClickListene
         provinceList.add("Takeo");
         provinceList.add("Tbong Khmum");
         provinceList.add("The best Android spinner library for your android application with more customization");
+        provinceList.add("João");
+        provinceList.add("são");
 
 
         String[] isoCountryCodes = Locale.getISOCountries();
