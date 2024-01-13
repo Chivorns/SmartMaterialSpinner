@@ -18,7 +18,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -36,6 +35,7 @@ import com.chivorn.smartmaterialspinner.util.StringUtils;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Locale;
 
 public class SearchableSpinnerDialog<T> extends DialogFragment implements SearchView.OnQueryTextListener, SearchView.OnCloseListener {
     private static final String TAG = SearchableSpinnerDialog.class.getSimpleName();
@@ -101,6 +101,7 @@ public class SearchableSpinnerDialog<T> extends DialogFragment implements Search
     }
 
     @Override
+    @Deprecated
     public void onSaveInstanceState(@NonNull Bundle outState) {
         outState = setSavedInstanceState(outState);
         outState.putSerializable(INSTANCE_LISTENER_KEY, outState.getSerializable(INSTANCE_LISTENER_KEY));
@@ -118,6 +119,11 @@ public class SearchableSpinnerDialog<T> extends DialogFragment implements Search
     }
 
     @Override
+    @SuppressWarnings({
+            "unchecked",
+            "rawtypes"
+    })
+    @Deprecated
     public void onCreate(Bundle savedInstanceState) {
         savedInstanceState = setSavedInstanceState(savedInstanceState);
         this.smartMaterialSpinner = (SmartMaterialSpinner) savedInstanceState.get(INSTANCE_SPINNER_KEY);
@@ -128,6 +134,7 @@ public class SearchableSpinnerDialog<T> extends DialogFragment implements Search
 
     @NonNull
     @Override
+    @Deprecated
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         savedInstanceState = setSavedInstanceState(savedInstanceState);
         LayoutInflater inflater = LayoutInflater.from(getActivity());
@@ -155,6 +162,11 @@ public class SearchableSpinnerDialog<T> extends DialogFragment implements Search
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 
+    @SuppressWarnings({
+            "unchecked",
+            "rawtypes"
+    })
+    @Deprecated
     private void initSearchDialog(View rootView, Bundle savedInstanceState) {
         searchHeaderView = rootView.findViewById(R.id.search_header_layout);
         tvSearchHeader = rootView.findViewById(R.id.tv_search_header);
@@ -203,8 +215,8 @@ public class SearchableSpinnerDialog<T> extends DialogFragment implements Search
                     if (searchListItemColor != 0) {
                         tvListItem.setTextColor(searchListItemColor);
                         if (searchFilterColor != 0 && searchView.getQuery() != null && !searchView.getQuery().toString().isEmpty()) {
-                            String query = StringUtils.removeDiacriticalMarks(searchView.getQuery().toString()).toLowerCase();
-                            String fullText = StringUtils.removeDiacriticalMarks(tvListItem.getText().toString()).toLowerCase();
+                            String query = StringUtils.removeDiacriticalMarks(searchView.getQuery().toString()).toLowerCase(Locale.getDefault());
+                            String fullText = StringUtils.removeDiacriticalMarks(tvListItem.getText().toString()).toLowerCase(Locale.getDefault());
                             int start = fullText.indexOf(query);
                             int end = start + query.length();
                             spannableString.setSpan(new ForegroundColorSpan(searchFilterColor), start, end, 0);
@@ -222,34 +234,23 @@ public class SearchableSpinnerDialog<T> extends DialogFragment implements Search
         }
         searchListView.setAdapter(searchArrayAdapter);
         searchListView.setTextFilterEnabled(true);
-        searchListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (onSearchDialogEventListener != null) {
-                    onSearchDialogEventListener.onSearchItemSelected(searchArrayAdapter.getItem(position), position);
-                    selectedItem = searchArrayAdapter.getItem(position);
-                }
-                getDialog().dismiss();
+        searchListView.setOnItemClickListener((parent, view, position, id) -> {
+            if (onSearchDialogEventListener != null) {
+                onSearchDialogEventListener.onSearchItemSelected(searchArrayAdapter.getItem(position), position);
+                selectedItem = searchArrayAdapter.getItem(position);
+            }
+            getDialog().dismiss();
+        });
+
+        searchListView.addOnLayoutChangeListener((v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> {
+            if (bottom < oldBottom) {
+                scrollToSelectedItem();
+            } else if (bottom > oldBottom) {
+                scrollToSelectedItem();
             }
         });
 
-        searchListView.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
-            @Override
-            public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
-                if (bottom < oldBottom) {
-                    scrollToSelectedItem();
-                } else if (bottom > oldBottom) {
-                    scrollToSelectedItem();
-                }
-            }
-        });
-
-        btnDismiss.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dismiss();
-            }
-        });
+        btnDismiss.setOnClickListener(v -> dismiss());
 
         initSearchHeader();
         initSearchBody();

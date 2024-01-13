@@ -68,7 +68,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="end"
             android:background="@color/smsp_transparent_color"
-            android:text="Done"
+            android:text="@string/done"
             android:textColor="@color/smsp_dismiss_color"
             android:visibility="gone" />
     </LinearLayout>

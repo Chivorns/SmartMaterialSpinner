@@ -14,7 +14,9 @@
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:autofillHints="Input Text"
             android:hint="Input Text"
+            android:inputType="text"
             tools:ignore="HardcodedText" />
 
         <LinearLayout
