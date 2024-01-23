@@ -12,6 +12,7 @@ import com.chivorn.smartmaterialspinner.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class SearchAdapter<T> extends ArrayAdapter<T> implements Filterable {
     private Context context;
@@ -47,9 +48,9 @@ public class SearchAdapter<T> extends ArrayAdapter<T> implements Filterable {
                     itemListFiltered = itemList;
                 } else {
                     List<T> filteredList = new ArrayList<>();
-                    String searchText = StringUtils.removeDiacriticalMarks(charString).toLowerCase();
+                    String searchText = StringUtils.removeDiacriticalMarks(charString).toLowerCase(Locale.getDefault());
                     for (T row : itemList) {
-                        String item = StringUtils.removeDiacriticalMarks(row.toString()).toLowerCase();
+                        String item = StringUtils.removeDiacriticalMarks(row.toString()).toLowerCase(Locale.getDefault());
                         if (item.contains(searchText)) {
                             filteredList.add(row);
                         }
@@ -64,6 +65,10 @@ public class SearchAdapter<T> extends ArrayAdapter<T> implements Filterable {
             }
 
             @Override
+            @SuppressWarnings({
+                    "unchecked",
+                    "rawtypes"
+            })
             protected void publishResults(CharSequence constraint, FilterResults results) {
                 itemListFiltered = (List<T>) results.values;
                 notifyDataSetChanged();

@@ -1,14 +1,16 @@
-apply plugin: 'com.android.application'
+plugins {
+    id 'com.android.application'
+}
 
 android {
-    compileSdkVersion 29
-    buildToolsVersion '29.0.3'
+    namespace 'com.chivorn.demojava'
+    compileSdk 34
     defaultConfig {
         applicationId "com.chivorn.smsp.demojava"
-        minSdkVersion 14
-        targetSdkVersion 29
-        versionCode 7
-        versionName "1.4.0"
+        minSdk 14
+        targetSdk 34
+        versionCode 8
+        versionName "2.0.0"
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
     }
     buildTypes {
@@ -17,8 +19,14 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-    lintOptions {
+
+    lint {
         abortOnError false
+    }
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 }
 

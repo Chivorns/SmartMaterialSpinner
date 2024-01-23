@@ -210,6 +210,7 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements Adapter
     private boolean isOnItemSelectedListenerOverride;
     private boolean dropdownHeightUpdated = false;
     private int hiddenItemPosition = -1;
+    private boolean isRequired = false;
 
     /*
      * **********************************************************************************
@@ -255,7 +256,7 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements Adapter
     }
 
     private void initAttributes(Context context, AttributeSet attrs) {
-        TypedArray defaultArray = context.obtainStyledAttributes(new int[]{R.attr.colorControlNormal, R.attr.colorAccent});
+        TypedArray defaultArray = context.obtainStyledAttributes(attrs, R.styleable.SmartMaterialSpinner);
         int defaultBaseColor = ContextCompat.getColor(context, R.color.smsp_base_color); // defaultArray.getColor(1, 0);
         int defaultHighlightColor = ContextCompat.getColor(context, R.color.smsp_base_color);
         int defaultErrorColor = ContextCompat.getColor(context, R.color.smsp_error_color);
@@ -614,6 +615,7 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements Adapter
         return false;
     }
 
+    @Deprecated
     private void configStaticLayout(CharSequence charSequence, TextPaint textPaint, int mWidth) {
         textPaint.setTextSize(errorTextSize);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -958,6 +960,10 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements Adapter
     }
 
     @Override
+    @SuppressWarnings({
+            "unchecked",
+            "rawtypes"
+    })
     public T getSelectedItem() {
         return (T) super.getSelectedItem();
     }
@@ -1985,6 +1991,13 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements Adapter
         isReSelectable = reSelectable;
     }
 
+    public boolean isRequired() {
+        return isRequired;
+    }
+
+    public void setRequired(boolean required) {
+        isRequired = required;
+    }
 
     /*
      * **********************************************************************************
@@ -2024,6 +2037,10 @@ public class SmartMaterialSpinner<T> extends AppCompatSpinner implements Adapter
         }
 
         @Override
+        @SuppressWarnings({
+                "unchecked",
+                "rawtypes"
+        })
         public T getItem(int position) {
             position = isHintApplicable() ? position - 1 : position;
             return (T) ((position == -1) ? hint : mSpinnerAdapter.getItem(position));
